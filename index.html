@@ -804,7 +804,10 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
               <path d="M 5 5 L 5.5 6 L 6.5 6.2 L 5.7 6.8 L 6 7.8 L 5 7.2 L 4 7.8 L 4.3 6.8 L 3.5 6.2 L 4.5 6 Z" fill="#ffeb3b" stroke="#0d1b2e" stroke-width="1" />
             </svg>
           </div>
-          <div class="stat-label">Doanh thu tháng</div>
+          <div class="stat-label" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Doanh thu tháng</span>
+            <button id="btn-edit-revenue" class="btn btn-outline btn-sm" style="padding:2px 6px;font-size:10px;border-color:rgba(201,168,76,.3);color:var(--gold-l);display:none;margin-top:-4px;" onclick="openEditRevenueModal()">✏️ Sửa</button>
+          </div>
           <div class="stat-val" id="stat-rev-val">—</div>
           <div class="stat-sub">+12% so tháng trước</div>
         </div>
@@ -1237,6 +1240,10 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
         ⚠️ Hồ sơ học sinh sẽ bị xóa vĩnh viễn khỏi danh sách lớp.<br>
         📊 Lịch sử điểm danh và nhận xét trước đây <strong style="color:var(--teal)">vẫn được lưu trong hệ thống</strong>.
       </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-m);cursor:pointer;margin-top:14px;user-select:none;">
+        <input type="checkbox" id="ds-deduct-revenue" style="width:16px;height:16px;cursor:pointer;">
+        <span>Trừ học phí đã đóng khỏi doanh thu tháng</span>
+      </label>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('modal-delete-student')">Hủy</button>
@@ -1409,6 +1416,31 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('modal-sb-settings')">Hủy</button>
       <button class="btn btn-gold" onclick="saveSbSettings()">💾 Lưu cấu hình</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Revenue -->
+<div class="modal-bg" id="modal-edit-revenue">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-title">✏️ Chỉnh sửa doanh thu tháng</div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Chọn Tháng</label>
+        <select class="inp" id="er-month-select" onchange="onRevenueMonthChange()">
+          <!-- Options populated dynamically -->
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Số tiền Doanh thu (VNĐ)</label>
+        <input class="inp" id="er-month-value" placeholder="VD: 5.000.000">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-revenue')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveEditRevenue()">💾 Lưu thay đổi</button>
     </div>
   </div>
 </div>
@@ -1668,6 +1700,12 @@ function initApp(){
   const settingsBtn = document.querySelector('.sb-settings');
   if (settingsBtn) {
     settingsBtn.style.display = (currentUser.role === 'teacher') ? 'none' : '';
+  }
+
+  // Hide or show edit revenue button for admin
+  const editRevBtn = document.getElementById('btn-edit-revenue');
+  if (editRevBtn) {
+    editRevBtn.style.display = (currentUser.role === 'admin') ? 'inline-block' : 'none';
   }
   
   document.querySelectorAll('.nav-item').forEach(n=>n.style.display='');
@@ -2386,12 +2424,82 @@ function doDeleteStudent(){
   const idx = STUDENTS.findIndex(x => x.id === id);
   if(idx === -1) return;
   
+  const deductRevenue = document.getElementById('ds-deduct-revenue').checked;
+  if (deductRevenue) {
+    renewLog.forEach(r => {
+      if (r.stuId === id) {
+        const monthKey = r.paidDate.slice(0, 7);
+        const feeVal = parseFeeVND(r.fee);
+        if (revenueByMonth[monthKey]) {
+          revenueByMonth[monthKey] = Math.max(0, revenueByMonth[monthKey] - feeVal);
+        }
+      }
+    });
+    renewLog = renewLog.filter(r => r.stuId !== id);
+  }
+  
+  // Reset checkbox for next time
+  document.getElementById('ds-deduct-revenue').checked = false;
+  
   STUDENTS.splice(idx, 1);
   closeModal('modal-delete-student');
   renderStudents();
   updateOverviewCards();
+  buildCharts();
   sbSave();
   showToast('🗑 Đã xóa học sinh!');
+}
+
+function openEditRevenueModal() {
+  if (currentUser.role !== 'admin') {
+    showToast('⚠️ Chỉ Admin mới có quyền sửa doanh thu!');
+    return;
+  }
+  
+  const year = 2026;
+  const select = document.getElementById('er-month-select');
+  if (select) {
+    select.innerHTML = Array.from({length:12}, (_, i) => {
+      const m = i + 1;
+      const mk = `${year}-${String(m).padStart(2,'0')}`;
+      return `<option value="${mk}">Tháng ${m} / ${year}</option>`;
+    }).join('');
+  }
+  
+  // Real-time currency formatting on input
+  const valInput = document.getElementById('er-month-value');
+  if (valInput && !valInput._hasListener) {
+    valInput.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
+    valInput._hasListener = true;
+  }
+  
+  onRevenueMonthChange();
+  openModal('modal-edit-revenue');
+}
+
+function onRevenueMonthChange() {
+  const mk = document.getElementById('er-month-select').value;
+  const amount = revenueByMonth[mk] || 0;
+  document.getElementById('er-month-value').value = formatFeeVND(amount);
+}
+
+function saveEditRevenue() {
+  if (currentUser.role !== 'admin') {
+    showToast('⚠️ Chỉ Admin mới có quyền sửa doanh thu!');
+    return;
+  }
+  
+  const mk = document.getElementById('er-month-select').value;
+  const rawVal = document.getElementById('er-month-value').value;
+  const amount = parseFeeVND(rawVal);
+  
+  revenueByMonth[mk] = amount;
+  
+  closeModal('modal-edit-revenue');
+  buildCharts();
+  updateOverviewCards();
+  sbSave();
+  showToast('✅ Đã cập nhật doanh thu tháng!');
 }
 
 function openRenewStudent(id){
