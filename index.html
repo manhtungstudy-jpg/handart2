@@ -1583,6 +1583,10 @@ async function sbSave(){
 }
 
 function openSbSettingsModal() {
+  if (currentUser.role !== 'admin') {
+    showToast('⚠️ Chỉ Admin mới có quyền cấu hình kết nối Supabase!');
+    return;
+  }
   document.getElementById('cfg-sb-url').value = localStorage.getItem('cfg_sb_url') || '';
   document.getElementById('cfg-sb-key').value = localStorage.getItem('cfg_sb_key') || '';
   document.getElementById('cfg-sb-bucket').value = localStorage.getItem('cfg_sb_bucket') || '';
@@ -1696,10 +1700,10 @@ function initApp(){
     addSessionBtn.style.display = (currentUser.role === 'teacher') ? 'none' : '';
   }
 
-  // Hide Supabase settings button for teachers
+  // Hide Supabase settings button for non-admins (only admin can access)
   const settingsBtn = document.querySelector('.sb-settings');
   if (settingsBtn) {
-    settingsBtn.style.display = (currentUser.role === 'teacher') ? 'none' : '';
+    settingsBtn.style.display = (currentUser.role === 'admin') ? '' : 'none';
   }
 
   // Hide or show edit revenue button for admin
