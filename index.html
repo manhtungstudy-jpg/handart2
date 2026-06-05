@@ -1,0 +1,3439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#060d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>HandArt Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#c9a84c; --gold-l:#f0d080; --gold-d:#8a6a20;
+  --navy:#060d1a; --navy-m:#0d1b2e; --navy-l:#162740; --navy-ll:#1e3a5f;
+  --teal:#00c8d4; --teal-d:#007a82;
+  --red:#ff3b3b; --red-d:#c0392b;
+  --glass:rgba(255,255,255,0.06);
+  --glass-b:rgba(201,168,76,0.25);
+  --text:#e8e0cc; --text-m:rgba(232,224,204,0.7); --text-d:rgba(232,224,204,0.4);
+  --font-display:'Baloo 2',sans-serif;
+  --font-body:'Be Vietnam Pro',sans-serif;
+  --sidebar:220px;
+  --header:64px;
+}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);color:var(--text);font-family:var(--font-body);}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:4px;}
+
+#page-login{
+  position:fixed;inset:0;z-index:200;
+  background-image: url('themes/background.png');
+  background-size:cover;background-position:center;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 60px;gap:48px;
+}
+#page-login::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(6,13,26,.65) 0%,rgba(6,13,26,.2) 50%,rgba(6,13,26,.65) 100%);
+}
+#page-login::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-conic-gradient(rgba(201,168,76,.03) 0% 25%,transparent 0% 50%) 0 0/56px 56px;
+  pointer-events:none;
+}
+
+.lg-left{
+  position:relative;z-index:2;
+  flex:1;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:12px;
+  animation:fadeL .9s ease both;
+}
+.lg-logo{width:280px;height:280px;object-fit:contain;
+  filter:drop-shadow(0 0 40px rgba(201,168,76,.55));
+  animation:float 4s ease-in-out infinite;}
+.lg-tag{font-family:var(--font-display);font-size:11px;letter-spacing:3px;
+  color:var(--gold-l);text-shadow:0 0 20px rgba(201,168,76,.8);text-transform:uppercase;text-align:center;}
+
+.lg-center{
+  position:relative;z-index:2;
+  flex:0 0 400px;display:flex;flex-direction:column;align-items:center;
+  animation:fadeU .9s ease .1s both;
+}
+.login-card{
+  width:100%;
+  background:rgba(13,27,46,.55);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(201,168,76,.3);border-radius:20px;
+  padding:40px 36px 32px;
+  box-shadow:0 0 0 1px rgba(201,168,76,.08),0 24px 60px rgba(0,0,0,.6),
+             inset 0 1px 0 rgba(255,255,255,.1);
+  display:flex;flex-direction:column;align-items:center;
+}
+.lc-cup{width:136px;height:136px;object-fit:contain;margin-bottom:12px;
+  filter:drop-shadow(0 4px 16px rgba(201,168,76,.8));
+  animation:floatS 3.5s ease-in-out infinite;}
+.lc-title{
+  font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:1.5px;
+  background:linear-gradient(to bottom, #fff5a0, #ff9f1a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  white-space:nowrap;
+  animation:cartoonFloat 3.5s ease-in-out infinite;
+  margin-bottom:28px;text-align:center;
+  filter:drop-shadow(1.1px 1.1px 0px #0d1b2e)
+         drop-shadow(-1.1px 1.1px 0px #0d1b2e)
+         drop-shadow(1.1px -1.1px 0px #0d1b2e)
+         drop-shadow(-1.1px -1.1px 0px #0d1b2e)
+         drop-shadow(0 0 10px rgba(255, 204, 0, 0.8));
+}
+.lc-field{position:relative;width:100%;margin-bottom:14px;}
+.lc-field span{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  color:var(--gold);font-size:15px;pointer-events:none;z-index:2;
+}
+.lc-field input{
+  width:100%;padding:13px 16px 13px 44px;
+  background:rgba(255,255,255,.9);border:1.5px solid var(--gold);
+  border-radius:10px;font-family:var(--font-body);font-size:14px;
+  color:#1a1a1a;outline:none;transition:all .25s;
+}
+.lc-field input:focus{background:#fff;border-color:var(--gold-l);
+  box-shadow:0 0 0 3px rgba(201,168,76,.2);}
+.btn-login{
+  width:100%;padding:14px;margin-top:6px;
+  background:linear-gradient(135deg,#c9a84c,#f0d080,#c9a84c);
+  border:none;border-radius:10px;
+  font-family:var(--font-body);font-size:13px;letter-spacing:3px;
+  font-weight:700;text-transform:uppercase;color:#1a0e00;cursor:pointer;
+  position:relative;overflow:hidden;transition:all .25s;
+  box-shadow:0 4px 20px rgba(201,168,76,.45);
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,76,.65);}
+.btn-login::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transform:translateX(-100%);transition:.5s;
+}
+.btn-login:hover::after{transform:translateX(100%);}
+.lg-links{display:flex;gap:24px;justify-content:center;margin-top:14px;}
+.lg-links a{font-size:12px;color:var(--text-m);cursor:pointer;transition:.2s;text-decoration:none;}
+.lg-links a:hover{color:var(--gold-l);}
+.lc-err{
+  display:none;width:100%;margin-top:10px;
+  background:rgba(255,59,59,.15);border:1px solid rgba(255,59,59,.4);
+  border-radius:8px;padding:9px 14px;color:#ff9090;font-size:13px;text-align:center;
+}
+
+.lg-right{
+  position:relative;z-index:2;
+  flex:1;max-width:380px;display:flex;align-items:center;justify-content:center;
+  animation:fadeR .9s ease .15s both;
+}
+.lg-slogan{width:280px;object-fit:contain;
+  filter:drop-shadow(0 4px 24px rgba(0,0,0,.5));
+  animation:floatS 5s ease-in-out infinite;}
+.lg-slogan:hover{transform:scale(1.04);filter:brightness(1.1);}
+
+#app{display:none;width:100%;height:100vh;overflow:hidden;position:relative;}
+
+#app::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image: url('themes/background.png');
+  background-size:cover;background-position:center;
+}
+#app::after{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:rgba(6,13,26,.82);
+}
+
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);z-index:50;
+  background:rgba(6,13,26,.92);
+  border-right:1px solid rgba(201,168,76,.18);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;
+  box-shadow:4px 0 30px rgba(0,0,0,.5);
+}
+.sb-brand{
+  padding:20px 16px 16px;border-bottom:1px solid rgba(201,168,76,.12);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.sb-logo{width:122px;height:122px;object-fit:contain;
+  filter:drop-shadow(0 0 16px rgba(201,168,76,.5));}
+.sb-name{
+  font-family:var(--font-display);font-size:12px;letter-spacing:2.5px;font-weight:700;
+  background:linear-gradient(135deg,#c9a84c 0%,#f0d080 50%,#8a6a20 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-align:center;line-height:1.4;
+}
+.sb-nav{flex:1;padding:12px 0;overflow-y:auto;}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 20px;cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all .2s;position:relative;
+  font-size:13px;font-weight:500;color:var(--text-m);
+  letter-spacing:.3px;
+}
+.nav-item:hover{color:var(--gold-l);background:rgba(201,168,76,.06);border-left-color:rgba(201,168,76,.3);}
+.nav-item.active{
+  color:var(--gold-l);background:rgba(201,168,76,.1);
+  border-left-color:var(--gold);
+}
+.nav-item.active .nav-icon{color:var(--gold);}
+.nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.nav-label{font-family:var(--font-body);}
+.sb-user{
+  padding:14px 16px;border-top:1px solid rgba(201,168,76,.12);
+  display:flex;align-items:center;gap:10px;
+}
+.sb-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-d),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:#1a0e00;flex-shrink:0;
+  box-shadow:0 0 12px rgba(201,168,76,.4);
+}
+.sb-uinfo{flex:1;min-width:0;}
+.sb-uname{font-size:12px;font-weight:700;color:var(--gold-l);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-urole{font-size:10px;color:var(--teal);letter-spacing:1px;text-transform:uppercase;}
+.sb-logout, .sb-settings{
+  font-size:16px;color:var(--text-d);cursor:pointer;transition:.2s;
+  background:none;border:none;padding:4px;
+}
+.sb-logout:hover{color:var(--red);}
+.sb-settings:hover{color:var(--gold-l);}
+
+.header{
+  position:fixed;left:var(--sidebar);right:0;top:0;height:var(--header);z-index:40;
+  background:rgba(6,13,26,.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(201,168,76,.15);
+  display:flex;align-items:center;padding:0 28px;gap:16px;
+  box-shadow:0 2px 20px rgba(0,0,0,.4);
+}
+.hdr-title{
+  font-family:var(--font-body);font-size:16px;letter-spacing:1px;
+  color:var(--gold-l);flex:1;font-weight:700;text-transform:uppercase;
+}
+.hdr-date{font-size:12px;color:var(--text-d);letter-spacing:.5px;}
+.hdr-badge{
+  padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  background:rgba(0,200,212,.12);border:1px solid rgba(0,200,212,.3);
+  color:var(--teal);
+}
+
+.main{
+  position:fixed;left:var(--sidebar);right:0;
+  top:var(--header);bottom:0;z-index:30;
+  overflow-y:auto;padding:24px 28px;
+}
+
+.sec-hdr{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.sec-hdr h2{
+  font-family:var(--font-body);font-size:15px;letter-spacing:1.5px;
+  color:var(--gold-l);text-transform:uppercase;font-weight:700;
+}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.4),transparent);}
+
+.card{
+  background:rgba(13,27,46,.6);
+  border:1px solid rgba(201,168,76,.18);border-radius:14px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 4px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+  transition:border-color .2s;
+}
+.card:hover{border-color:rgba(201,168,76,.35);}
+
+.stat-card{padding:20px 22px;display:flex;flex-direction:column;gap:8px;}
+.stat-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-d);}
+.stat-val{font-family:var(--font-display);font-size:28px;color:var(--gold-l);font-weight:700;}
+.stat-sub{font-size:12px;color:var(--text-m);}
+.stat-icon{font-size:28px;margin-bottom:4px;}
+
+.gold-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent);margin:20px 0;}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+
+.chart-card{display:flex;flex-direction:column;gap:0;padding:20px 20px 14px;}
+.chart-header{margin-bottom:12px;}
+.chart-title{font-family:var(--font-display);font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+.chart-val{font-family:var(--font-display);font-size:26px;color:var(--gold-l);font-weight:700;line-height:1.1;}
+.chart-sub{font-size:11px;color:var(--text-d);margin-top:2px;}
+.chart-body{
+  display:flex;align-items:flex-end;gap:3px;
+  height:110px;padding-top:8px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  position:relative;
+}
+.cb-col{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  height:100%;justify-content:flex-end;
+}
+.cb-bar{
+  width:100%;border-radius:3px 3px 0 0;
+  min-height:2px;
+  transition:height .5s cubic-bezier(.4,0,.2,1);
+  position:relative;cursor:pointer;
+}
+.cb-bar.gold{background:linear-gradient(180deg,var(--gold-l),var(--gold-d));}
+.cb-bar.teal{background:linear-gradient(180deg,var(--teal),var(--teal-d));}
+.cb-bar.blue{background:linear-gradient(180deg,#4a9ede,#1e3a5f);}
+.cb-bar.empty{background:rgba(255,255,255,.06);min-height:2px;}
+.cb-bar:hover::after{
+  content:attr(data-tip);
+  position:absolute;bottom:calc(100%+6px);left:50%;transform:translateX(-50%);
+  background:rgba(13,27,46,.97);border:1px solid var(--gold);border-radius:5px;
+  padding:4px 8px;font-size:10px;color:var(--gold-l);white-space:nowrap;z-index:20;
+  pointer-events:none;
+}
+.cb-lbl{font-size:8px;color:var(--text-d);margin-top:5px;text-align:center;letter-spacing:.3px;}
+.cb-lbl.cur{color:var(--gold-l);font-weight:700;}
+
+/* ── Cartoon SVG Icon Styles & Animations ── */
+.icon-svg {
+  vertical-align: middle;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.nav-item:hover .icon-svg {
+  transform: scale(1.2) rotate(6deg);
+}
+.stat-card:hover .icon-svg {
+  transform: scale(1.15) translateY(-2px);
+}
+@keyframes textFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes cartoonFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Table Layouts ── */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(201,168,76,.18);margin-top:10px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:rgba(13,27,46,.9);}
+thead th{
+  padding:12px 16px;text-align:left;
+  font-family:var(--font-display);font-size:10px;letter-spacing:2px;
+  color:var(--gold);text-transform:uppercase;white-space:nowrap;
+  border-bottom:1px solid rgba(201,168,76,.2);
+}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:.15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(201,168,76,.05);}
+tbody td{padding:11px 16px;color:var(--text);vertical-align:middle;}
+
+/* ── Badges ── */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.badge-gold{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);color:var(--gold-l);}
+.badge-teal{background:rgba(0,200,212,.12);border:1px solid rgba(0,200,212,.3);color:var(--teal);}
+.badge-red{background:rgba(255,59,59,.15);border:1px solid rgba(255,59,59,.4);color:#ff7070;
+  animation:pulseRed 2s infinite;}
+.badge-green{background:rgba(39,174,96,.15);border:1px solid rgba(39,174,96,.3);color:#5ddb8e;}
+.badge-gray{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-m);}
+@keyframes pulseRed{0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.3)}50%{box-shadow:0 0 0 4px rgba(255,59,59,0)}}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 18px;border-radius:8px;font-size:12px;font-weight:700;
+  letter-spacing:.5px;cursor:pointer;border:none;transition:all .2s;
+  font-family:var(--font-body);
+}
+.btn-gold{background:linear-gradient(135deg,#c9a84c,#f0d080);color:#1a0e00;
+  box-shadow:0 4px 14px rgba(201,168,76,.35);}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,.5);}
+.btn-outline{background:transparent;border:1px solid rgba(201,168,76,.4);color:var(--gold-l);}
+.btn-outline:hover{background:rgba(201,168,76,.08);border-color:var(--gold);}
+.btn-danger{background:rgba(255,59,59,.15);border:1px solid rgba(255,59,59,.4);color:#ff7070;}
+.btn-danger:hover{background:rgba(255,59,59,.25);}
+.btn-teal{background:rgba(0,200,212,.15);border:1px solid rgba(0,200,212,.35);color:var(--teal);}
+.btn-teal:hover{background:rgba(0,200,212,.25);}
+.btn-sm{padding:6px 12px;font-size:11px;}
+
+/* ── Modals ── */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+}
+.modal-bg.show{display:flex;}
+.modal{
+  background:linear-gradient(135deg,rgba(6,13,26,.97),rgba(13,27,46,.97));
+  border:1px solid rgba(201,168,76,.35);border-radius:18px;
+  padding:32px 36px;width:90%;max-width:520px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 0 60px rgba(0,0,0,.7),0 0 0 1px rgba(201,168,76,.1);
+  animation:popIn .35s cubic-bezier(.34,1.56,.64,1) both;
+}
+.modal-title{
+  font-family:var(--font-display);font-size:14px;letter-spacing:3px;
+  color:var(--gold-l);text-transform:uppercase;margin-bottom:24px;
+  padding-bottom:14px;border-bottom:1px solid rgba(201,168,76,.18);
+}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;
+  padding-top:16px;border-top:1px solid rgba(201,168,76,.12);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.form-col{display:flex;flex-direction:column;}
+.form-col.full{grid-column:1/-1;}
+
+.inp{
+  background:rgba(255,255,255,.07);border:1px solid rgba(201,168,76,.25);
+  border-radius:8px;padding:9px 14px;color:var(--text);
+  font-family:var(--font-body);font-size:13px;outline:none;
+  transition:border-color .2s;width:100%;
+}
+.inp:focus{border-color:var(--gold);background:rgba(255,255,255,.1);}
+.inp::placeholder{color:var(--text-d);}
+select.inp{cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  padding-right:32px;appearance:none;
+}
+select.inp option{background:#0d1b2e;color:var(--text);}
+label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-d);display:block;margin-bottom:5px;}
+
+/* ── Role Tags ── */
+.role-tag{
+  padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.role-admin{background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.5);color:var(--gold-l);}
+.role-manager{background:rgba(0,200,212,.15);border:1px solid rgba(0,200,212,.4);color:var(--teal);}
+.role-teacher{background:rgba(39,174,96,.15);border:1px solid rgba(39,174,96,.3);color:#5ddb8e;}
+
+@keyframes popIn{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
+
+#tab-overview{display:block;}
+.ov-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.ov-chart-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.chart-title{
+  font-family:var(--font-display);font-size:11px;letter-spacing:2px;
+  color:var(--gold);text-transform:uppercase;padding:16px 18px 0;
+}
+.chart-val{font-family:var(--font-display);font-size:18px;color:var(--gold-l);
+  padding:4px 18px 0;}
+.chart-sub{font-size:11px;color:var(--text-d);padding:2px 18px 0;}
+
+/* Placeholder styling for inactive tabs */
+.tab-placeholder{
+  text-align:center;padding:80px 24px;color:var(--text-m);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.placeholder-icon{font-size:56px;animation:floatS 4s infinite;}
+.placeholder-title{font-family:var(--font-display);font-size:16px;letter-spacing:2px;color:var(--gold-l);text-transform:uppercase;}
+.placeholder-desc{font-size:13px;color:var(--text-d);max-width:440px;line-height:1.6;}
+
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes floatS{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes fadeL{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeR{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeU{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tabIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════
+   MOBILE-FIRST RESPONSIVE SYSTEM
+   ═══════════════════════════════════ */
+
+.hdr-mob-menu{
+  display:none;background:none;border:none;
+  color:var(--gold);font-size:22px;cursor:pointer;
+  padding:4px 8px;border-radius:6px;transition:.2s;
+  flex-shrink:0;
+}
+.hdr-mob-menu:hover{background:rgba(201,168,76,.1);}
+
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;z-index:49;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(2px);
+}
+.sidebar-overlay.show{display:block;}
+
+/* Custom CSS for Evaluation Criteria and Suggestions */
+.criteria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.crit-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(13, 27, 46, 0.85); /* Darker glassmorphic contrast */
+  border: 1px solid rgba(201, 168, 76, 0.35); /* High-contrast gold border */
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.crit-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold-l);
+  background: rgba(22, 39, 64, 0.7);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+.crit-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text); /* More vibrant, clear text */
+  font-weight: 600;
+}
+.crit-score {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 18px;
+  color: var(--gold-l);
+  font-weight: 700;
+  background: rgba(201, 168, 76, 0.25);
+  border: 1px solid rgba(201, 168, 76, 0.5); /* Higher contrast border */
+  padding: 2px 10px;
+  border-radius: 20px;
+  min-width: 36px;
+  text-align: center;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+.crit-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+  transition: background 0.3s;
+}
+.crit-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-d), var(--gold-l));
+  cursor: pointer;
+  border: 2px solid #0d1b2e;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.crit-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.6);
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.chip {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text-m);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  font-family: var(--font-body);
+}
+.chip:hover {
+  background: rgba(201, 168, 76, 0.08);
+  border-color: var(--gold-l);
+  color: var(--gold-l);
+  transform: translateY(-1px);
+}
+.chip.sel {
+  background: linear-gradient(135deg, var(--gold-d), var(--gold-l));
+  border-color: var(--gold-l);
+  color: #1a0e00;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
+}
+
+@media(max-width:1024px){
+  :root{--sidebar:190px;}
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+  .ov-chart-grid{grid-template-columns:1fr 1fr;}
+}
+
+@media(max-width:768px){
+  :root{--sidebar:0px;--header:56px;}
+  .sidebar{
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    z-index:100;width:240px;
+  }
+  .sidebar.open{transform:translateX(0);}
+  .header{left:0;padding:0 14px;gap:10px;}
+  .hdr-mob-menu{display:flex;}
+  .hdr-date{display:none;}
+  .hdr-title{font-size:13px;}
+  .hdr-badge{font-size:10px;padding:4px 10px;}
+  .main{left:0;padding:14px 12px 80px;}
+  .grid-3,.grid-4,.ov-stats,.ov-chart-grid{grid-template-columns:1fr;}
+  .grid-2{grid-template-columns:1fr;}
+  .stat-card{flex-direction:row;align-items:center;gap:14px;padding:14px 16px;}
+  .stat-icon{font-size:22px;margin-bottom:0;}
+  .stat-val{font-size:22px;}
+  #page-login{
+    flex-direction:column;padding:20px 16px;gap:12px;
+    justify-content:flex-start;overflow-y:auto;
+  }
+  .lg-left{flex:unset;width:100%;max-width:100%;flex-direction:row;gap:14px;align-items:center;}
+  .lg-logo{width:90px;height:90px;}
+  .lg-tag{font-size:10px;text-align:left;}
+  .lg-center{width:100%;max-width:100%;}
+  .login-card{padding:24px 20px 20px;}
+  .lc-title{font-size:22px;margin-bottom:20px;white-space:nowrap;}
+  .lg-right{display:none;}
+  .criteria-grid{grid-template-columns:1fr;}
+}
+
+@media(max-width:400px){
+  .main{padding:10px 8px 80px;}
+  .login-card{padding:20px 14px;}
+  .stat-val{font-size:20px;}
+}
+
+@media(hover:none){
+  .btn:active{transform:scale(.96);opacity:.85;}
+  .nav-item:active{background:rgba(201,168,76,.12);}
+  input,select,textarea{font-size:16px!important;}
+}
+
+</style>
+</head>
+<body>
+
+<div id="page-login">
+  <div class="lg-center">
+    <div class="login-card">
+      <img src="themes/logo.png" class="lc-cup" alt="cup">
+      <div class="lc-title">HandArt Academy</div>
+      <div class="lc-field">
+        <span><svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" fill="#ff9f1a" /><path d="M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#ff9f1a" /></svg></span>
+        <input type="text" id="lg-user" placeholder="Tên đăng nhập" class="inp">
+      </div>
+      <div class="lc-field">
+        <span><svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><rect x="5" y="11" width="14" height="10" rx="2" fill="#ff9f1a" /><path d="M12 3a5 5 0 0 0-5 5v3h10V8a5 5 0 0 0-5-5zm-3 8V8a3 3 0 0 1 6 0v3H9z" fill="#ff9f1a" opacity="0.8" /></svg></span>
+        <input type="password" id="lg-pass" placeholder="Mật khẩu" class="inp">
+      </div>
+      <button class="btn-login" onclick="doLogin()">Đăng nhập ›</button>
+      <div class="lc-err" id="lg-err">Tên đăng nhập hoặc mật khẩu không đúng!</div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <img src="themes/logo.png" class="sb-logo" alt="logo">
+      <div class="sb-name">HANDART<br>ACADEMY</div>
+    </div>
+    <div class="sb-nav">
+      <div class="nav-item active" onclick="switchTab('overview',this)">
+        <span class="nav-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;">
+            <defs>
+              <linearGradient id="ovGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ff70a6"/>
+                <stop offset="100%" stop-color="#ff006e"/>
+              </linearGradient>
+              <linearGradient id="ovGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffeb3b"/>
+                <stop offset="100%" stop-color="#ffa502"/>
+              </linearGradient>
+              <linearGradient id="ovGrad3" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00f5d4"/>
+                <stop offset="100%" stop-color="#00bbf9"/>
+              </linearGradient>
+            </defs>
+            <rect x="3" y="11" width="5" height="9" rx="2.5" fill="url(#ovGrad1)" stroke="#0d1b2e" stroke-width="1.5" />
+            <rect x="4.5" y="12.5" width="1.2" height="4" rx="0.5" fill="#ffffff" opacity="0.6" />
+            <rect x="9.5" y="4" width="5" height="16" rx="2.5" fill="url(#ovGrad2)" stroke="#0d1b2e" stroke-width="1.5" />
+            <rect x="11" y="5.5" width="1.2" height="7" rx="0.5" fill="#ffffff" opacity="0.6" />
+            <rect x="16" y="8" width="5" height="12" rx="2.5" fill="url(#ovGrad3)" stroke="#0d1b2e" stroke-width="1.5" />
+            <rect x="17.5" y="9.5" width="1.2" height="5" rx="0.5" fill="#ffffff" opacity="0.6" />
+            <path d="M 17 2 L 18.5 4 L 21 4.5 L 19 6 L 19.5 8.5 L 17 7 L 14.5 8.5 L 15 6 L 13 4.5 L 15.5 4 Z" fill="#ffeb3b" stroke="#0d1b2e" stroke-width="1" stroke-linejoin="round" />
+          </svg>
+        </span><span class="nav-label">Tổng quan</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('members',this)">
+        <span class="nav-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;">
+            <defs>
+              <linearGradient id="memGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ff758c"/>
+                <stop offset="100%" stop-color="#ff7eb3"/>
+              </linearGradient>
+              <linearGradient id="memGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4facfe"/>
+                <stop offset="100%" stop-color="#00f2fe"/>
+              </linearGradient>
+            </defs>
+            <path d="M 12 20 C 12 16.5, 21 16.5, 21 20 Z" fill="url(#memGrad2)" stroke="#0d1b2e" stroke-width="1.5" stroke-linejoin="round" />
+            <circle cx="16.5" cy="11.5" r="3.2" fill="#ffd1a9" stroke="#0d1b2e" stroke-width="1.5" />
+            <path d="M 13.5 10.5 C 13.5 8, 19.5 8, 19.5 10.5 C 19.5 9, 13.5 9, 13.5 10.5 Z" fill="#fbc531" stroke="#0d1b2e" stroke-width="1" />
+            <path d="M 3 20 C 3 15.5, 14 15.5, 14 20 Z" fill="url(#memGrad1)" stroke="#0d1b2e" stroke-width="1.5" stroke-linejoin="round" />
+            <circle cx="8.5" cy="10.5" r="3.8" fill="#ffe3d1" stroke="#0d1b2e" stroke-width="1.5" />
+            <path d="M 5 9.5 C 5 6.5, 12 6.5, 12 9.5 Q 8.5 7.5, 5 9.5 Z" fill="#2f3542" stroke="#0d1b2e" stroke-width="1.2" />
+            <path d="M 7 11.5 Q 8.5 13 10 11.5" fill="none" stroke="#0d1b2e" stroke-width="1.2" stroke-linecap="round" />
+          </svg>
+        </span><span class="nav-label">Thành viên</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('students',this)">
+        <span class="nav-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;">
+            <defs>
+              <linearGradient id="palGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffeaa7"/>
+                <stop offset="100%" stop-color="#f5cd79"/>
+              </linearGradient>
+            </defs>
+            <path d="M 12 3 C 6.5 3, 2 7.5, 2 13 C 2 18, 5.5 21, 11 21 C 13 21, 14.5 19.5, 14.5 18 C 14.5 17, 13.5 16.5, 13.5 15 C 13.5 13.5, 15 12.5, 17 12.5 L 18.5 12.5 C 20.5 12.5, 22 11, 22 9 C 22 5, 17.5 3, 12 3 Z" fill="url(#palGrad)" stroke="#0d1b2e" stroke-width="1.5" stroke-linejoin="round" />
+            <circle cx="8.5" cy="16.5" r="1.5" fill="#0d1b2e" />
+            <circle cx="6" cy="9.5" r="1.8" fill="#ff4757" stroke="#0d1b2e" stroke-width="1" />
+            <circle cx="5.7" cy="9.0" r="0.5" fill="#fff" opacity="0.6" />
+            <circle cx="9.5" cy="6.5" r="1.8" fill="#ff9f1a" stroke="#0d1b2e" stroke-width="1" />
+            <circle cx="9.2" cy="6.0" r="0.5" fill="#fff" opacity="0.6" />
+            <circle cx="14" cy="6.5" r="1.8" fill="#2ed573" stroke="#0d1b2e" stroke-width="1" />
+            <circle cx="13.7" cy="6.0" r="0.5" fill="#fff" opacity="0.6" />
+            <circle cx="18" cy="9.5" r="1.8" fill="#1e90ff" stroke="#0d1b2e" stroke-width="1" />
+            <circle cx="17.7" cy="9.0" r="0.5" fill="#fff" opacity="0.6" />
+            <path d="M 4 20 L 16 8" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M 15.5 8.5 L 17.5 6.5" stroke="#cbd5e0" stroke-width="2.2" stroke-linecap="round" />
+            <path d="M 17.5 6.5 C 18 5.5, 19 4.5, 20.5 3.5 C 19.5 5, 18.5 6, 17.5 6.5 Z" fill="#ff006e" stroke="#0d1b2e" stroke-width="0.8" />
+          </svg>
+        </span><span class="nav-label">Học sinh</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('sessions',this)">
+        <span class="nav-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;">
+            <line x1="12" y1="3" x2="6" y2="21" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="12" y1="3" x2="18" y2="21" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="12" y1="3" x2="12" y2="18" stroke="#704010" stroke-width="1.5" stroke-linecap="round" />
+            <rect x="3" y="15" width="18" height="2" rx="0.5" fill="#8b5a2b" stroke="#0d1b2e" stroke-width="1.2" />
+            <rect x="5" y="6" width="14" height="9" rx="1" fill="#ffffff" stroke="#0d1b2e" stroke-width="1.5" />
+            <path d="M 7 12 Q 10 9, 12 11 Q 14 13, 17 10" fill="none" stroke="#ff4757" stroke-width="1.2" stroke-linecap="round" />
+            <circle cx="15" cy="8.5" r="1.2" fill="#ffa502" />
+          </svg>
+        </span><span class="nav-label">Lớp học</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('reviews',this)">
+        <span class="nav-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;">
+            <rect x="4" y="4" width="16" height="18" rx="2.5" fill="#ffa822" stroke="#0d1b2e" stroke-width="1.5" />
+            <rect x="6.5" y="7" width="11" height="13" rx="1" fill="#ffffff" stroke="#0d1b2e" stroke-width="1.2" />
+            <path d="M 9 2 H 15 C 15 4, 9 4, 9 2" fill="#a0aec0" stroke="#0d1b2e" stroke-width="1.2" stroke-linejoin="round" />
+            <line x1="9" y1="10" x2="15" y2="10" stroke="#a0aec0" stroke-width="1.2" stroke-linecap="round" />
+            <line x1="9" y1="13" x2="13" y2="13" stroke="#a0aec0" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M 14.5 13 L 15.5 14 L 18 11.5" fill="none" stroke="#2ed573" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M 14 22 L 16 20 L 22 14 L 20 12 L 14 18 Z" fill="#ffeb3b" stroke="#0d1b2e" stroke-width="1" />
+            <path d="M 14 22 L 15 21 L 14 20 Z" fill="#0d1b2e" />
+            <path d="M 21 15 L 22 14 L 21 13 L 20 14 Z" fill="#ff758c" stroke="#0d1b2e" stroke-width="0.8" />
+          </svg>
+        </span><span class="nav-label">Nhận xét</span>
+      </div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-av">A</div>
+      <div class="sb-uinfo">
+        <div class="sb-uname" id="sb-uname">Admin</div>
+        <div class="sb-urole" id="sb-urole">admin</div>
+      </div>
+      <button class="sb-settings" onclick="openSbSettingsModal()" title="Cấu hình kết nối Supabase">⚙</button>
+      <button class="sb-logout" onclick="doLogout()" title="Đăng xuất">⏻</button>
+    </div>
+  </nav>
+
+  <header class="header">
+    <button class="hdr-mob-menu" onclick="toggleSidebar()">☰</button>
+    <div class="hdr-title" id="hdr-title">Tổng quan</div>
+    <div class="hdr-date" id="hdr-date"></div>
+    <div id="sb-sync-status" style="font-size:11px;letter-spacing:.5px;min-width:70px;text-align:right;"></div>
+    <div class="hdr-badge" id="hdr-role-badge">Admin</div>
+  </header>
+
+  <main class="main">
+
+    <!-- Tab: Overview (ACTIVE) -->
+    <div id="tab-overview">
+      <div class="ov-stats">
+        <div class="card stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" width="40" height="40" style="vertical-align: middle;">
+              <defs>
+                <linearGradient id="coinGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffeaa7"/>
+                  <stop offset="100%" stop-color="#fdcb6e"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="12" cy="18" rx="8" ry="3.5" fill="url(#coinGrad)" stroke="#0d1b2e" stroke-width="1.8" />
+              <path d="M 4 18 L 4 20 C 4 21.5, 20 21.5, 20 20 L 20 18" fill="url(#coinGrad)" stroke="#0d1b2e" stroke-width="1.8" stroke-linejoin="round" />
+              <ellipse cx="12" cy="20" rx="6" ry="2" fill="none" stroke="#e1b12c" stroke-width="1" />
+              <ellipse cx="11" cy="13" rx="8" ry="3.5" fill="url(#coinGrad)" stroke="#0d1b2e" stroke-width="1.8" />
+              <path d="M 3 13 L 3 15 C 3 16.5, 19 16.5, 19 15 L 19 13" fill="url(#coinGrad)" stroke="#0d1b2e" stroke-width="1.8" stroke-linejoin="round" />
+              <ellipse cx="11" cy="15" rx="6" ry="2" fill="none" stroke="#e1b12c" stroke-width="1" />
+              <ellipse cx="12" cy="8" rx="8" ry="3.5" fill="url(#coinGrad)" stroke="#0d1b2e" stroke-width="1.8" />
+              <path d="M 4 8 L 4 10 C 4 11.5, 20 11.5, 20 10 L 20 8" fill="url(#coinGrad)" stroke="#0d1b2e" stroke-width="1.8" stroke-linejoin="round" />
+              <ellipse cx="12" cy="8" rx="5" ry="1.8" fill="none" stroke="#fff" opacity="0.6" stroke-width="1.5" />
+              <path d="M 18 2 L 19 3.5 L 21 4 L 19.5 5 L 20 6.5 L 18 5.5 L 16 6.5 L 16.5 5 L 15 4 L 17 3.5 Z" fill="#ffeb3b" stroke="#0d1b2e" stroke-width="1" />
+              <path d="M 5 5 L 5.5 6 L 6.5 6.2 L 5.7 6.8 L 6 7.8 L 5 7.2 L 4 7.8 L 4.3 6.8 L 3.5 6.2 L 4.5 6 Z" fill="#ffeb3b" stroke="#0d1b2e" stroke-width="1" />
+            </svg>
+          </div>
+          <div class="stat-label">Doanh thu tháng</div>
+          <div class="stat-val" id="stat-rev-val">—</div>
+          <div class="stat-sub">+12% so tháng trước</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" width="40" height="40" style="vertical-align: middle;">
+              <defs>
+                <linearGradient id="palGradCard" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffeaa7"/>
+                  <stop offset="100%" stop-color="#f5cd79"/>
+                </linearGradient>
+              </defs>
+              <path d="M 12 3 C 6.5 3, 2 7.5, 2 13 C 2 18, 5.5 21, 11 21 C 13 21, 14.5 19.5, 14.5 18 C 14.5 17, 13.5 16.5, 13.5 15 C 13.5 13.5, 15 12.5, 17 12.5 L 18.5 12.5 C 20.5 12.5, 22 11, 22 9 C 22 5, 17.5 3, 12 3 Z" fill="url(#palGradCard)" stroke="#0d1b2e" stroke-width="1.5" stroke-linejoin="round" />
+              <circle cx="8.5" cy="16.5" r="1.5" fill="#0d1b2e" />
+              <circle cx="6" cy="9.5" r="1.8" fill="#ff4757" stroke="#0d1b2e" stroke-width="1" />
+              <circle cx="5.7" cy="9.0" r="0.5" fill="#fff" opacity="0.6" />
+              <circle cx="9.5" cy="6.5" r="1.8" fill="#ff9f1a" stroke="#0d1b2e" stroke-width="1" />
+              <circle cx="9.2" cy="6.0" r="0.5" fill="#fff" opacity="0.6" />
+              <circle cx="14" cy="6.5" r="1.8" fill="#2ed573" stroke="#0d1b2e" stroke-width="1" />
+              <circle cx="13.7" cy="6.0" r="0.5" fill="#fff" opacity="0.6" />
+              <circle cx="18" cy="9.5" r="1.8" fill="#1e90ff" stroke="#0d1b2e" stroke-width="1" />
+              <circle cx="17.7" cy="9.0" r="0.5" fill="#fff" opacity="0.6" />
+              <path d="M 4 20 L 16 8" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M 15.5 8.5 L 17.5 6.5" stroke="#cbd5e0" stroke-width="2.2" stroke-linecap="round" />
+              <path d="M 17.5 6.5 C 18 5.5, 19 4.5, 20.5 3.5 C 19.5 5, 18.5 6, 17.5 6.5 Z" fill="#ff006e" stroke="#0d1b2e" stroke-width="0.8" />
+            </svg>
+          </div>
+          <div class="stat-label">Học sinh</div>
+          <div class="stat-val" id="stat-stu-val">0</div>
+          <div class="stat-sub">đang học / tổng</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" width="40" height="40" style="vertical-align: middle;">
+              <line x1="12" y1="3" x2="6" y2="21" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round" />
+              <line x1="12" y1="3" x2="18" y2="21" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round" />
+              <line x1="12" y1="3" x2="12" y2="18" stroke="#704010" stroke-width="1.5" stroke-linecap="round" />
+              <rect x="3" y="15" width="18" height="2" rx="0.5" fill="#8b5a2b" stroke="#0d1b2e" stroke-width="1.2" />
+              <rect x="5" y="6" width="14" height="9" rx="1" fill="#ffffff" stroke="#0d1b2e" stroke-width="1.5" />
+              <path d="M 7 12 Q 10 9, 12 11 Q 14 13, 17 10" fill="none" stroke="#ff4757" stroke-width="1.2" stroke-linecap="round" />
+              <circle cx="15" cy="8.5" r="1.2" fill="#ffa502" />
+            </svg>
+          </div>
+          <div class="stat-label">Lớp học</div>
+          <div class="stat-val" id="stat-ses-val">0</div>
+          <div class="stat-sub" id="stat-ses-sub">Chưa có lớp học</div>
+        </div>
+      </div>
+      <div class="ov-chart-grid">
+        
+        <div class="card chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">💰 Doanh thu năm 2026</div>
+              <div class="chart-val" id="rev-chart-val">—</div>
+              <div class="chart-sub">tổng VNĐ • 2026</div>
+            </div>
+          </div>
+          <div class="chart-body" id="chart-revenue"></div>
+        </div>
+        
+        <div class="card chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🎨 Học sinh đang học</div>
+              <div class="chart-val" id="stat-stu-chart-val">—</div>
+              <div class="chart-sub">học sinh hoạt động</div>
+            </div>
+          </div>
+          <div class="chart-body" id="chart-students"></div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">📅 Số ca điểm danh</div>
+              <div class="chart-val" id="stat-ses-chart-val">—</div>
+              <div class="chart-sub">số ca hoàn tất dạy học</div>
+            </div>
+          </div>
+          <div class="chart-body" id="chart-sessions"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tab: Inactive Placeholders for Step-by-Step Delivery -->
+    <div id="tab-members" style="display:none;">
+      <div class="sec-hdr">
+        <h2>Thành viên</h2><div class="sec-line"></div>
+        <button class="btn btn-gold btn-sm" onclick="openModal('modal-add-member')">+ Thêm</button>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>Họ và tên</th><th>Tên đăng nhập</th><th>Vai trò</th>
+              <th>SĐT</th><th>Buổi phụ trách</th><th>Trạng thái</th><th>Chỉnh sửa</th>
+            </tr></thead>
+            <tbody id="members-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-students" style="display:none;">
+      <div class="sec-hdr">
+        <h2>Danh sách Học sinh</h2>
+        <span class="badge badge-gold" id="stu-total-badge" style="font-size:11px;margin-left:8px;">0 học sinh</span>
+        <div class="sec-line"></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input type="text" id="stu-search-input" placeholder="🔍 Tìm kiếm học sinh, lớp..." class="inp" style="max-width:240px;padding:6px 12px;font-size:12px;">
+          <button class="btn btn-gold btn-sm" onclick="openAddStudentModalHelper()">+ Thêm Học sinh</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:50px">#</th>
+              <th>Học sinh</th>
+              <th>Lớp học</th>
+              <th>Khóa học &amp; Tiến trình</th>
+              <th>Thời hạn</th>
+              <th>Học phí &amp; Gia hạn</th>
+              <th>Trạng thái</th>
+              <th style="width:120px">Hành động</th>
+            </tr></thead>
+            <tbody id="students-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-sessions" style="display:none;">
+      <div class="sec-hdr">
+        <h2>Lớp học &amp; Điểm danh</h2>
+        <div class="sec-line"></div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <label class="lbl" style="margin:0;font-size:12px;color:var(--text-m)">📅 Chọn ngày học:</label>
+          <input type="date" id="ses-date-picker" class="inp" style="max-width:180px;padding:6px 12px;font-size:13px;" onchange="renderSessions()">
+          <button class="btn btn-gold btn-sm" id="btn-add-session" onclick="openAddSessionModalHelper()">+ Thêm Lớp học</button>
+        </div>
+      </div>
+      <div class="grid-3" style="grid-template-columns: 240px 1fr; gap:20px; align-items: start;">
+        
+        <!-- Left Column: Weekly Schedule -->
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:var(--font-display);font-size:12px;color:var(--gold-l);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;border-bottom:1px solid rgba(201,168,76,.15);padding-bottom:8px;">📅 Lịch học cố định</h3>
+          <div style="display:flex;flex-direction:column;gap:12px;" id="weekly-schedule-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Right Column: Daily Sessions and Attendance checking -->
+        <div style="display:flex;flex-direction:column;gap:16px;" id="daily-sessions-container">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+    </div>
+
+    <div id="tab-reviews" style="display:none;">
+      <div class="sec-hdr"><h2>Chi tiết</h2><div class="sec-line"></div></div>
+
+      <div id="rv-notice" style="display:none;align-items:flex-start;gap:12px;padding:13px 16px;
+        border-radius:10px;margin-bottom:16px;border:1px solid transparent;">
+        <div class="rv-notice-text" style="font-size:13px;line-height:1.7;color:var(--text);flex:1;"></div>
+        <button class="btn btn-gold btn-sm" onclick="openRvRenewModal()" style="flex-shrink:0;">Gia hạn học phí</button>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div>
+          <label class="lbl">Học sinh</label>
+          <div style="position:relative;" id="rv-stu-wrap">
+            <input type="text" class="inp" id="rv-stu-search" placeholder="🔍 Tìm theo tên..."
+              oninput="filterRvStudents(this.value)" onfocus="showRvDropdown()" autocomplete="off">
+            <div id="rv-stu-dropdown" style="display:none;position:absolute;top:calc(100%+4px);left:0;right:0;
+              background:rgba(6,13,26,.97);border:1px solid rgba(201,168,76,.3);border-radius:10px;
+              z-index:200;max-height:220px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+            </div>
+            <input type="hidden" id="rv-student" value="">
+            <input type="hidden" id="rv-session" value="">
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Ngày học</label>
+          <input type="date" class="inp" id="rv-date">
+        </div>
+      </div>
+
+      <div class="sec-hdr"><h2>Tiêu chí đánh giá</h2><div class="sec-line"></div></div>
+      <div class="criteria-grid" id="criteria-grid"></div>
+      <div class="gold-line"></div>
+
+      <div class="sec-hdr"><h2>Nhận xét chi tiết</h2><div class="sec-line"></div></div>
+      <div style="margin-bottom:10px;">
+        <label class="lbl">Gợi ý nhanh</label>
+        <div class="suggestion-chips" id="chips"></div>
+      </div>
+      <textarea class="inp" id="rv-text" rows="4" placeholder="Nhận xét chi tiết về buổi học vẽ..."></textarea>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="previewReview()">👁 Xem trước nhận xét</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="modal-bg" id="modal-add-member">
+  <div class="modal">
+    <div class="modal-title">➕ Thêm thành viên</div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Họ tên</label><input class="inp" id="am-name" placeholder="Nguyễn Văn A"></div>
+      <div class="form-col"><label class="lbl">Tên đăng nhập</label><input class="inp" id="am-username" placeholder="gv_thuat"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Mật khẩu</label><input type="password" class="inp" id="am-pass" placeholder="••••••••"></div>
+      <div class="form-col"><label class="lbl">Vai trò</label>
+        <select class="inp" id="am-role"><option value="teacher">Giáo viên</option><option value="manager">Quản lý</option><option value="admin">Admin</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Số điện thoại</label><input class="inp" id="am-phone" placeholder="09xxxxxxxx"></div>
+      <div class="form-col"><label class="lbl">Trạng thái</label>
+        <select class="inp" id="am-status"><option value="active">Hoạt động</option><option value="inactive">Tạm dừng</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-member')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveAddMember()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-edit-member">
+  <div class="modal">
+    <input type="hidden" id="em-id">
+    <div class="modal-title" id="modal-edit-member-title">✏️ Sửa thành viên</div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Họ tên</label><input class="inp" id="em-name"></div>
+      <div class="form-col"><label class="lbl">Tên đăng nhập</label><input class="inp" id="em-username"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col">
+        <label class="lbl">Mật khẩu mới <span style="color:var(--text-d);font-weight:400">(để trống = giữ nguyên)</span></label>
+        <input type="password" class="inp" id="em-pass" placeholder="Nhập để đổi mật khẩu">
+      </div>
+      <div class="form-col"><label class="lbl">Số điện thoại</label><input class="inp" id="em-phone"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Vai trò</label>
+        <select class="inp" id="em-role">
+          <option value="teacher">Giáo viên</option>
+          <option value="manager">Quản lý</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-col"><label class="lbl">Trạng thái</label>
+        <select class="inp" id="em-status">
+          <option value="active">● Hoạt động</option>
+          <option value="inactive">○ Tạm dừng</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-member')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveEditMember()">💾 Lưu thay đổi</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-delete-member">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-title" style="color:#ff7070;">🗑 Xác nhận xóa thành viên</div>
+    <input type="hidden" id="del-member-id">
+    <div style="padding:16px;background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);border-radius:10px;margin-bottom:20px;">
+      <div style="font-size:14px;color:var(--text);margin-bottom:8px;">
+        Bạn muốn xóa thành viên: <strong style="color:var(--gold-l)" id="del-member-name"></strong>?
+      </div>
+      <div style="font-size:12px;color:var(--text-m);line-height:1.6;">
+        ⚠️ Tài khoản sẽ bị xóa khỏi hệ thống.<br>
+        📋 Toàn bộ lịch sử điểm danh trước đó <strong style="color:var(--teal)">vẫn được giữ nguyên</strong>.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-delete-member')">Hủy</button>
+      <button class="btn btn-danger" onclick="doDeleteMember()">🗑 Xác nhận xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Student -->
+<div class="modal-bg" id="modal-add-student">
+  <div class="modal" style="max-width:580px;">
+    <div class="modal-title">➕ Thêm học sinh mới</div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Họ tên học sinh</label><input class="inp" id="as-name" placeholder="Nguyễn Văn B"></div>
+      <div class="form-col"><label class="lbl">Biệt danh (Nickname)</label><input class="inp" id="as-nick" placeholder="Bin"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Năm sinh</label><input type="number" class="inp" id="as-dob" placeholder="2018"></div>
+      <div class="form-col"><label class="lbl">Địa chỉ</label><input class="inp" id="as-address" placeholder="Quận 1, HCM"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Tên phụ huynh</label><input class="inp" id="as-parentName" placeholder="Nguyễn Văn A"></div>
+      <div class="form-col"><label class="lbl">Số điện thoại phụ huynh</label><input class="inp" id="as-parentPhone" placeholder="09xxxxxxxx"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Chương trình học</label>
+        <select class="inp" id="as-progId" onchange="onStudentAddProgramChange()"></select>
+      </div>
+      <div class="form-col"><label class="lbl">Học phí (VNĐ)</label><input class="inp" id="as-fee" placeholder="1.200.000"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Ngày bắt đầu</label><input type="date" class="inp" id="as-dateFrom"></div>
+      <div class="form-col"><label class="lbl">Ngày kết thúc (Có thể để trống)</label><input type="date" class="inp" id="as-dateTo"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Ngày đóng học phí</label><input type="date" class="inp" id="as-paidDate"></div>
+      <div class="form-col"><label class="lbl">Trạng thái đóng phí ban đầu</label>
+        <select class="inp" id="as-stuStatus">
+          <option value="active">Đã đóng học phí</option>
+          <option value="unpaid">Chưa đóng học phí</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Đăng ký lớp học (Chọn nhiều lớp)</label>
+        <div id="as-sessions-check" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(255,255,255,.04);padding:10px;border-radius:8px;border:1px solid rgba(201,168,76,.18)"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-student')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveAddStudent()">Lưu thông tin</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Student -->
+<div class="modal-bg" id="modal-edit-student">
+  <div class="modal" style="max-width:580px;">
+    <input type="hidden" id="es-id">
+    <div class="modal-title" id="modal-edit-student-title">✏️ Sửa thông tin học sinh</div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Họ tên học sinh</label><input class="inp" id="es-name"></div>
+      <div class="form-col"><label class="lbl">Biệt danh (Nickname)</label><input class="inp" id="es-nick"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Năm sinh</label><input type="number" class="inp" id="es-dob"></div>
+      <div class="form-col"><label class="lbl">Địa chỉ</label><input class="inp" id="es-address"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Tên phụ huynh</label><input class="inp" id="es-parentName"></div>
+      <div class="form-col"><label class="lbl">SĐT phụ huynh</label><input class="inp" id="es-parentPhone"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Chương trình học</label>
+        <select class="inp" id="es-progId" onchange="onStudentEditProgramChange()"></select>
+      </div>
+      <div class="form-col"><label class="lbl">Học phí (VNĐ)</label><input class="inp" id="es-fee"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Ngày bắt đầu</label><input type="date" class="inp" id="es-dateFrom"></div>
+      <div class="form-col"><label class="lbl">Ngày kết thúc</label><input type="date" class="inp" id="es-dateTo"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Trạng thái học tập</label>
+        <select class="inp" id="es-status">
+          <option value="active">Đang học</option>
+          <option value="break">Tạm dừng học</option>
+        </select>
+      </div>
+      <div class="form-col"><label class="lbl">Đã học (số buổi)</label>
+        <input type="number" class="inp" id="es-done" min="0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Đăng ký lớp học</label>
+        <div id="es-sessions-check" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(255,255,255,.04);padding:10px;border-radius:8px;border:1px solid rgba(201,168,76,.18)"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-student')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveEditStudent()">💾 Lưu thay đổi</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Renew Student -->
+<div class="modal-bg" id="modal-renew-student">
+  <div class="modal" style="max-width:480px;">
+    <input type="hidden" id="rs-id">
+    <div class="modal-title">🔄 Gia hạn học phí &amp; khóa học</div>
+    <div style="padding:12px 16px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;margin-bottom:18px;">
+      Gia hạn học phí cho học sinh: <strong style="color:var(--gold-l)" id="rs-name-display"></strong>
+    </div>
+    <div class="form-row">
+      <div class="form-col full"><label class="lbl">Chọn chương trình học</label>
+        <select class="inp" id="rs-progId" onchange="onStudentRenewProgramChange()"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Học phí mới (VNĐ)</label><input class="inp" id="rs-fee"></div>
+      <div class="form-col"><label class="lbl">Ngày đóng phí</label><input type="date" class="inp" id="rs-paidDate"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Ngày bắt đầu khóa mới</label><input type="date" class="inp" id="rs-dateFrom"></div>
+      <div class="form-col"><label class="lbl">Ngày kết thúc mới (Có thể để trống)</label><input type="date" class="inp" id="rs-dateTo"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-renew-student')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveRenewStudent()">💾 Xác nhận gia hạn</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Delete Student -->
+<div class="modal-bg" id="modal-delete-student">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-title" style="color:#ff7070;">🗑 Xác nhận xóa học sinh</div>
+    <input type="hidden" id="ds-id">
+    <div style="padding:16px;background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);border-radius:10px;margin-bottom:20px;">
+      <div style="font-size:14px;color:var(--text);margin-bottom:8px;">
+        Bạn muốn xóa học sinh: <strong style="color:var(--gold-l)" id="ds-name-display"></strong>?
+      </div>
+      <div style="font-size:12px;color:var(--text-m);line-height:1.6;">
+        ⚠️ Hồ sơ học sinh sẽ bị xóa vĩnh viễn khỏi danh sách lớp.<br>
+        📊 Lịch sử điểm danh và nhận xét trước đây <strong style="color:var(--teal)">vẫn được lưu trong hệ thống</strong>.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-delete-student')">Hủy</button>
+      <button class="btn btn-danger" onclick="doDeleteStudent()">🗑 Xác nhận xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Recurring Class/Session -->
+<div class="modal-bg" id="modal-add-session">
+  <div class="modal">
+    <div class="modal-title">📅 Thêm lớp học mới</div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Tên lớp học</label>
+        <input class="inp" id="ns-name" placeholder="VD: Lớp Vẽ màu nước CN">
+      </div>
+      <div class="form-col"><label class="lbl">Giáo viên phụ trách</label>
+        <select class="inp" id="ns-teacher"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Thứ học cố định</label>
+        <select class="inp" id="ns-day">
+          <option value="T2">Thứ 2</option>
+          <option value="T3">Thứ 3</option>
+          <option value="T4">Thứ 4</option>
+          <option value="T5">Thứ 5</option>
+          <option value="T6">Thứ 6</option>
+          <option value="T7" selected>Thứ 7</option>
+          <option value="CN">Chủ nhật</option>
+        </select>
+      </div>
+      <div class="form-col">
+        <label class="lbl">Khung giờ (Bắt đầu - Kết thúc)</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="inp" id="ns-start" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option selected>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
+          <span style="color:var(--text-d);font-size:13px;">–</span>
+          <select class="inp" id="ns-end" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option selected>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-session')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveNewSession()">Tạo lớp học</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Delete Recurring Class/Session -->
+<div class="modal-bg" id="modal-delete-recurring-class">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-title" style="color:#ff7070;">🗑 Xác nhận xóa lớp học</div>
+    <input type="hidden" id="del-recurring-class-id">
+    <div style="padding:16px;background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);border-radius:10px;margin-bottom:20px;">
+      <div style="font-size:14px;color:var(--text);margin-bottom:8px;">
+        Bạn muốn xóa lớp học cố định: <strong style="color:var(--gold-l)" id="del-recurring-class-name"></strong>?
+      </div>
+      <div style="font-size:12px;color:var(--text-m);line-height:1.6;">
+        ⚠️ Lớp học sẽ bị xóa khỏi lịch cố định hàng tuần.<br>
+        📋 Học sinh đang đăng ký lớp này sẽ tự động hủy đăng ký lớp này.<br>
+        📊 Lịch sử điểm danh và doanh thu trước đây <strong style="color:var(--teal)">vẫn được giữ nguyên</strong>.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-delete-recurring-class')">Hủy</button>
+      <button class="btn btn-danger" onclick="doDeleteRecurringClass()">🗑 Xác nhận xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Student to Daily Session -->
+<div class="modal-bg" id="modal-add-stu-session">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-title">➕ Thêm học sinh vào ca học</div>
+    <input type="hidden" id="add-stu-sess-class-id">
+    <input type="hidden" id="add-stu-sess-date-str">
+    <div style="margin-bottom:14px;">
+      <input class="inp" id="add-stu-sess-search" placeholder="🔍 Tìm kiếm học sinh..." oninput="filterAddStuSessList(this.value)" style="margin-bottom:10px;">
+      <label class="lbl">Chọn học sinh</label>
+      <select class="inp" id="add-stu-sess-select" size="6" style="height:auto;padding:4px 0;"></select>
+    </div>
+    <div style="font-size:11px;color:var(--text-d);margin-bottom:18px;line-height:1.5;">
+      💡 Học sinh được thêm sẽ xuất hiện trong ca học này của ngày được chọn và tham gia điểm danh (không thay đổi lớp đăng ký mặc định của học sinh).
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-stu-session')">Hủy</button>
+      <button class="btn btn-gold" onclick="confirmAddStudentToSession()">➕ Thêm vào ca học</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Recurring Class -->
+<div class="modal-bg" id="modal-edit-recurring-class">
+  <div class="modal">
+    <div class="modal-title">✏️ Sửa thông tin lớp học cố định</div>
+    <input type="hidden" id="er-class-id">
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Tên lớp học</label>
+        <input class="inp" id="er-name" placeholder="Tên lớp">
+      </div>
+      <div class="form-col"><label class="lbl">Giáo viên mặc định</label>
+        <select class="inp" id="er-teacher"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Thứ học cố định</label>
+        <select class="inp" id="er-day">
+          <option value="T2">Thứ 2</option>
+          <option value="T3">Thứ 3</option>
+          <option value="T4">Thứ 4</option>
+          <option value="T5">Thứ 5</option>
+          <option value="T6">Thứ 6</option>
+          <option value="T7">Thứ 7</option>
+          <option value="CN">Chủ nhật</option>
+        </select>
+      </div>
+      <div class="form-col">
+        <label class="lbl">Khung giờ (Bắt đầu - Kết thúc)</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="inp" id="er-start" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
+          <span style="color:var(--text-d);font-size:13px;">–</span>
+          <select class="inp" id="er-end" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-recurring-class')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveEditRecurringClass()">💾 Lưu thay đổi</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-preview">
+  <div class="modal" style="max-width:580px;">
+    <div class="modal-title" id="preview-modal-title">👁 Xem trước nhận xét</div>
+    <div id="review-preview-content"
+      style="background:linear-gradient(135deg,rgba(6,13,26,.95),rgba(13,27,46,.95));
+        border:1px solid rgba(201,168,76,.18);border-radius:12px;padding:22px;">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-preview')">Đóng</button>
+      <button class="btn btn-gold" onclick="saveReviewImage()">💾 Tải phiếu (ảnh JPG)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Supabase Settings -->
+<div class="modal-bg" id="modal-sb-settings">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">⚙️ Cấu hình kết nối Supabase</div>
+    <div style="font-size:12px;color:var(--text-m);line-height:1.6;margin-bottom:16px;padding:10px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:8px;">
+      💡 Bạn có thể cấu hình dự án Supabase của riêng mình để lưu trữ dữ liệu riêng tư. Nếu để trống, hệ thống sẽ tự động sử dụng dự án dùng chung mặc định.
+    </div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Supabase Project URL</label>
+        <input class="inp" id="cfg-sb-url" placeholder="https://your-project.supabase.co">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Supabase API Key (Anon / Service Role)</label>
+        <input type="password" class="inp" id="cfg-sb-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Bucket Name</label><input class="inp" id="cfg-sb-bucket" placeholder="eradata"></div>
+      <div class="form-col"><label class="lbl">File Name (JSON)</label><input class="inp" id="cfg-sb-file" placeholder="handart-data.json"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-sb-settings')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveSbSettings()">💾 Lưu cấu hình</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/*═══════════════════════════════════
+  SEED DATA & APP STATE
+  (HandArt Drawing Class equivalents)
+  Loaded automatically if Supabase data file is not found
+  Synced to 'handart-data.json'
+═══════════════════════════════════*/
+const MONTHS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+
+let SB_URL = localStorage.getItem('cfg_sb_url') || 'https://mrnosatbmsevkecqehtt.supabase.co';
+let SB_KEY = localStorage.getItem('cfg_sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybm9zYXRibXNldmtlY3FlaHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDEyOTQsImV4cCI6MjA5NDQxNzI5NH0.Kdd0yrZ7nZrGORN3BnmoCIhnd3KcH2UAfB99S3K4UCU';
+let SB_BUCKET = localStorage.getItem('cfg_sb_bucket') || 'eradata';
+let SB_FILE = localStorage.getItem('cfg_sb_file') || 'handart-data.json';
+
+const CRITERIA = [
+  {key:'color',label:'Phối màu, sắc độ'},
+  {key:'composition',label:'Bố cục, hình ảnh'},
+  {key:'detail',label:'Độ chi tiết'},
+  {key:'creativity',label:'Sức sáng tạo'},
+  {key:'focus',label:'Sự tập trung, kiên nhẫn'},
+  {key:'progress',label:'Sự tiến bộ'}
+];
+
+const SUGGESTIONS = [
+  "Bạn tiếp thu nhanh, có hứng thú với màu vẽ, hôm nay bé đã hoàn thành một bức tranh phong cảnh cơ bản.",
+  "Bạn có tư duy bố cục tốt, ba mẹ có thể gợi ý để bé phát triển thêm về hội họa kiến trúc hoặc thời trang.",
+  "Bạn mới làm quen với cọ vẽ mà đã có thể đi viền khá tốt, bạn chia sẻ thích vẽ hoạt hình, ba mẹ có thể gợi ý bé vẽ thể loại anime."
+];
+
+// Seed Members
+const MEMBERS = [
+  {id:1,name:'Admin HandArt',username:'admin',pass:'123456',role:'admin',phone:'',status:'active'}
+];
+
+// Seed Drawing Programs
+const PROGRAMS = [
+  {id:1,name:'Mỹ thuật cơ bản',sessions:8},
+  {id:2,name:'Vẽ màu nước dã ngoại',sessions:12},
+  {id:3,name:'Phác họa chân dung chuyên sâu',sessions:16}
+];
+
+// Seed Classes
+const SESSIONS_DATA = [];
+
+// Seed Students
+const STUDENTS = [];
+
+// Seed State Vars
+let currentUser = null;
+let activeTab = 'overview';
+let savedAttendance = {};
+let hiddenSessionDates = {};
+let savedReviews = [];
+let memberSelfAtt = {};
+let studentAttCount = {};
+let renewLog = [];
+let revenueByMonth = {};
+
+/*═══════════════════════════════════
+  SUPABASE SYNC SETUP (Isolated File)
+  Uses bucket 'eradata', file 'handart-data.json'
+═══════════════════════════════════*/
+function _sbSetStatus(state){
+  const el=document.getElementById('sb-sync-status');
+  if(!el) return;
+  if(state==='saving')   { el.textContent='⏳ Đang lưu...';  el.style.color='var(--gold-l)'; }
+  else if(state==='ok')  { el.textContent='✓ Đã lưu';        el.style.color='#5ddb8e'; setTimeout(()=>{ if(el.textContent==='✓ Đã lưu') el.textContent=''; },2500); }
+  else if(state==='err') { el.textContent='⚠ Lỗi lưu';      el.style.color='var(--red)'; }
+  else                   { el.textContent=''; }
+}
+
+async function sbLoad(){
+  _sbSetStatus('saving');
+  try{
+    const url=`${SB_URL}/storage/v1/object/${SB_BUCKET}/${SB_FILE}`;
+    const res=await fetch(url,{headers:{'Authorization':'Bearer '+SB_KEY}});
+    if(res.status===404){ _sbSetStatus('ok'); return false; } 
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    if(data.MEMBERS && data.MEMBERS.length) MEMBERS.splice(0,MEMBERS.length,...data.MEMBERS);
+    if(data.SESSIONS_DATA) SESSIONS_DATA.splice(0,SESSIONS_DATA.length,...data.SESSIONS_DATA);
+    if(data.STUDENTS)      STUDENTS.splice(0,STUDENTS.length,...data.STUDENTS);
+    if(data.savedAttendance)    Object.assign(savedAttendance,   data.savedAttendance);
+    if(data.hiddenSessionDates) Object.assign(hiddenSessionDates,data.hiddenSessionDates);
+    if(data.savedReviews)  savedReviews.splice(0,savedReviews.length,...data.savedReviews);
+    if(data.memberSelfAtt)  Object.assign(memberSelfAtt, data.memberSelfAtt);
+    if(data.renewLog)      renewLog.splice(0,renewLog.length,...data.renewLog);
+    if(data.revenueByMonth) Object.assign(revenueByMonth,data.revenueByMonth);
+    _sbSetStatus('ok');
+    return true;
+  } catch(e){
+    console.error('sbLoad error',e);
+    _sbSetStatus('err');
+    return false;
+  }
+}
+
+let _sbSaveTimer=null;
+async function sbSave(){
+  clearTimeout(_sbSaveTimer);
+  _sbSaveTimer=setTimeout(async()=>{
+    _sbSetStatus('saving');
+    const payload=JSON.stringify({
+      MEMBERS:[...MEMBERS],
+      SESSIONS_DATA:[...SESSIONS_DATA],
+      STUDENTS:[...STUDENTS],
+      savedAttendance:{...savedAttendance},
+      hiddenSessionDates:{...hiddenSessionDates},
+      savedReviews:[...savedReviews],
+      memberSelfAtt:{...memberSelfAtt},
+      renewLog:[...renewLog],
+      revenueByMonth:{...revenueByMonth},
+      savedAt:new Date().toISOString()
+    });
+    try{
+      const url=`${SB_URL}/storage/v1/object/${SB_BUCKET}/${SB_FILE}`;
+      let res=await fetch(url,{
+        method:'PUT',
+        headers:{'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','x-upsert':'true'},
+        body:payload
+      });
+      if(!res.ok){
+        res=await fetch(`${SB_URL}/storage/v1/object/${SB_BUCKET}/${SB_FILE}`,{
+          method:'POST',
+          headers:{'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+          body:payload
+        });
+      }
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      _sbSetStatus('ok');
+    } catch(e){
+      console.error('sbSave error',e);
+      _sbSetStatus('err');
+    }
+  },800);
+}
+
+function openSbSettingsModal() {
+  document.getElementById('cfg-sb-url').value = localStorage.getItem('cfg_sb_url') || '';
+  document.getElementById('cfg-sb-key').value = localStorage.getItem('cfg_sb_key') || '';
+  document.getElementById('cfg-sb-bucket').value = localStorage.getItem('cfg_sb_bucket') || '';
+  document.getElementById('cfg-sb-file').value = localStorage.getItem('cfg_sb_file') || '';
+  openModal('modal-sb-settings');
+}
+
+function saveSbSettings() {
+  const url = document.getElementById('cfg-sb-url').value.trim();
+  const key = document.getElementById('cfg-sb-key').value.trim();
+  const bucket = document.getElementById('cfg-sb-bucket').value.trim();
+  const file = document.getElementById('cfg-sb-file').value.trim();
+
+  if (url) localStorage.setItem('cfg_sb_url', url); else localStorage.removeItem('cfg_sb_url');
+  if (key) localStorage.setItem('cfg_sb_key', key); else localStorage.removeItem('cfg_sb_key');
+  if (bucket) localStorage.setItem('cfg_sb_bucket', bucket); else localStorage.removeItem('cfg_sb_bucket');
+  if (file) localStorage.setItem('cfg_sb_file', file); else localStorage.removeItem('cfg_sb_file');
+
+  SB_URL = url || 'https://mrnosatbmsevkecqehtt.supabase.co';
+  SB_KEY = key || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybm9zYXRibXNldmtlY3FlaHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDEyOTQsImV4cCI6MjA5NDQxNzI5NH0.Kdd0yrZ7nZrGORN3BnmoCIhnd3KcH2UAfB99S3K4UCU';
+  SB_BUCKET = bucket || 'eradata';
+  SB_FILE = file || 'handart-data.json';
+
+  closeModal('modal-sb-settings');
+  showToast('✅ Đã cập nhật cấu hình Supabase! Đang tải lại dữ liệu...');
+  sbLoad().then(() => {
+    initApp();
+  });
+}
+
+/*═══════════════════════════════════
+  AUTHENTICATION FLOW
+  ═══════════════════════════════════*/
+async function doLogin(){
+  const u = document.getElementById('lg-user').value.trim();
+  const p = document.getElementById('lg-pass').value.trim();
+  if(!u||!p){ showErr('Vui lòng nhập đầy đủ thông tin!'); return; }
+
+  let found = MEMBERS.find(m=>m.username===u && m.pass===p);
+
+  if(!found){
+    const btn = document.querySelector('.btn-login');
+    if(btn){ btn.disabled=true; btn.textContent='Đang kiểm tra...'; }
+    await sbLoad();
+    if(btn){ btn.disabled=false; btn.textContent='Đăng nhập ›'; }
+    found = MEMBERS.find(m=>m.username===u && m.pass===p);
+  }
+
+  if(!found){ showErr('Tên đăng nhập hoặc mật khẩu không đúng!'); return; }
+  if(found.status==='inactive'){ showErr('Tài khoản đã bị tạm dừng. Liên hệ quản trị viên!'); return; }
+  currentUser = {...found};
+  document.getElementById('page-login').style.display='none';
+  document.getElementById('app').style.display='block';
+  
+  const loadMsg=document.createElement('div');
+  loadMsg.id='sb-loading';
+  loadMsg.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(6,13,26,.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:var(--font-body);';
+  loadMsg.innerHTML='<div style="font-size:24px">🎨</div><div style="color:var(--gold-l);font-size:14px;letter-spacing:1px;">Đang tải dữ liệu...</div>';
+  document.body.appendChild(loadMsg);
+  
+  sbLoad().then(()=>{
+    if(document.getElementById('sb-loading')) document.body.removeChild(loadMsg);
+    initApp();
+  });
+}
+
+document.addEventListener('keydown',e=>{ 
+  if(e.key==='Enter'&&document.getElementById('page-login').style.display!=='none') doLogin(); 
+});
+
+function showErr(msg){
+  const el=document.getElementById('lg-err'); el.textContent=msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none',3000);
+}
+
+function doLogout(){
+  document.querySelectorAll('.nav-item').forEach(n=>n.style.display='');
+  document.getElementById('page-login').style.display='flex';
+  document.getElementById('app').style.display='none';
+  currentUser=null;
+  activeTab='overview';
+}
+
+/*═══════════════════════════════════
+  APP FRAMEWORK INITIALIZATION
+  ═══════════════════════════════════*/
+function initApp(){
+  const now=new Date();
+  document.getElementById('hdr-date').textContent=now.toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+  document.getElementById('sb-uname').textContent=currentUser.name;
+  document.getElementById('sb-urole').textContent=currentUser.role;
+  document.getElementById('sb-av').textContent=currentUser.name[0];
+  const roleBadge=document.getElementById('hdr-role-badge');
+  roleBadge.textContent=currentUser.role==='admin'?'Admin':currentUser.role==='manager'?'Quản lý':'Giáo viên';
+  
+  // Initialize date picker to today
+  const picker = document.getElementById('ses-date-picker');
+  if(picker && !picker.value){
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    picker.value = `${y}-${m}-${d}`;
+  }
+  
+  initStudentModalSelectors();
+  buildReviewForm();
+  
+  // Hide class creation button for teachers
+  const addSessionBtn = document.getElementById('btn-add-session');
+  if (addSessionBtn) {
+    addSessionBtn.style.display = (currentUser.role === 'teacher') ? 'none' : '';
+  }
+
+  // Hide Supabase settings button for teachers
+  const settingsBtn = document.querySelector('.sb-settings');
+  if (settingsBtn) {
+    settingsBtn.style.display = (currentUser.role === 'teacher') ? 'none' : '';
+  }
+  
+  document.querySelectorAll('.nav-item').forEach(n=>n.style.display='');
+  if(currentUser.role==='teacher'){
+    document.querySelectorAll('.nav-item')[0].style.display='none'; // hide overview
+    document.querySelectorAll('.nav-item')[1].style.display='none'; // hide members
+    switchTab('sessions',document.querySelectorAll('.nav-item')[3]);
+  } else {
+    switchTab('overview',document.querySelectorAll('.nav-item')[0]);
+  }
+}
+
+/*═══════════════════════════════════
+  TAB SWITCHING SYSTEM
+  ═══════════════════════════════════*/
+const TAB_TITLES={
+  overview:'Tổng quan',
+  members:'Thành viên',
+  students:'Danh sách học sinh',
+  sessions:'Lớp học / Ca điểm danh',
+  reviews:'Nhận xét học sinh'
+};
+
+function switchTab(name,el){
+  if(window.innerWidth<=768){
+    const sb=document.getElementById('sidebar');
+    const ov=document.getElementById('sidebar-overlay');
+    if(sb.classList.contains('open')){
+      sb.classList.remove('open');ov.classList.remove('show');
+      document.body.style.overflow='';
+    }
+  }
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.main > div[id^="tab-"]').forEach(d=>d.style.display='none');
+  const target=document.getElementById(`tab-${name}`);
+  if(target){ target.style.display='block'; target.style.animation='tabIn .35s ease both'; }
+  document.getElementById('hdr-title').textContent=TAB_TITLES[name]||name;
+  activeTab=name;
+  if(window.innerWidth<768) document.getElementById('sidebar').classList.remove('open');
+  
+  if(name==='overview') { buildCharts(); updateOverviewCards(); }
+  if(name==='members')  renderMembers();
+  if(name==='students') renderStudents();
+  if(name==='sessions') renderSessions();
+}
+
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const ov=document.getElementById('sidebar-overlay');
+  const isOpen=sb.classList.toggle('open');
+  ov.classList.toggle('show',isOpen);
+  document.body.style.overflow=isOpen?'hidden':'';
+}
+
+/*═══════════════════════════════════
+  TAB 1: OVERVIEW COMPONENT (ACTIVE)
+═══════════════════════════════════*/
+function parseFeeVND(feeStr){
+  return parseInt((feeStr||'').replace(/[^0-9]/g,''))||0;
+}
+function addDots(s){
+  var result='';
+  var len=s.length;
+  for(var i=0;i<len;i++){
+    if(i>0&&(len-i)%3===0) result+='.';
+    result+=s[i];
+  }
+  return result;
+}
+function formatFeeVND(val){
+  var raw=(val||'').toString().replace(/[^0-9]/g,'');
+  if(!raw||raw==='0') return '';
+  return addDots(raw);
+}
+
+function updateOverviewCards(){
+  // Active students count
+  const activeCount=STUDENTS.filter(s=>s.stuStatus!=='break').length;
+  const stuEl=document.getElementById('stat-stu-val');
+  if(stuEl) stuEl.innerHTML=`${activeCount} <span style="font-size:14px;color:var(--text-m)">/ ${STUDENTS.length}</span>`;
+  
+  // Total classes count
+  const sesEl=document.getElementById('stat-ses-val');
+  if(sesEl) sesEl.textContent=SESSIONS_DATA.length;
+  
+  const sesSubEl=document.getElementById('stat-ses-sub');
+  if(sesSubEl){
+    const days=[...new Set(SESSIONS_DATA.map(s=>s.day))];
+    const cnCount=SESSIONS_DATA.filter(s=>s.day==='CN').length;
+    const others=days.filter(d=>d!=='CN').join(', ');
+    sesSubEl.textContent=(others?(others+', '):'')+(cnCount>1?`CN×${cnCount}`:'CN');
+  }
+}
+
+function buildCharts(){
+  const year = 2026;
+  const now  = new Date();
+  const curM = now.getFullYear()===year ? now.getMonth() : (year < now.getFullYear() ? 11 : -1);
+
+  // YTD Revenue chart
+  const rev = Array.from({length:12},(_,i)=>{
+    const mk=`${year}-${String(i+1).padStart(2,'0')}`;
+    return (revenueByMonth[mk]||0);
+  });
+
+  // YTD Student counts (active)
+  const stuBase=[0,0,0,0,0,0,0,0,0,0,0,0];
+  const stuExtra=Array(12).fill(0);
+  renewLog.forEach(r=>{
+    if(r.paidDate && r.paidDate.startsWith(String(year))){
+      const m=parseInt(r.paidDate.slice(5,7))-1;
+      if(m>=0&&m<12) stuExtra[m]++;
+    }
+  });
+  const stu=stuBase.map((v,i)=>stuExtra[i]>0?stuExtra[i]:v);
+
+  // YTD Sessions taken
+  const sesBase=[0,0,0,0,0,0,0,0,0,0,0,0];
+  const sesExtra=Array(12).fill(0);
+  Object.values(savedAttendance).forEach(att=>{
+    if(att.finalized&&att.savedAt&&att.savedAt.startsWith(String(year))){
+      const m=parseInt(att.savedAt.slice(5,7))-1;
+      if(m>=0&&m<12) sesExtra[m]++;
+    }
+  });
+  const ses=sesBase.map((v,i)=>sesExtra[i]>0?sesExtra[i]:v);
+
+  const totalRev=rev.reduce((a,b)=>a+b,0);
+  const curRev=curM>=0?rev[curM]:0;
+  const prevRev=curM>0?rev[curM-1]:0;
+
+  // Header display
+  const revEl=document.getElementById('rev-chart-val');
+  if(revEl) revEl.textContent=(totalRev/1000000).toFixed(1).replace('.',',')+' M';
+
+  const statRevEl=document.getElementById('stat-rev-val');
+  if(statRevEl) statRevEl.textContent=(curRev/1000000).toFixed(1).replace('.',',')+' M';
+
+  const statSubs=document.querySelectorAll('.stat-sub');
+  if(statSubs[0]){
+    if(prevRev>0){
+      const pct=Math.round((curRev-prevRev)/prevRev*100);
+      statSubs[0].textContent=(pct>=0?'+':'')+pct+'% so tháng trước';
+    } else {
+      statSubs[0].textContent='Tháng '+String(curM+1)+'/'+year;
+    }
+  }
+
+  const stuEl=document.getElementById('stat-stu-chart-val');
+  if(stuEl) stuEl.textContent=STUDENTS.filter(s=>s.stuStatus!=='break').length;
+  
+  const sesEl=document.getElementById('stat-ses-chart-val');
+  if(sesEl) sesEl.textContent=ses.reduce((a,b)=>a+b,0);
+
+  // Render bars
+  renderBarChart('chart-revenue', rev, curM, 'gold', v=>v===0?'—':(v/1000000).toFixed(1)+' M');
+  renderBarChart('chart-students', stu, curM, 'teal', v=>v===0?'—':v+' HS');
+  renderBarChart('chart-sessions', ses, curM, 'blue', v=>v===0?'—':v+' buổi');
+}
+
+function renderBarChart(containerId, data, curMonth, colorClass, fmtFn){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  const months=['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+  const max=Math.max(...data,1);
+  el.innerHTML='';
+  data.forEach((v,i)=>{
+    const pct=Math.round(v/max*100);
+    const isEmpty=v===0;
+    const isCur=i===curMonth;
+    const col=document.createElement('div');
+    col.className='cb-col';
+    const bar=document.createElement('div');
+    bar.className='cb-bar '+(isEmpty?'empty':colorClass);
+    bar.style.height=(isEmpty?4:Math.max(pct,4))+'%';
+    bar.setAttribute('data-tip', fmtFn(v));
+    if(isCur&&!isEmpty) bar.style.filter='brightness(1.3)';
+    const lbl=document.createElement('div');
+    lbl.className='cb-lbl'+(isCur?' cur':'');
+    lbl.textContent=months[i];
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    el.appendChild(col);
+  });
+}
+
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='toast';
+    t.style.cssText='position:fixed;bottom:28px;right:28px;z-index:9999;padding:12px 20px;'+
+      'background:rgba(13,27,46,.97);border:1px solid rgba(201,168,76,.5);border-radius:10px;'+
+      'color:var(--gold-l);font-size:13px;font-weight:600;box-shadow:0 4px 24px rgba(0,0,0,.5);'+
+      'animation:fadeU .3s ease;pointer-events:none;max-width:320px;';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.display='block';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.style.display='none',3000);
+}
+
+/*═══════════════════════════════════
+  MEMBERS MANAGEMENT (TAB 2) & MODALS
+═══════════════════════════════════*/
+function openModal(id){
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
+}
+
+function getMemberSelfAttMonth(memberId){
+  const now=new Date();
+  const mk=now.toISOString().slice(0,7);
+  return (memberSelfAtt[memberId]||{})[mk]||0;
+}
+
+function resetMemberAtt(memberId){
+  const now=new Date();
+  const mk=now.toISOString().slice(0,7);
+  if(!memberSelfAtt[memberId]) memberSelfAtt[memberId]={};
+  memberSelfAtt[memberId][mk]=0;
+  renderMembers();
+  showToast('🔄 Đã reset buổi phụ trách tháng này!');
+}
+
+function renderMembers(){
+  const tb=document.getElementById('members-tbody');
+  if(!tb) return;
+  const now=new Date();
+  const monthLabel=`T${now.getMonth()+1}/${now.getFullYear()}`;
+  tb.innerHTML=MEMBERS.map((m,i)=>{
+    const roleClass=m.role==='admin'?'role-admin':m.role==='manager'?'role-manager':'role-teacher';
+    const roleLbl=m.role==='admin'?'Admin':m.role==='manager'?'Quản lý':'Giáo viên';
+    const isActive=m.status!=='inactive';
+    const statusBadge=isActive
+      ?`<span class="badge badge-green">● Hoạt động</span>`
+      :`<span class="badge badge-gray">○ Tạm dừng</span>`;
+    const canEdit=currentUser&&(currentUser.role==='admin'||(currentUser.role==='manager'&&m.role!=='admin'));
+    const canDelete=currentUser&&currentUser.role==='admin'&&m.id!==currentUser.id;
+    // Buổi phụ trách
+    let attCell='<span style="color:var(--text-d);font-size:12px">—</span>';
+    if(m.role==='teacher'||m.role==='manager'){
+      const cnt=getMemberSelfAttMonth(m.id);
+      const canReset=currentUser&&(currentUser.role==='admin'||(currentUser.role==='manager'&&m.id===currentUser.id));
+      attCell=`<div style="display:flex;align-items:center;gap:8px;">
+        <span style="color:var(--gold-l);font-weight:700;min-width:28px;">${cnt}</span>
+        <span style="font-size:10px;color:var(--text-d);">${monthLabel}</span>
+        ${canReset?`<button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:10px;" onclick="resetMemberAtt(${m.id})" title="Reset về 0">↺</button>`:''}
+      </div>`;
+    }
+    const rowBg=i%2===0?'':'background:rgba(255,255,255,.025)';
+    return `<tr style="${!isActive?'opacity:.55;':''}${rowBg}">
+      <td style="color:var(--text-d)">${i+1}</td>
+      <td style="font-weight:600">${m.name}</td>
+      <td style="color:var(--teal);font-size:12px">${m.username}</td>
+      <td><span class="role-tag ${roleClass}">${roleLbl}</span></td>
+      <td style="color:var(--text-m);font-size:12px">${m.phone||'—'}</td>
+      <td>${attCell}</td>
+      <td>${statusBadge}</td>
+      <td>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${canEdit?`<button class="btn btn-outline btn-sm" onclick="openEditMember(${m.id})">✏️ Sửa</button>`:''}
+          ${canDelete?`<button class="btn btn-danger btn-sm" onclick="confirmDeleteMember(${m.id})">🗑</button>`:''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function saveAddMember(){
+  const name=document.getElementById('am-name').value.trim();
+  const username=document.getElementById('am-username').value.trim();
+  const pass=document.getElementById('am-pass').value;
+  if(!name||!username||!pass){showToast('⚠️ Vui lòng điền đủ thông tin!');return;}
+  const newId=(MEMBERS.length>0?Math.max(...MEMBERS.map(m=>m.id)):0)+1;
+  MEMBERS.push({
+    id:newId,name,username,pass,
+    role:document.getElementById('am-role').value,
+    phone:document.getElementById('am-phone').value,
+    selfAtt:[0,0,0,0,0],
+    status:'active'
+  });
+  closeModal('modal-add-member');
+  renderMembers(); sbSave();
+  showToast('✅ Đã thêm thành viên mới!');
+  document.getElementById('am-name').value='';
+  document.getElementById('am-username').value='';
+  document.getElementById('am-pass').value='';
+  document.getElementById('am-phone').value='';
+}
+
+function openEditMember(id){
+  const m=MEMBERS.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('em-id').value=m.id;
+  document.getElementById('em-name').value=m.name;
+  document.getElementById('em-username').value=m.username;
+  document.getElementById('em-pass').value='';
+  document.getElementById('em-phone').value=m.phone||'';
+  document.getElementById('em-role').value=m.role;
+  document.getElementById('em-status').value=m.status||'active';
+  document.getElementById('modal-edit-member-title').textContent='✏️ Sửa thành viên — '+m.name;
+  openModal('modal-edit-member');
+}
+
+function saveEditMember(){
+  const id=parseInt(document.getElementById('em-id').value);
+  const idx=MEMBERS.findIndex(x=>x.id===id);
+  if(idx===-1) return;
+  const newPass=document.getElementById('em-pass').value;
+  MEMBERS[idx].name=document.getElementById('em-name').value;
+  MEMBERS[idx].username=document.getElementById('em-username').value;
+  if(newPass) MEMBERS[idx].pass=newPass;
+  MEMBERS[idx].phone=document.getElementById('em-phone').value;
+  MEMBERS[idx].role=document.getElementById('em-role').value;
+  MEMBERS[idx].status=document.getElementById('em-status').value;
+  closeModal('modal-edit-member');
+  renderMembers(); sbSave();
+  showToast('✅ Đã cập nhật thành viên!');
+}
+
+function confirmDeleteMember(id){
+  const m=MEMBERS.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('del-member-name').textContent=m.name;
+  document.getElementById('del-member-id').value=id;
+  openModal('modal-delete-member');
+}
+
+function doDeleteMember(){
+  const id=parseInt(document.getElementById('del-member-id').value);
+  const idx=MEMBERS.findIndex(x=>x.id===id);
+  if(idx===-1) return;
+  MEMBERS.splice(idx,1);
+  closeModal('modal-delete-member');
+  renderMembers(); sbSave();
+  showToast('🗑 Đã xóa thành viên!');
+}
+
+/*═══════════════════════════════════
+  TAB 3: STUDENTS COMPONENT (ACTIVE)
+═══════════════════════════════════*/
+function initStudentModalSelectors(){
+  // Populate programs select dropdowns
+  const asProg = document.getElementById('as-progId');
+  const esProg = document.getElementById('es-progId');
+  const rsProg = document.getElementById('rs-progId');
+  
+  if(asProg && esProg && rsProg){
+    const optionsHTML = PROGRAMS.map(p => `<option value="${p.id}">${p.name} (${p.sessions} buổi)</option>`).join('');
+    asProg.innerHTML = optionsHTML;
+    esProg.innerHTML = optionsHTML;
+    rsProg.innerHTML = optionsHTML;
+  }
+  
+  // Populate session checklists
+  const asSessions = document.getElementById('as-sessions-check');
+  const esSessions = document.getElementById('es-sessions-check');
+  if(asSessions && esSessions){
+    const checkHTML = SESSIONS_DATA.map(s => `
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-m);cursor:pointer;">
+        <input type="checkbox" value="${s.id}"> ${s.name}
+      </label>
+    `).join('');
+    asSessions.innerHTML = checkHTML;
+    esSessions.innerHTML = checkHTML;
+  }
+  
+  // Set up auto fee fills
+  onStudentAddProgramChange();
+  onStudentRenewProgramChange();
+  
+  // Setup Search Listener
+  const searchInput = document.getElementById('stu-search-input');
+  if(searchInput){
+    searchInput.addEventListener('input', renderStudents);
+  }
+  
+  // Real-time currency formatting on input
+  const asFee = document.getElementById('as-fee');
+  const esFee = document.getElementById('es-fee');
+  const rsFee = document.getElementById('rs-fee');
+  if (asFee) asFee.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
+  if (esFee) esFee.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
+  if (rsFee) rsFee.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
+}
+
+function getProgramDefaultFee(progId){
+  if(progId === 1) return '1.200.000';
+  if(progId === 2) return '2.000.000';
+  if(progId === 3) return '3.200.000';
+  return '1.200.000';
+}
+
+function onStudentAddProgramChange(){
+  const progId = parseInt(document.getElementById('as-progId').value);
+  document.getElementById('as-fee').value = getProgramDefaultFee(progId);
+}
+
+function onStudentEditProgramChange(){
+  const progId = parseInt(document.getElementById('es-progId').value);
+  document.getElementById('es-fee').value = getProgramDefaultFee(progId);
+}
+
+function onStudentRenewProgramChange(){
+  const progId = parseInt(document.getElementById('rs-progId').value);
+  document.getElementById('rs-fee').value = getProgramDefaultFee(progId);
+}
+
+function openAddStudentModalHelper(){
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('as-dateFrom').value = today;
+  document.getElementById('as-paidDate').value = today;
+  document.getElementById('as-dateTo').value = '';
+  
+  // Reset checkboxes
+  const checkboxes = document.querySelectorAll('#as-sessions-check input[type="checkbox"]');
+  checkboxes.forEach(cb => cb.checked = false);
+  
+  onStudentAddProgramChange();
+  openModal('modal-add-student');
+}
+
+function renderStudents(){
+  const tb = document.getElementById('students-tbody');
+  if(!tb) return;
+  const searchVal = (document.getElementById('stu-search-input')?.value || '').trim().toLowerCase();
+  
+  // Filter list
+  const filtered = STUDENTS.filter(s => {
+    if(!searchVal) return true;
+    
+    // Match name or nickname
+    const nameMatch = s.name.toLowerCase().includes(searchVal);
+    const nickMatch = (s.nick || '').toLowerCase().includes(searchVal);
+    
+    // Match class names
+    let classMatch = false;
+    const sIds = s.sessionIds || (s.sessionId ? [s.sessionId] : []);
+    sIds.forEach(id => {
+      const ses = SESSIONS_DATA.find(x => x.id === id);
+      if(ses && ses.name.toLowerCase().includes(searchVal)) classMatch = true;
+    });
+    
+    return nameMatch || nickMatch || classMatch;
+  });
+  
+  // Update badge count
+  const badge = document.getElementById('stu-total-badge');
+  if(badge) {
+    const activeCount = STUDENTS.filter(s => s.stuStatus !== 'break').length;
+    badge.textContent = `${activeCount} đang học / ${STUDENTS.length} tổng`;
+  }
+  
+  // Build HTML table rows
+  tb.innerHTML = filtered.map((s, i) => {
+    const prog = PROGRAMS.find(p => p.id === s.progId) || {name: 'Chưa chọn', sessions: 8};
+    
+    const done = s.done || 0;
+    const total = s.total || prog.sessions || 8;
+    const pct = Math.min(Math.max(Math.round((done / total) * 100), 0), 100);
+    
+    const isExpired = s.dateTo && new Date(s.dateTo) < new Date();
+    const needsPayment = (done >= total) || isExpired || s.stuStatus === 'unpaid';
+    
+    const sIds = s.sessionIds || (s.sessionId ? [s.sessionId] : []);
+    const sessionBadges = sIds.map(id => {
+      const ses = SESSIONS_DATA.find(x => x.id === id);
+      return ses ? `<span class="badge badge-gold" style="font-size:10px;padding:2px 6px;margin:2px 0;">${ses.name}</span>` : '';
+    }).join(' ');
+    
+    let tuitionBadge = `<span class="badge badge-green">● Đã đóng</span>`;
+    if(needsPayment){
+      tuitionBadge = `<span class="badge badge-red">⚠ Đóng tiền</span>`;
+    }
+    
+    const formatDate = (dStr) => {
+      if(!dStr) return '—';
+      try {
+        const parts = dStr.split('-');
+        if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        return dStr;
+      } catch(e) { return dStr; }
+    };
+    
+    const periodStr = `<div style="font-size:11px;line-height:1.5;">
+      <span style="color:var(--text-m)">Từ:</span> ${formatDate(s.dateFrom)}<br>
+      <span style="color:var(--text-d)">Đến:</span> <span style="${isExpired ? 'color:var(--red);font-weight:600;' : 'color:var(--text-m)'}">${formatDate(s.dateTo)}</span>
+    </div>`;
+    
+    const rowBg = i%2 === 0 ? '' : 'background:rgba(255,255,255,.025)';
+    const opacityStyle = s.stuStatus === 'break' ? 'opacity:.55;' : '';
+    
+    return `<tr style="${opacityStyle}${rowBg}">
+      <td style="color:var(--text-d)">${i+1}</td>
+      <td>
+        <div style="font-weight:600">${s.name}</div>
+        ${s.nick ? `<div style="font-size:11px;color:var(--text-d)">(${s.nick})</div>` : ''}
+        <div style="font-size:10px;color:var(--text-d)">NS: ${s.dob || '—'}</div>
+      </td>
+      <td>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+          ${sessionBadges || '<span style="color:var(--text-d)">—</span>'}
+        </div>
+      </td>
+      <td>
+        <div style="font-size:12px;font-weight:500;margin-bottom:4px;color:var(--gold-l);">${prog.name}</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="flex:1;min-width:70px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;border:0.5px solid rgba(255,255,255,.1);">
+            <div style="width:${pct}%;height:100%;background:linear-gradient(90deg, var(--teal), #00ffaa);border-radius:3px;"></div>
+          </div>
+          <span style="font-size:11px;font-weight:700;color:var(--teal);min-width:32px;text-align:right;">${done}/${total}</span>
+        </div>
+      </td>
+      <td>${periodStr}</td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-start;">
+          <span style="font-size:12px;font-weight:700;color:var(--gold-l)">${formatFeeVND(s.fee) ? formatFeeVND(s.fee) + 'đ' : '—'}</span>
+          ${tuitionBadge}
+          <div style="font-size:10px;color:var(--text-d)">Đóng: ${s.paid || '—'}</div>
+          <div style="font-size:10px;color:var(--text-d)">Vòng đóng (R): ${s.round || 1}</div>
+        </div>
+      </td>
+      <td>
+        ${s.stuStatus === 'break' 
+          ? '<span class="badge badge-gray">○ Tạm dừng</span>' 
+          : '<span class="badge badge-green">● Đang học</span>'}
+      </td>
+      <td>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-teal btn-sm" style="padding:4px 8px;font-size:11px;" onclick="openRenewStudent(${s.id})" title="Gia hạn học phí khóa mới">🔄 Gia hạn</button>
+          <button class="btn btn-outline btn-sm" style="padding:4px 8px;font-size:11px;" onclick="openEditStudent(${s.id})">✏️ Sửa</button>
+          ${currentUser && currentUser.role === 'admin' ? `<button class="btn btn-danger btn-sm" style="padding:4px 6px;font-size:11px;" onclick="confirmDeleteStudent(${s.id})">🗑</button>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function saveAddStudent(){
+  const name = document.getElementById('as-name').value.trim();
+  const nick = document.getElementById('as-nick').value.trim();
+  const dob = document.getElementById('as-dob').value.trim();
+  const address = document.getElementById('as-address').value.trim();
+  const parentName = document.getElementById('as-parentName').value.trim();
+  const parentPhone = document.getElementById('as-parentPhone').value.trim();
+  const progId = parseInt(document.getElementById('as-progId').value);
+  const fee = document.getElementById('as-fee').value.trim();
+  const dateFrom = document.getElementById('as-dateFrom').value;
+  const dateTo = document.getElementById('as-dateTo').value;
+  const paidDate = document.getElementById('as-paidDate').value;
+  const stuStatus = document.getElementById('as-stuStatus').value;
+  
+  if(!name || !dateFrom || !paidDate){
+    showToast('⚠️ Vui lòng nhập đầy đủ: Họ tên, Ngày bắt đầu và Ngày đóng học phí!');
+    return;
+  }
+  
+  // Check checkboxes
+  const sessionIds = [];
+  const checkboxes = document.querySelectorAll('#as-sessions-check input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    if(cb.checked) sessionIds.push(parseInt(cb.value));
+  });
+  
+  const prog = PROGRAMS.find(p => p.id === progId) || {sessions: 8};
+  const newId = (STUDENTS.length > 0 ? Math.max(...STUDENTS.map(s => s.id)) : 0) + 1;
+  const formattedPaidDate = formatDateDMY(paidDate);
+  
+  const newStudent = {
+    id: newId,
+    name,
+    nick,
+    dob,
+    address,
+    parentName,
+    parentPhone,
+    sessionId: sessionIds[0] || null,
+    sessionIds,
+    progId,
+    done: 0,
+    total: prog.sessions,
+    fee,
+    paid: formattedPaidDate,
+    round: 1,
+    status: 'active',
+    stuStatus,
+    dateFrom,
+    dateTo
+  };
+  
+  STUDENTS.push(newStudent);
+  
+  // Record Revenue
+  if(stuStatus === 'active'){
+    const monthKey = paidDate.slice(0, 7);
+    const feeVal = parseFeeVND(fee);
+    revenueByMonth[monthKey] = (revenueByMonth[monthKey] || 0) + feeVal;
+    
+    renewLog.push({
+      stuId: newId,
+      stuName: name,
+      sessionId: sessionIds[0] || null,
+      progId,
+      dateFrom,
+      dateTo,
+      fee,
+      paidDate,
+      round: 1,
+      renewedAt: new Date().toISOString()
+    });
+  }
+  
+  closeModal('modal-add-student');
+  renderStudents();
+  updateOverviewCards();
+  buildCharts();
+  sbSave();
+  showToast('✅ Đã thêm học sinh mới!');
+}
+
+function formatDateDMY(dStr){
+  if(!dStr) return '';
+  try {
+    const parts = dStr.split('-');
+    if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return dStr;
+  } catch(e) { return dStr; }
+}
+
+function openEditStudent(id){
+  const s = STUDENTS.find(x => x.id === id);
+  if(!s) return;
+  
+  document.getElementById('es-id').value = s.id;
+  document.getElementById('es-name').value = s.name;
+  document.getElementById('es-nick').value = s.nick || '';
+  document.getElementById('es-dob').value = s.dob || '';
+  document.getElementById('es-address').value = s.address || '';
+  document.getElementById('es-parentName').value = s.parentName || '';
+  document.getElementById('es-parentPhone').value = s.parentPhone || '';
+  document.getElementById('es-progId').value = s.progId;
+  document.getElementById('es-fee').value = s.fee || '';
+  document.getElementById('es-dateFrom').value = s.dateFrom || '';
+  document.getElementById('es-dateTo').value = s.dateTo || '';
+  document.getElementById('es-status').value = s.stuStatus || 'active';
+  document.getElementById('es-done').value = s.done || 0;
+  
+  // Tick checkboxes
+  const sIds = s.sessionIds || (s.sessionId ? [s.sessionId] : []);
+  const checkboxes = document.querySelectorAll('#es-sessions-check input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    cb.checked = sIds.includes(parseInt(cb.value));
+  });
+  
+  document.getElementById('modal-edit-student-title').textContent = '✏️ Sửa học sinh — ' + s.name;
+  openModal('modal-edit-student');
+}
+
+function saveEditStudent(){
+  const id = parseInt(document.getElementById('es-id').value);
+  const s = STUDENTS.find(x => x.id === id);
+  if(!s) return;
+  
+  const sessionIds = [];
+  const checkboxes = document.querySelectorAll('#es-sessions-check input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    if(cb.checked) sessionIds.push(parseInt(cb.value));
+  });
+  
+  s.name = document.getElementById('es-name').value.trim();
+  s.nick = document.getElementById('es-nick').value.trim();
+  s.dob = document.getElementById('es-dob').value.trim();
+  s.address = document.getElementById('es-address').value.trim();
+  s.parentName = document.getElementById('es-parentName').value.trim();
+  s.parentPhone = document.getElementById('es-parentPhone').value.trim();
+  
+  const newProgId = parseInt(document.getElementById('es-progId').value);
+  if(s.progId !== newProgId){
+    s.progId = newProgId;
+    const prog = PROGRAMS.find(p => p.id === newProgId) || {sessions: 8};
+    s.total = prog.sessions;
+  }
+  
+  s.fee = document.getElementById('es-fee').value.trim();
+  s.dateFrom = document.getElementById('es-dateFrom').value;
+  s.dateTo = document.getElementById('es-dateTo').value;
+  s.stuStatus = document.getElementById('es-status').value;
+  s.done = parseInt(document.getElementById('es-done').value) || 0;
+  
+  s.sessionId = sessionIds[0] || null;
+  s.sessionIds = sessionIds;
+  s.status = s.stuStatus === 'break' ? 'inactive' : 'active';
+  
+  closeModal('modal-edit-student');
+  renderStudents();
+  updateOverviewCards();
+  sbSave();
+  showToast('✅ Đã cập nhật học sinh!');
+}
+
+function confirmDeleteStudent(id){
+  const s = STUDENTS.find(x => x.id === id);
+  if(!s) return;
+  document.getElementById('ds-name-display').textContent = s.name;
+  document.getElementById('ds-id').value = id;
+  openModal('modal-delete-student');
+}
+
+function doDeleteStudent(){
+  const id = parseInt(document.getElementById('ds-id').value);
+  const idx = STUDENTS.findIndex(x => x.id === id);
+  if(idx === -1) return;
+  
+  STUDENTS.splice(idx, 1);
+  closeModal('modal-delete-student');
+  renderStudents();
+  updateOverviewCards();
+  sbSave();
+  showToast('🗑 Đã xóa học sinh!');
+}
+
+function openRenewStudent(id){
+  const s = STUDENTS.find(x => x.id === id);
+  if(!s) return;
+  
+  document.getElementById('rs-id').value = s.id;
+  document.getElementById('rs-name-display').textContent = s.name;
+  document.getElementById('rs-progId').value = s.progId;
+  document.getElementById('rs-fee').value = s.fee || '';
+  
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('rs-paidDate').value = today;
+  document.getElementById('rs-dateFrom').value = today;
+  document.getElementById('rs-dateTo').value = '';
+  
+  onStudentRenewProgramChange();
+  openModal('modal-renew-student');
+}
+
+function saveRenewStudent(){
+  const id = parseInt(document.getElementById('rs-id').value);
+  const s = STUDENTS.find(x => x.id === id);
+  if(!s) return;
+  
+  const progId = parseInt(document.getElementById('rs-progId').value);
+  const fee = document.getElementById('rs-fee').value.trim();
+  const paidDate = document.getElementById('rs-paidDate').value;
+  const dateFrom = document.getElementById('rs-dateFrom').value;
+  const dateTo = document.getElementById('rs-dateTo').value;
+  
+  if(!paidDate || !dateFrom){
+    showToast('⚠️ Vui lòng điền đủ: Ngày đóng học phí và Ngày bắt đầu!');
+    return;
+  }
+  
+  const prog = PROGRAMS.find(p => p.id === progId) || {sessions: 8};
+  
+  s.progId = progId;
+  s.fee = fee;
+  s.paid = formatDateDMY(paidDate);
+  s.dateFrom = dateFrom;
+  s.dateTo = dateTo;
+  s.done = 0;
+  s.total = prog.sessions;
+  s.round = (s.round || 1) + 1;
+  s.stuStatus = 'active';
+  s.status = 'active';
+  
+  const monthKey = paidDate.slice(0, 7);
+  const feeVal = parseFeeVND(fee);
+  revenueByMonth[monthKey] = (revenueByMonth[monthKey] || 0) + feeVal;
+  
+  renewLog.push({
+    stuId: s.id,
+    stuName: s.name,
+    sessionId: s.sessionIds?.[0] || s.sessionId || null,
+    progId,
+    dateFrom,
+    dateTo,
+    fee,
+    paidDate,
+    round: s.round,
+    renewedAt: new Date().toISOString()
+  });
+  
+  closeModal('modal-renew-student');
+  renderStudents();
+  updateOverviewCards();
+  buildCharts();
+  sbSave();
+  showToast('🔄 Đã gia hạn học phí thành công!');
+}
+
+/*═══════════════════════════════════
+  TAB 4: SESSIONS & ATTENDANCE LOGIC
+  ═══════════════════════════════════*/
+function renderSessions() {
+  const datePicker = document.getElementById('ses-date-picker');
+  if(!datePicker) return;
+  const dateStr = datePicker.value;
+  if(!dateStr) return;
+  
+  // 1. Render Left Column: Weekly Schedule
+  const scheduleList = document.getElementById('weekly-schedule-list');
+  if(scheduleList) {
+    const canDeleteSess = currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager');
+    scheduleList.innerHTML = SESSIONS_DATA.map(s => {
+      const teacher = MEMBERS.find(m => m.id === s.teacherId) || {name: 'Chưa có GV'};
+      return `
+        <div style="padding:10px;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.12);border-radius:8px;position:relative;">
+          <div style="font-weight:600;font-size:12px;color:var(--gold-l);padding-right:40px;">${s.name}</div>
+          <div style="font-size:11px;color:var(--text-m);margin-top:4px;">⏱ ${s.time} (${s.day})</div>
+          <div style="font-size:11px;color:var(--teal);margin-top:2px;">👨‍🏫 ${teacher.name}</div>
+          ${canDeleteSess ? `
+            <div style="position:absolute;top:8px;right:8px;display:flex;gap:4px;">
+              <button onclick="openEditRecurringClass(${s.id})" style="background:none;border:none;color:var(--text-d);cursor:pointer;font-size:11px;padding:2px;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-d)'" title="Sửa lớp học cố định">✏️</button>
+              <button onclick="confirmDeleteRecurringClass(${s.id})" style="background:none;border:none;color:var(--text-d);cursor:pointer;font-size:11px;padding:2px;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-d)'" title="Xóa lớp học cố định">🗑</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+  
+  // 2. Determine Day of Week for selected date
+  const selectedDate = new Date(dateStr);
+  const dayOfWeekNum = selectedDate.getDay();
+  const dayOfWeekMap = {
+    0: 'CN',
+    1: 'T2',
+    2: 'T3',
+    3: 'T4',
+    4: 'T5',
+    5: 'T6',
+    6: 'T7'
+  };
+  const dayOfWeekCode = dayOfWeekMap[dayOfWeekNum];
+  
+  // 3. Render Right Column: Daily Sessions list
+  const container = document.getElementById('daily-sessions-container');
+  if(!container) return;
+  
+  const todaysClasses = SESSIONS_DATA.filter(s => s.day === dayOfWeekCode);
+  
+  if(todaysClasses.length === 0) {
+    container.innerHTML = `
+      <div class="card" style="padding:32px;text-align:center;color:var(--text-d);">
+        <div style="font-size:36px;margin-bottom:12px;">📅</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-m);">Không có lớp học nào được xếp lịch vào ngày này (${dayOfWeekCode})</div>
+        <div style="font-size:12px;margin-top:4px;color:var(--text-d);">Lịch học cố định gồm Thứ 7 (T7) và Chủ nhật (CN).</div>
+      </div>
+    `;
+    return;
+  }
+  
+  let html = '';
+  todaysClasses.forEach(c => {
+    const sessionKey = `${c.id}_${dateStr}`;
+    const isHidden = !!hiddenSessionDates[sessionKey];
+    const attendance = savedAttendance[sessionKey] || { finalized: false, presentIds: [], extraStudentIds: [], teacherId: c.teacherId };
+    
+    const currentTeacherId = attendance.teacherId || c.teacherId;
+    const teacher = MEMBERS.find(m => m.id === currentTeacherId) || {name: 'Chưa có GV'};
+    
+    if(isHidden) {
+      const canRestore = currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager' || currentUser.id === currentTeacherId);
+      html += `
+        <div class="card" style="padding:16px 20px;border-color:rgba(255,59,59,.3);background:rgba(255,59,59,.03);display:flex;align-items:center;justify-content:between;gap:12px;">
+          <div>
+            <div style="font-weight:600;color:var(--red);font-size:13px;">🚫 ${c.name} - Buổi học ngày ${formatDateDMY(dateStr)} đã bị hủy / ẩn</div>
+            <div style="font-size:11px;color:var(--text-d);margin-top:2px;">Lớp lúc: ${c.time} | Giáo viên: ${teacher.name}</div>
+          </div>
+          ${canRestore ? `<button class="btn btn-teal btn-sm" onclick="restoreSessionDate(${c.id}, '${dateStr}')">Phục hồi lớp</button>` : ''}
+        </div>
+      `;
+      return;
+    }
+    
+    const classStudents = STUDENTS.filter(s => {
+      const isRegistered = (s.sessionIds || (s.sessionId ? [s.sessionId] : [])).includes(c.id);
+      const isExtra = (attendance.extraStudentIds || []).includes(s.id);
+      const isHistoricalPresence = attendance.finalized && attendance.presentIds.includes(s.id);
+      return (isRegistered && s.stuStatus === 'active') || isExtra || isHistoricalPresence;
+    });
+    
+    let studentRows = '';
+    if(classStudents.length === 0) {
+      studentRows = `<div style="text-align:center;padding:12px;color:var(--text-d);font-size:12px;">Chưa có học sinh nào đăng ký lớp này.</div>`;
+    } else {
+      studentRows = classStudents.map(s => {
+        const done = s.done || 0;
+        const total = s.total || 8;
+        const isExpired = s.dateTo && new Date(s.dateTo) < new Date();
+        const needsPayment = (done >= total) || isExpired || s.stuStatus === 'unpaid';
+        const isChecked = attendance.presentIds.includes(s.id);
+        
+        const isGuest = !(s.sessionIds || (s.sessionId ? [s.sessionId] : [])).includes(c.id);
+        const guestBadge = isGuest ? `<span class="badge badge-teal" style="font-size:9px;padding:1px 4px;margin-left:6px;text-transform:none;font-weight:normal;background:rgba(0,200,212,.12);border:1px solid rgba(0,200,212,.3);color:var(--teal);">Vãng lai</span>` : '';
+        
+        if (attendance.finalized) {
+          const statusIcon = isChecked 
+            ? '<span style="color:#5ddb8e;font-weight:bold;">✓ Đi học</span>' 
+            : '<span style="color:var(--text-d);">✕ Vắng</span>';
+          return `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.01);border-radius:6px;border:1px solid rgba(255,255,255,.03)">
+              <div>
+                <span style="font-weight:600;font-size:12px;">${s.name}</span>
+                ${s.nick ? `<span style="font-size:10px;color:var(--text-d);margin-left:4px;">(${s.nick})</span>` : ''}
+                ${guestBadge}
+              </div>
+              <div style="font-size:12px;">${statusIcon}</div>
+            </div>
+          `;
+        } else {
+          let checkboxAttr = '';
+          let warningSpan = '';
+          if (needsPayment) {
+            checkboxAttr = 'disabled';
+            warningSpan = `<span class="badge badge-red" style="font-size:10px;padding:2px 6px;">⚠ Cần đóng phí</span>`;
+          } else {
+            checkboxAttr = isChecked ? 'checked' : '';
+          }
+          
+          return `
+            <label style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.02);border-radius:6px;border:1px solid rgba(201,168,76,.08);cursor:${needsPayment ? 'not-allowed' : 'pointer'};margin:0;">
+              <div>
+                <span style="font-weight:600;font-size:12px;">${s.name}</span>
+                ${s.nick ? `<span style="font-size:10px;color:var(--text-d);margin-left:4px;">(${s.nick})</span>` : ''}
+                ${guestBadge}
+                <span style="font-size:10px;color:var(--teal);margin-left:6px;">(${done}/${total} buổi)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                ${warningSpan}
+                <input type="checkbox" class="stu-att-checkbox" data-student-id="${s.id}" ${checkboxAttr} style="width:16px;height:16px;cursor:${needsPayment ? 'not-allowed' : 'pointer'};">
+              </div>
+            </label>
+          `;
+        }
+      }).join('');
+    }
+    
+    const canManage = currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager' || currentUser.id === currentTeacherId);
+    const canOverrideTeacher = currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager');
+    const canAddGuest = currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager');
+    
+    let teacherEl = '';
+    if (attendance.finalized || !canOverrideTeacher) {
+      teacherEl = `<span style="color:var(--teal);">${teacher.name}</span>`;
+    } else {
+      const teachers = MEMBERS.filter(m => m.status !== 'inactive' && (m.role === 'teacher' || m.role === 'manager' || m.role === 'admin'));
+      const options = teachers.map(m => `<option value="${m.id}" ${m.id === currentTeacherId ? 'selected' : ''}>${m.name}</option>`).join('');
+      teacherEl = `
+        <select class="inp" style="display:inline-block;width:auto;padding:3px 24px 3px 10px;font-size:11px;height:auto;margin-left:6px;" onchange="changeSessionTeacher(${c.id}, '${dateStr}', this.value)">
+          ${options}
+        </select>
+      `;
+    }
+    
+    let cardFooter = '';
+    if(attendance.finalized) {
+      const formattedSavedAt = attendance.savedAt ? new Date(attendance.savedAt).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}) + ' ' + formatDateDMY(attendance.savedAt.split('T')[0]) : '';
+      const canUnlock = currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager');
+      
+      cardFooter = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);">
+          <div style="font-size:11px;color:var(--text-d);">Đã hoàn tất lúc: ${formattedSavedAt}</div>
+          ${canUnlock ? `<button class="btn btn-outline btn-sm" onclick="undoFinalizeSession(${c.id}, '${dateStr}')">🔓 Mở khóa ca dạy</button>` : ''}
+        </div>
+      `;
+    } else {
+      cardFooter = `
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);">
+          ${canManage ? `
+            <button class="btn btn-outline btn-sm btn-danger" onclick="hideSessionDate(${c.id}, '${dateStr}')" style="border-color:rgba(255,59,59,.3);color:#ff7070;">✕ Hủy ca buổi này</button>
+            <button class="btn btn-gold btn-sm" onclick="finalizeSession(${c.id}, '${dateStr}')">💾 Xác nhận hoàn tất</button>
+          ` : ''}
+        </div>
+      `;
+    }
+    
+    const statusBadge = attendance.finalized 
+      ? `<span class="badge badge-green">✓ Hoàn thành ca dạy</span>`
+      : `<span class="badge badge-gold">● Chưa điểm danh</span>`;
+      
+    html += `
+      <div class="card" id="session-card-${c.id}" style="padding:20px;display:flex;flex-direction:column;gap:12px;${attendance.finalized ? 'border-color:rgba(39,174,96,.45);background:rgba(39,174,96,.02);' : ''}">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(201,168,76,.15);padding-bottom:10px;">
+          <div>
+            <h4 style="font-family:var(--font-display);font-size:14px;color:var(--gold-l);">${c.name}</h4>
+            <div style="font-size:11px;color:var(--text-m);margin-top:2px;">⏱ ${c.time} | Lịch cố định: ${c.day}</div>
+          </div>
+          <div>${statusBadge}</div>
+        </div>
+        
+        <div style="font-size:12px;color:var(--text-m);font-weight:600;margin-top:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+          <span>👨‍🏫 Giáo viên:</span> ${teacherEl}
+          ${!attendance.finalized && canManage ? `<label style="display:inline-flex;align-items:center;gap:4px;margin:0 0 0 10px;font-weight:normal;font-size:11px;color:var(--text-d);"><input type="checkbox" checked disabled style="width:13px;height:13px;"> Đứng lớp</label>` : ''}
+        </div>
+        
+        <div style="margin-top:8px;">
+          <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-d);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+            <span>Danh sách học sinh điểm danh</span>
+            ${!attendance.finalized && canAddGuest ? `
+              <button class="btn btn-teal btn-sm" style="padding:2px 8px;font-size:10px;text-transform:none;letter-spacing:0;" onclick="openAddStudentToSession(${c.id}, '${dateStr}')">➕ Thêm HS</button>
+            ` : ''}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;" class="students-list-container">
+            ${studentRows}
+          </div>
+        </div>
+        
+        ${cardFooter}
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+function finalizeSession(classId, dateStr) {
+  const card = document.getElementById(`session-card-${classId}`);
+  if(!card) return;
+  const checkboxes = card.querySelectorAll('.stu-att-checkbox');
+  const presentIds = [];
+  checkboxes.forEach(cb => {
+    if(cb.checked) {
+      presentIds.push(parseInt(cb.getAttribute('data-student-id')));
+    }
+  });
+  
+  const cls = SESSIONS_DATA.find(x => x.id === classId);
+  const sessionKey = `${classId}_${dateStr}`;
+  const attendance = savedAttendance[sessionKey] || {};
+  const teacherId = attendance.teacherId || (cls ? cls.teacherId : null);
+  
+  savedAttendance[sessionKey] = {
+    ...attendance,
+    finalized: true,
+    presentIds: presentIds,
+    teacherId: teacherId,
+    savedAt: new Date().toISOString()
+  };
+  
+  // Increment done for present students
+  presentIds.forEach(id => {
+    const s = STUDENTS.find(x => x.id === id);
+    if(s) {
+      s.done = (s.done || 0) + 1;
+    }
+  });
+  
+  // Increment teacher workload in memberSelfAtt
+  if(teacherId) {
+    if(!memberSelfAtt[teacherId]) memberSelfAtt[teacherId] = {};
+    const monthKey = dateStr.slice(0, 7);
+    memberSelfAtt[teacherId][monthKey] = (memberSelfAtt[teacherId][monthKey] || 0) + 1;
+  }
+  
+  sbSave();
+  renderSessions();
+  showToast('✅ Đã hoàn tất ca học và điểm danh!');
+}
+
+function undoFinalizeSession(classId, dateStr) {
+  const sessionKey = `${classId}_${dateStr}`;
+  const attendance = savedAttendance[sessionKey];
+  if(!attendance || !attendance.finalized) return;
+  
+  const cls = SESSIONS_DATA.find(x => x.id === classId);
+  const teacherId = attendance.teacherId || (cls ? cls.teacherId : null);
+  
+  // Decrement progress for present students
+  attendance.presentIds.forEach(id => {
+    const s = STUDENTS.find(x => x.id === id);
+    if(s) {
+      s.done = Math.max(0, (s.done || 0) - 1);
+    }
+  });
+  
+  // Decrement teacher workload
+  if(teacherId) {
+    const monthKey = dateStr.slice(0, 7);
+    if(memberSelfAtt[teacherId] && memberSelfAtt[teacherId][monthKey]) {
+      memberSelfAtt[teacherId][monthKey] = Math.max(0, memberSelfAtt[teacherId][monthKey] - 1);
+    }
+  }
+  
+  // Check if there are overrides (extra student IDs or overridden teacher)
+  const defaultTeacherId = cls ? cls.teacherId : null;
+  const hasExtraStudents = attendance.extraStudentIds && attendance.extraStudentIds.length > 0;
+  const hasTeacherOverride = attendance.teacherId && attendance.teacherId !== defaultTeacherId;
+  
+  if (hasExtraStudents || hasTeacherOverride) {
+    attendance.finalized = false;
+    attendance.presentIds = [];
+  } else {
+    delete savedAttendance[sessionKey];
+  }
+  
+  sbSave();
+  renderSessions();
+  showToast('🔓 Đã mở khóa ca học!');
+}
+
+function changeSessionTeacher(classId, dateStr, teacherId) {
+  if (currentUser.role === 'teacher') {
+    showToast('⚠️ Bạn không có quyền thay đổi giáo viên!');
+    renderSessions();
+    return;
+  }
+  const sessionKey = `${classId}_${dateStr}`;
+  if (!savedAttendance[sessionKey]) {
+    savedAttendance[sessionKey] = {
+      finalized: false,
+      presentIds: [],
+      extraStudentIds: [],
+      teacherId: parseInt(teacherId)
+    };
+  } else {
+    savedAttendance[sessionKey].teacherId = parseInt(teacherId);
+  }
+  sbSave();
+  renderSessions();
+  showToast('✅ Đã cập nhật giáo viên cho ca dạy này!');
+}
+
+function openEditRecurringClass(classId) {
+  if (currentUser.role === 'teacher') {
+    showToast('⚠️ Bạn không có quyền chỉnh sửa lớp!');
+    return;
+  }
+  const c = SESSIONS_DATA.find(x => x.id === classId);
+  if (!c) return;
+  
+  document.getElementById('er-class-id').value = c.id;
+  document.getElementById('er-name').value = c.name;
+  
+  const sel = document.getElementById('er-teacher');
+  if (sel) {
+    const teachers = MEMBERS.filter(m => m.status !== 'inactive' && (m.role === 'teacher' || m.role === 'manager' || m.role === 'admin'));
+    sel.innerHTML = teachers.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+    sel.value = c.teacherId;
+  }
+  
+  document.getElementById('er-day').value = c.day;
+  
+  const times = c.time.split(/–|-/);
+  if (times.length === 2) {
+    document.getElementById('er-start').value = times[0].trim();
+    document.getElementById('er-end').value = times[1].trim();
+  }
+  
+  openModal('modal-edit-recurring-class');
+}
+
+function saveEditRecurringClass() {
+  if (currentUser.role === 'teacher') {
+    showToast('⚠️ Bạn không có quyền chỉnh sửa lớp!');
+    return;
+  }
+  const classId = parseInt(document.getElementById('er-class-id').value);
+  const c = SESSIONS_DATA.find(x => x.id === classId);
+  if (!c) return;
+  
+  const name = document.getElementById('er-name').value.trim();
+  if (!name) {
+    showToast('⚠️ Vui lòng nhập tên lớp!');
+    return;
+  }
+  
+  const teacherId = parseInt(document.getElementById('er-teacher').value);
+  const day = document.getElementById('er-day').value;
+  const start = document.getElementById('er-start').value;
+  const end = document.getElementById('er-end').value;
+  
+  c.name = name;
+  c.fullName = name;
+  c.teacherId = teacherId;
+  c.day = day;
+  c.time = `${start}–${end}`;
+  
+  closeModal('modal-edit-recurring-class');
+  initStudentModalSelectors();
+  renderSessions();
+  sbSave();
+  showToast('✅ Đã cập nhật lớp học cố định!');
+}
+
+function openAddStudentToSession(classId, dateStr) {
+  if (currentUser.role === 'teacher') {
+    showToast('⚠️ Bạn không có quyền thêm học sinh!');
+    return;
+  }
+  document.getElementById('add-stu-sess-class-id').value = classId;
+  document.getElementById('add-stu-sess-date-str').value = dateStr;
+  document.getElementById('add-stu-sess-search').value = '';
+  
+  renderAddStuSessList(classId, dateStr, '');
+  openModal('modal-add-stu-session');
+}
+
+function renderAddStuSessList(classId, dateStr, query) {
+  const select = document.getElementById('add-stu-sess-select');
+  if (!select) return;
+  
+  const sessionKey = `${classId}_${dateStr}`;
+  const extraIds = savedAttendance[sessionKey]?.extraStudentIds || [];
+  
+  const filtered = STUDENTS.filter(s => {
+    if (s.stuStatus === 'break') return false;
+    
+    const isRegistered = (s.sessionIds || (s.sessionId ? [s.sessionId] : [])).includes(classId);
+    if (isRegistered) return false;
+    
+    if (extraIds.includes(s.id)) return false;
+    
+    if (query) {
+      const q = query.toLowerCase();
+      const nameMatch = s.name.toLowerCase().includes(q);
+      const nickMatch = (s.nick || '').toLowerCase().includes(q);
+      return nameMatch || nickMatch;
+    }
+    
+    return true;
+  });
+  
+  select.innerHTML = filtered.map(s => {
+    const nickText = s.nick ? ` (${s.nick})` : '';
+    return `<option value="${s.id}">${s.name}${nickText}</option>`;
+  }).join('');
+}
+
+function filterAddStuSessList(query) {
+  const classId = parseInt(document.getElementById('add-stu-sess-class-id').value);
+  const dateStr = document.getElementById('add-stu-sess-date-str').value;
+  renderAddStuSessList(classId, dateStr, query);
+}
+
+function confirmAddStudentToSession() {
+  if (currentUser.role === 'teacher') {
+    showToast('⚠️ Bạn không có quyền thêm học sinh!');
+    return;
+  }
+  const classId = parseInt(document.getElementById('add-stu-sess-class-id').value);
+  const dateStr = document.getElementById('add-stu-sess-date-str').value;
+  const select = document.getElementById('add-stu-sess-select');
+  if (!select) return;
+  const val = select.value;
+  if (!val) {
+    showToast('⚠️ Vui lòng chọn học sinh!');
+    return;
+  }
+  const studentId = parseInt(val);
+  const sessionKey = `${classId}_${dateStr}`;
+  
+  if (!savedAttendance[sessionKey]) {
+    const cls = SESSIONS_DATA.find(x => x.id === classId);
+    savedAttendance[sessionKey] = {
+      finalized: false,
+      presentIds: [],
+      extraStudentIds: [studentId],
+      teacherId: cls ? cls.teacherId : null
+    };
+  } else {
+    if (!savedAttendance[sessionKey].extraStudentIds) {
+      savedAttendance[sessionKey].extraStudentIds = [];
+    }
+    if (!savedAttendance[sessionKey].extraStudentIds.includes(studentId)) {
+      savedAttendance[sessionKey].extraStudentIds.push(studentId);
+    }
+  }
+  
+  closeModal('modal-add-stu-session');
+  renderSessions();
+  sbSave();
+  showToast('✅ Đã thêm học sinh vào ca học!');
+}
+
+function hideSessionDate(classId, dateStr) {
+  const sessionKey = `${classId}_${dateStr}`;
+  hiddenSessionDates[sessionKey] = true;
+  sbSave();
+  renderSessions();
+  showToast('🚫 Đã hủy ca dạy của ngày này!');
+}
+
+function restoreSessionDate(classId, dateStr) {
+  const sessionKey = `${classId}_${dateStr}`;
+  delete hiddenSessionDates[sessionKey];
+  sbSave();
+  renderSessions();
+  showToast('✅ Đã phục hồi ca dạy!');
+}
+
+function openAddSessionModalHelper() {
+  const sel = document.getElementById('ns-teacher');
+  if (sel) {
+    const teachers = MEMBERS.filter(m => m.status !== 'inactive' && (m.role === 'teacher' || m.role === 'manager' || m.role === 'admin'));
+    sel.innerHTML = teachers.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+  }
+  document.getElementById('ns-name').value = '';
+  document.getElementById('ns-day').value = 'T7';
+  document.getElementById('ns-start').value = '08:30';
+  document.getElementById('ns-end').value = '10:30';
+  openModal('modal-add-session');
+}
+
+function saveNewSession() {
+  const name = document.getElementById('ns-name').value.trim();
+  if (!name) {
+    showToast('⚠️ Vui lòng nhập tên lớp học!');
+    return;
+  }
+  const teacherId = parseInt(document.getElementById('ns-teacher').value);
+  const day = document.getElementById('ns-day').value;
+  const start = document.getElementById('ns-start').value;
+  const end = document.getElementById('ns-end').value;
+  const time = `${start}–${end}`;
+  const newId = (SESSIONS_DATA.length > 0 ? Math.max(...SESSIONS_DATA.map(s => s.id)) : 0) + 1;
+  
+  SESSIONS_DATA.push({
+    id: newId,
+    name: name,
+    day: day,
+    time: time,
+    teacherId: teacherId,
+    fullName: name
+  });
+  
+  closeModal('modal-add-session');
+  initStudentModalSelectors();
+  renderSessions();
+  sbSave();
+  showToast(`✅ Đã tạo lớp "${name}" — ${day} ${time}`);
+}
+
+function confirmDeleteRecurringClass(id) {
+  const c = SESSIONS_DATA.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('del-recurring-class-id').value = id;
+  document.getElementById('del-recurring-class-name').textContent = c.name;
+  openModal('modal-delete-recurring-class');
+}
+
+function doDeleteRecurringClass() {
+  const id = parseInt(document.getElementById('del-recurring-class-id').value);
+  const idx = SESSIONS_DATA.findIndex(x => x.id === id);
+  if (idx === -1) {
+    closeModal('modal-delete-recurring-class');
+    return;
+  }
+  
+  SESSIONS_DATA.splice(idx, 1);
+  
+  // Sweep student records to remove references
+  STUDENTS.forEach(student => {
+    if (student.sessionIds) {
+      student.sessionIds = student.sessionIds.filter(x => x !== id);
+    }
+    if (student.sessionId === id) {
+      student.sessionId = student.sessionIds?.[0] || null;
+    }
+  });
+  
+  closeModal('modal-delete-recurring-class');
+  initStudentModalSelectors();
+  renderSessions();
+  sbSave();
+  showToast('🗑 Đã xóa lớp học cố định!');
+}
+
+/*═══════════════════════════════════
+  REVIEWS (TAB 5) COMPONENT (ACTIVE)
+═══════════════════════════════════*/
+let _rvSelectedStuId = null;
+
+function buildReviewForm(){
+  const grid=document.getElementById('criteria-grid');
+  if (grid) {
+    grid.innerHTML=CRITERIA.map(c=>`
+      <div class="card crit-item">
+        <div class="crit-label">${c.label} <span class="crit-score" id="score-${c.key}">7</span></div>
+        <input type="range" class="crit-slider" min="5" max="10" value="7"
+          oninput="document.getElementById('score-${c.key}').textContent=this.value">
+      </div>`).join('');
+  }
+
+  const chips=document.getElementById('chips');
+  if (chips) {
+    chips.innerHTML=SUGGESTIONS.map(s=>
+      `<div class="chip" onclick="toggleChip(this,this.textContent)">${s}</div>`).join('');
+  }
+
+  const dateInput = document.getElementById('rv-date');
+  if (dateInput) {
+    dateInput.value=new Date().toISOString().split('T')[0];
+  }
+
+  // Select first student by default
+  if(STUDENTS.length){
+    selectRvStudent(STUDENTS[0].id);
+  }
+
+  // Close dropdown on outside click
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('rv-stu-wrap')?.contains(e.target))
+      hideRvDropdown();
+  });
+}
+
+function filterRvStudents(q){
+  const filtered=q.trim()===''
+    ? STUDENTS
+    : STUDENTS.filter(s=>
+        s.name.toLowerCase().includes(q.toLowerCase())||
+        (s.nick&&s.nick.toLowerCase().includes(q.toLowerCase()))
+      );
+  renderRvDropdown(filtered);
+  showRvDropdown();
+}
+
+function renderRvDropdown(list){
+  const dd=document.getElementById('rv-stu-dropdown');
+  if(!dd) return;
+  if(!list.length){
+    dd.innerHTML=`<div style="padding:12px 16px;color:var(--text-d);font-size:13px;">Không tìm thấy</div>`;
+    return;
+  }
+  dd.innerHTML=list.map(s=>{
+    const prog=PROGRAMS.find(p=>p.id===s.progId);
+    const isFull=s.done>=s.total;
+    const isSel=s.id===_rvSelectedStuId;
+    return `<div onclick="selectRvStudent(${s.id})"
+      style="padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);
+        background:${isSel?'rgba(201,168,76,.12)':'transparent'};
+        transition:background .15s;"
+      onmouseover="this.style.background='rgba(201,168,76,.08)'"
+      onmouseout="this.style.background='${isSel?'rgba(201,168,76,.12)':'transparent'}'">
+      <div style="font-size:13px;font-weight:${isSel?700:500};color:${isSel?'var(--gold-l)':'var(--text)'}">
+        ${s.name}${s.nick?` <span style="color:var(--text-d);font-size:11px">(${s.nick})</span>`:''}
+      </div>
+      <div style="font-size:11px;color:var(--text-d);margin-top:2px;display:flex;gap:10px;">
+        <span>${prog?.name||''}</span>
+        <span style="color:${isFull?'#ff9090':'var(--text-d)'}">${s.done}/${s.total} buổi${isFull?' · ⚠ Hết gói':''}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showRvDropdown(){
+  const dd=document.getElementById('rv-stu-dropdown');
+  if(!dd) return;
+  const q=document.getElementById('rv-stu-search')?.value||'';
+  renderRvDropdown(q?STUDENTS.filter(s=>
+    s.name.toLowerCase().includes(q.toLowerCase())||
+    (s.nick&&s.nick.toLowerCase().includes(q.toLowerCase()))
+  ):STUDENTS);
+  dd.style.display='block';
+}
+
+function hideRvDropdown(){
+  const dd = document.getElementById('rv-stu-dropdown');
+  if (dd) dd.style.display='none';
+}
+
+function selectRvStudent(id){
+  _rvSelectedStuId=id;
+  const stu=STUDENTS.find(s=>s.id===id);
+  if(!stu) return;
+  const rvStudentInput = document.getElementById('rv-student');
+  if (rvStudentInput) rvStudentInput.value=id;
+  const rvSearchInput = document.getElementById('rv-stu-search');
+  if (rvSearchInput) rvSearchInput.value=stu.name;
+  hideRvDropdown();
+  updateRvNotice();
+}
+
+function updateRvNotice(){
+  requestAnimationFrame(()=>{
+    const stuId=_rvSelectedStuId||parseInt(document.getElementById('rv-student')?.value);
+    const noticeEl=document.getElementById('rv-notice');
+    if(!noticeEl) return;
+    if(!stuId){ noticeEl.style.display='none'; return; }
+    const stu=STUDENTS.find(s=>s.id===stuId);
+    if(!stu){ noticeEl.style.display='none'; return; }
+    const remaining=stu.total-stu.done;
+    const isFull=stu.done>=stu.total;
+    const textEl=noticeEl.querySelector('.rv-notice-text');
+    if(isFull){
+      noticeEl.style.cssText=`display:flex!important;align-items:flex-start;gap:12px;padding:13px 16px;border-radius:10px;margin-bottom:16px;border:1.5px solid rgba(255,59,59,.55);background:rgba(255,40,40,.13);`;
+      if(textEl) textEl.innerHTML=
+        `⚠️ <strong style="color:#ff8080">${stu.name}</strong> đã hoàn thành hết <strong style="color:#ff8080">${stu.done}/${stu.total}</strong> buổi học — Phụ huynh vui lòng gia hạn khóa học vẽ.`;
+    } else if(remaining<=2 && remaining>0){
+      noticeEl.style.cssText=`display:flex!important;align-items:flex-start;gap:12px;padding:13px 16px;border-radius:10px;margin-bottom:16px;border:1.5px solid rgba(201,168,76,.4);background:rgba(201,168,76,.09);`;
+      if(textEl) textEl.innerHTML=
+        `📣 <strong style="color:var(--gold-l)">${stu.name}</strong> còn <strong style="color:var(--gold-l)">${remaining} buổi</strong> — Phụ huynh vui lòng gia hạn khóa học vẽ.`;
+    } else {
+      noticeEl.style.cssText=`display:none;`;
+    }
+  });
+}
+
+function openRvRenewModal(){
+  const stuId = _rvSelectedStuId || parseInt(document.getElementById('rv-student')?.value);
+  if (stuId) {
+    openRenewStudent(stuId);
+  } else {
+    showToast('⚠️ Vui lòng chọn học sinh để gia hạn!');
+  }
+}
+
+function toggleChip(el,text){
+  el.classList.toggle('sel');
+  const tv=document.getElementById('rv-text');
+  if(!tv) return;
+  if(el.classList.contains('sel')) {
+    tv.value=(tv.value?tv.value+'\n':'')+text;
+  } else {
+    tv.value=tv.value.replace(text,'').replace(/\n\n/g,'\n').trim();
+  }
+}
+
+function buildReviewHTML(stu, sessionLabel, dateLabel, text, scores, teacherName){
+  const scoreRows=CRITERIA.map(c=>{
+    const v=Number(scores[c.key]||7);
+    const pct=((v-5)/5*100).toFixed(0);
+    const color=v>=9?'#5ddb8e':v>=7?'var(--gold-l)':'#ff9090';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <span style="min-width:130px;color:rgba(232,224,204,0.7);font-size:12px;font-family:'Be Vietnam Pro',sans-serif">${c.label}</span>
+      <div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08)">
+        <div style="width:${pct}%;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold-d),${color});transition:width .5s"></div>
+      </div>
+      <span style="color:${color};font-weight:700;font-family:'Baloo 2',sans-serif;font-size:15px;min-width:28px;text-align:right">${v}</span>
+    </div>`;
+  }).join('');
+
+  let noticeHTML='';
+  if(stu){
+    const remaining=stu.total-stu.done;
+    const isFull=stu.done>=stu.total;
+    if(isFull){
+      noticeHTML=`<div style="
+        display:flex;align-items:center;gap:10px;
+        padding:11px 14px;border-radius:8px;margin-top:14px;
+        background:rgba(255,40,40,.13);border:1.5px solid rgba(255,59,59,.55);">
+        <span style="font-size:18px">⚠️</span>
+        <div style="font-size:12px;line-height:1.6;color:#ffaaaa;">
+          <strong style="color:#ff8080">${stu.name}</strong> đã hoàn thành hết
+          <strong style="color:#ff8080">${stu.done}/${stu.total} buổi</strong> học.<br>
+          Phụ huynh vui lòng <strong style="color:#ff8080">gia hạn khóa học vẽ</strong>.
+        </div>
+      </div>`;
+    } else if(remaining<=2 && remaining>0){
+      noticeHTML=`<div style="
+        display:flex;align-items:center;gap:10px;
+        padding:11px 14px;border-radius:8px;margin-top:14px;
+        background:rgba(201,168,76,.09);border:1.5px solid rgba(201,168,76,.4);">
+        <span style="font-size:18px">📣</span>
+        <div style="font-size:12px;line-height:1.6;color:var(--gold-l);">
+          <strong>${stu.name}</strong> còn
+          <strong>${remaining} buổi</strong> học.<br>
+          Phụ huynh vui lòng gia hạn khóa học vẽ.
+        </div>
+      </div>`;
+    }
+  }
+
+  const nickText = stu?.nick ? ` (${stu.nick})` : '';
+  const dobText = stu?.dob ? ` · Năm sinh: ${stu.dob}` : '';
+  const displayTeacher = teacherName || currentUser?.name || '—';
+  
+  const activeTeachers = MEMBERS.filter(m => m.status !== 'inactive' && (m.role === 'teacher' || m.role === 'manager' || m.role === 'admin'));
+  const teacherOptions = activeTeachers.map(m => `<option value="${m.name}" ${m.name === displayTeacher ? 'selected' : ''} style="background:#0d1b2e;color:#e8e0cc;">${m.name}</option>`).join('');
+
+  return `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(201,168,76,.18);">
+      <img src="themes/logo.png" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;" alt="logo">
+      <div style="flex:1;">
+        <div style="font-family:'Baloo 2',sans-serif;font-size:15px;letter-spacing:1px;color:#f0d080;font-weight:700;text-transform:uppercase;line-height:1.2;">NHẬN XÉT HỌC VIÊN</div>
+        <div style="font-size:10px;letter-spacing:1.5px;color:rgba(232,224,204,0.4);text-transform:uppercase;font-weight:600;margin-top:2px;">HANDART ACADEMY</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(201,168,76,.18);">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#8a6a20,#c9a84c);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#1a0e00;flex-shrink:0">${(stu?.name||'?')[0]}</div>
+      <div>
+        <div style="font-size:15px;font-weight:700;font-family:'Be Vietnam Pro',sans-serif;color:#e8e0cc">${stu?.name||'—'}${nickText}</div>
+        <div style="font-size:11px;color:rgba(232,224,204,0.4);margin-top:2px">${dateLabel}${dobText}</div>
+      </div>
+    </div>
+    ${scoreRows}
+    ${text?`<div style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,.04);border-radius:10px;border-left:3px solid #8a6a20;font-size:13px;line-height:1.7;color:#e8e0cc;font-family:'Be Vietnam Pro',sans-serif;white-space:pre-wrap;">${text}</div>`:''}
+    ${noticeHTML}
+    <div style="margin-top:14px;font-size:11px;color:rgba(232,224,204,0.4);text-align:right;font-family:'Be Vietnam Pro',sans-serif;">
+      Giáo viên nhận xét: <select id="preview-teacher-select" style="background:transparent;color:#f0d080;border:none;font-family:'Be Vietnam Pro',sans-serif;font-size:11px;font-weight:600;cursor:pointer;outline:none;padding:0;display:inline-block;width:auto;">${teacherOptions}</select> · HANDART ACADEMY
+    </div>`;
+}
+
+function previewReview(){
+  const stuId=_rvSelectedStuId||parseInt(document.getElementById('rv-student')?.value);
+  const stu=STUDENTS.find(s=>s.id===stuId);
+  if(!stu){ showToast('⚠️ Chưa chọn học sinh!'); return; }
+  const date=document.getElementById('rv-date').value;
+  const text=document.getElementById('rv-text').value;
+  const scores={};
+  CRITERIA.forEach(c=>{ scores[c.key]=document.getElementById(`score-${c.key}`).textContent; });
+  const sessionLabel='';
+  const dateLabel=date?new Date(date+'T00:00:00').toLocaleDateString('vi-VN'):'—';
+  const titleEl=document.getElementById('preview-modal-title');
+  if(titleEl) titleEl.textContent=`👁 Xem trước nhận xét — ${stu.name}`;
+  document.getElementById('review-preview-content').innerHTML=buildReviewHTML(stu,sessionLabel,dateLabel,text,scores,currentUser?.name);
+  openModal('modal-preview');
+}
+
+function saveReviewImage(){
+  const el=document.getElementById('review-preview-content');
+  if(!el){showToast('⚠️ Không tìm thấy nội dung!');return;}
+  if(!window.html2canvas){
+    const scr=document.createElement('script');
+    scr.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    scr.onload=()=>doSaveImage(el);
+    scr.onerror=()=>showToast('⚠️ Không tải được thư viện. Kiểm tra kết nối mạng!');
+    document.head.appendChild(scr);
+    showToast('⏳ Đang tải thư viện lưu ảnh...');
+  } else {
+    doSaveImage(el);
+  }
+}
+
+function doSaveImage(el){
+  const selectEl=el.querySelector('#preview-teacher-select');
+  let tempSpan=null;
+  if(selectEl){
+    tempSpan=document.createElement('span');
+    tempSpan.textContent=selectEl.value;
+    tempSpan.style.color='#f0d080';
+    tempSpan.style.fontWeight='600';
+    selectEl.parentNode.insertBefore(tempSpan,selectEl);
+    selectEl.style.display='none';
+  }
+
+  const orig=el.getAttribute('style')||'';
+  el.style.padding='28px';
+  el.style.background='#060d1a';
+  el.style.borderRadius='12px';
+  html2canvas(el,{
+    backgroundColor:'#060d1a',
+    scale:2,
+    useCORS:true,
+    allowTaint:true,
+    logging:false,
+    onclone:function(clonedDoc){
+      const link=clonedDoc.createElement('link');
+      link.rel='stylesheet';
+      link.href='https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap';
+      clonedDoc.head.appendChild(link);
+    }
+  }).then(canvas=>{
+    if(selectEl && tempSpan){
+      selectEl.style.display='';
+      tempSpan.parentNode.removeChild(tempSpan);
+    }
+    el.setAttribute('style',orig);
+    const link=document.createElement('a');
+    const title=document.getElementById('preview-modal-title')?.textContent||'nhanxet';
+    const filename=title.replace(/[^a-zA-ZÀ-ỹ0-9 ]/g,'').trim().replace(/\s+/g,'_')||'nhan_xet';
+    link.download=filename+'_'+new Date().toLocaleDateString('vi-VN').replace(/\//g,'-')+'.jpg';
+    link.href=canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+    showToast('✅ Đã tải xuống ảnh JPG nhận xét!');
+  }).catch(()=>{
+    el.setAttribute('style',orig);
+    showToast('⚠️ Lỗi khi tạo ảnh. Thử lại!');
+  });
+}
+
+function saveReview(){
+  const stuId=_rvSelectedStuId||parseInt(document.getElementById('rv-student')?.value);
+  const stu=STUDENTS.find(s=>s.id===stuId);
+  if(!stu){ showToast('⚠️ Chưa chọn học sinh!'); return; }
+  const date=document.getElementById('rv-date').value;
+  const text=document.getElementById('rv-text').value;
+  const scores={};
+  CRITERIA.forEach(c=>{ scores[c.key]=document.getElementById(`score-${c.key}`).textContent; });
+  const review={
+    id:Date.now(),
+    stuId, stuName:stu.name,
+    sessLabel:'—',
+    date, text, scores,
+    teacher:currentUser?.name,
+    savedAt:new Date().toISOString()
+  };
+  savedReviews.unshift(review);
+  renderSavedReviews(); sbSave();
+  showToast(`✅ Đã lưu nhận xét cho ${stu.name}!`);
+  
+  // Reset fields
+  document.getElementById('rv-text').value='';
+  document.querySelectorAll('.chip.sel').forEach(c=>c.classList.remove('sel'));
+  CRITERIA.forEach(c=>{
+    const sl=document.querySelector(`input[oninput*="score-${c.key}"]`);
+    if(sl){sl.value=7; document.getElementById(`score-${c.key}`).textContent='7';}
+  });
+}
+
+function renderSavedReviews(){
+  const el=document.getElementById('saved-reviews-list');
+  if(!el) return;
+  const q=(document.getElementById('rv-filter-name')?.value||'').toLowerCase().trim();
+  const list=q ? savedReviews.filter(r=>r.stuName.toLowerCase().includes(q)) : savedReviews;
+  if(!list.length){
+    el.innerHTML=`<div style="color:var(--text-d);font-size:13px;padding:20px;text-align:center;">
+      ${savedReviews.length?'Không tìm thấy nhận xét phù hợp.':'Chưa có nhận xét nào được lưu.'}
+    </div>`;
+    return;
+  }
+  const grouped={};
+  list.forEach(r=>{
+    if(!grouped[r.stuName]) grouped[r.stuName]=[];
+    grouped[r.stuName].push(r);
+  });
+  el.innerHTML=Object.entries(grouped).map(([name,reviews])=>`
+    <div style="margin-bottom:16px;">
+      <div style="font-family:var(--font-display);font-size:12px;letter-spacing:2px;color:var(--gold);
+        text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;font-weight:700;">
+        <span>${name}</span>
+        <span style="font-size:10px;color:var(--text-d);font-family:var(--font-body);letter-spacing:0;text-transform:none;font-weight:normal;">(${reviews.length} nhận xét)</span>
+      </div>
+      ${reviews.map(r=>`
+        <div class="card" style="padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;"
+          onclick="viewSavedReview(${r.id})"
+          onmouseover="this.style.borderColor='rgba(201,168,76,.4)'"
+          onmouseout="this.style.borderColor=''">
+          <div style="flex:1;">
+            <div style="font-size:12px;color:var(--text-m);">
+              ${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('vi-VN'):'—'}
+            </div>
+            <div style="display:flex;gap:10px;margin-top:5px;flex-wrap:wrap;">
+              ${CRITERIA.map(c=>`<span style="font-size:11px;color:var(--text-d)">${c.label}: <strong style="color:var(--gold-l)">${r.scores[c.key]||7}</strong></span>`).join('')}
+            </div>
+            ${r.text?`<div style="font-size:12px;color:var(--text-m);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:500px;">"${r.text}"</div>`:''}
+          </div>
+          <button class="btn btn-outline btn-sm" style="flex-shrink:0;">👁 Xem</button>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function viewSavedReview(id){
+  const r=savedReviews.find(x=>x.id===id);
+  if(!r) return;
+  const stu=STUDENTS.find(s=>s.id===r.stuId);
+  const dateLabel=r.date?new Date(r.date+'T00:00:00').toLocaleDateString('vi-VN'):'—';
+  const titleEl=document.getElementById('preview-modal-title');
+  if(titleEl) titleEl.textContent=`📋 Nhận xét đã lưu — ${r.stuName}`;
+  document.getElementById('review-preview-content').innerHTML=buildReviewHTML(stu,r.sessLabel,dateLabel,r.text,r.scores,r.teacher);
+  openModal('modal-preview');
+}
+
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('modal-bg')) e.target.classList.remove('show');
+});
+
+</script>
+</body>
+</html>
