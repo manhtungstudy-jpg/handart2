@@ -1454,10 +1454,10 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
 ═══════════════════════════════════*/
 const MONTHS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
 
-let SB_URL = localStorage.getItem('cfg_sb_url') || 'https://mrnosatbmsevkecqehtt.supabase.co';
-let SB_KEY = localStorage.getItem('cfg_sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybm9zYXRibXNldmtlY3FlaHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDEyOTQsImV4cCI6MjA5NDQxNzI5NH0.Kdd0yrZ7nZrGORN3BnmoCIhnd3KcH2UAfB99S3K4UCU';
-let SB_BUCKET = localStorage.getItem('cfg_sb_bucket') || 'eradata';
-let SB_FILE = localStorage.getItem('cfg_sb_file') || 'handart-data.json';
+let SB_URL = localStorage.getItem('cfg_sb_url') || 'https://ronsdbiejfpnlwcpanhd.supabase.co';
+let SB_KEY = localStorage.getItem('cfg_sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbnNkYmllamZwbmx3Y3BhbmhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjY5MDMsImV4cCI6MjA5NjI0MjkwM30.Uvu9fg4ojck0SVg3T1KCIldR4Q0ATIaZIzqiouApvtY';
+let SB_BUCKET = localStorage.getItem('cfg_sb_bucket') || 'handart2';
+let SB_FILE = localStorage.getItem('cfg_sb_file') || 'handart2data.json';
 
 const CRITERIA = [
   {key:'color',label:'Phối màu, sắc độ'},
@@ -1587,10 +1587,10 @@ function openSbSettingsModal() {
     showToast('⚠️ Chỉ Admin mới có quyền cấu hình kết nối Supabase!');
     return;
   }
-  document.getElementById('cfg-sb-url').value = localStorage.getItem('cfg_sb_url') || '';
-  document.getElementById('cfg-sb-key').value = localStorage.getItem('cfg_sb_key') || '';
-  document.getElementById('cfg-sb-bucket').value = localStorage.getItem('cfg_sb_bucket') || '';
-  document.getElementById('cfg-sb-file').value = localStorage.getItem('cfg_sb_file') || '';
+  document.getElementById('cfg-sb-url').value = localStorage.getItem('cfg_sb_url') || SB_URL;
+  document.getElementById('cfg-sb-key').value = localStorage.getItem('cfg_sb_key') || SB_KEY;
+  document.getElementById('cfg-sb-bucket').value = localStorage.getItem('cfg_sb_bucket') || SB_BUCKET;
+  document.getElementById('cfg-sb-file').value = localStorage.getItem('cfg_sb_file') || SB_FILE;
   openModal('modal-sb-settings');
 }
 
@@ -1605,10 +1605,10 @@ function saveSbSettings() {
   if (bucket) localStorage.setItem('cfg_sb_bucket', bucket); else localStorage.removeItem('cfg_sb_bucket');
   if (file) localStorage.setItem('cfg_sb_file', file); else localStorage.removeItem('cfg_sb_file');
 
-  SB_URL = url || 'https://mrnosatbmsevkecqehtt.supabase.co';
-  SB_KEY = key || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybm9zYXRibXNldmtlY3FlaHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDEyOTQsImV4cCI6MjA5NDQxNzI5NH0.Kdd0yrZ7nZrGORN3BnmoCIhnd3KcH2UAfB99S3K4UCU';
-  SB_BUCKET = bucket || 'eradata';
-  SB_FILE = file || 'handart-data.json';
+  SB_URL = url || 'https://ronsdbiejfpnlwcpanhd.supabase.co';
+  SB_KEY = key || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbnNkYmllamZwbmx3Y3BhbmhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjY5MDMsImV4cCI6MjA5NjI0MjkwM30.Uvu9fg4ojck0SVg3T1KCIldR4Q0ATIaZIzqiouApvtY';
+  SB_BUCKET = bucket || 'handart2';
+  SB_FILE = file || 'handart2data.json';
 
   closeModal('modal-sb-settings');
   showToast('✅ Đã cập nhật cấu hình Supabase! Đang tải lại dữ liệu...');
