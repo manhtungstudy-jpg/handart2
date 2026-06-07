@@ -622,6 +622,156 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
   input,select,textarea{font-size:16px!important;}
 }
 
+/* ── Student Detail Modal Styles ── */
+.sd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.sd-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: var(--gold-l);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.sd-close {
+  background: none;
+  border: none;
+  color: var(--text-d);
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.sd-close:hover {
+  color: var(--red);
+}
+.sd-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.sd-col-2 {
+  grid-column: span 2;
+}
+.sd-col-3 {
+  grid-column: span 3;
+}
+.sd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sd-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-d);
+  font-weight: 600;
+}
+.sd-val {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+.sd-val.name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.sd-val.highlight-green {
+  color: #5ddb8e;
+  font-weight: 700;
+}
+.sd-val.highlight-large {
+  font-size: 20px;
+  font-weight: 700;
+}
+.sd-val.large-green {
+  font-size: 20px;
+  font-weight: 700;
+  color: #5ddb8e;
+}
+.sd-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+.sd-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+.sd-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+.sd-progress-pct {
+  font-size: 11px;
+  color: var(--text-d);
+  white-space: nowrap;
+}
+.sd-attendance-section {
+  border-top: 1px solid rgba(201, 168, 76, 0.18);
+  padding-top: 16px;
+  margin-top: 20px;
+}
+.sd-attendance-title {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sd-month-group {
+  margin-bottom: 16px;
+}
+.sd-month-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.sd-days-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sd-day-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-d);
+}
+.sd-day-circle.active {
+  background: rgba(39, 174, 96, 0.15);
+  border: 1.5px solid #27ae60;
+  color: #5ddb8e;
+  font-weight: 700;
+}
+
 </style>
 </head>
 <body>
@@ -756,6 +906,26 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
             <path d="M 21 15 L 22 14 L 21 13 L 20 14 Z" fill="#ff758c" stroke="#0d1b2e" stroke-width="0.8" />
           </svg>
         </span><span class="nav-label">Nhận xét</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('canvas',this)">
+        <span class="nav-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;">
+            <defs>
+              <linearGradient id="canvasGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#a8ff78"/>
+                <stop offset="100%" stop-color="#78ffd6"/>
+              </linearGradient>
+            </defs>
+            <rect x="3" y="3" width="18" height="18" rx="2" fill="url(#canvasGrad)" stroke="#0d1b2e" stroke-width="1.5"/>
+            <rect x="5.5" y="5.5" width="13" height="13" rx="1" fill="none" stroke="#0d1b2e" stroke-dasharray="2 2" stroke-width="1"/>
+            <path d="M 6 15 C 8 12, 10 12, 12 15 C 14 13, 16 13, 18 15 L 18 17 L 6 17 Z" fill="#2ed573" stroke="#0d1b2e" stroke-width="1.2"/>
+            <circle cx="15.5" cy="8.5" r="1.8" fill="#ffeb3b" stroke="#0d1b2e" stroke-width="1"/>
+          </svg>
+        </span>
+        <span class="nav-label" style="display:flex; align-items:center; gap:6px;">
+          Đặt khung Canvas
+          <span id="canvas-unpaid-badge" style="display:none; width:8px; height:8px; background-color:var(--red); border-radius:50%; box-shadow:0 0 8px var(--red); flex-shrink:0;"></span>
+        </span>
       </div>
     </div>
     <div class="sb-user">
@@ -1014,6 +1184,35 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
       </div>
     </div>
 
+    <div id="tab-canvas" style="display:none;">
+      <div class="sec-hdr">
+        <h2>Đặt khung Canvas</h2>
+        <span class="badge badge-red" id="canvas-unpaid-total-badge" style="font-size:11px;margin-left:8px;display:none;">0 chưa đóng tiền</span>
+        <div class="sec-line"></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input type="text" id="canvas-search-input" placeholder="🔍 Tìm kiếm học sinh, kích thước..." class="inp" style="max-width:240px;padding:6px 12px;font-size:12px;" oninput="renderCanvasOrders()">
+          <button class="btn btn-gold btn-sm" onclick="openAddCanvasModal()">+ Đặt khung mới</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:50px">#</th>
+              <th>Học sinh</th>
+              <th>Kích thước</th>
+              <th>Số tiền</th>
+              <th>Ngày nhận khung</th>
+              <th>Ngày đóng tiền</th>
+              <th>Trạng thái</th>
+              <th style="width:120px">Hành động</th>
+            </tr></thead>
+            <tbody id="canvas-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -1117,8 +1316,19 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
       <div class="form-col"><label class="lbl">Số điện thoại phụ huynh</label><input class="inp" id="as-parentPhone" placeholder="09xxxxxxxx"></div>
     </div>
     <div class="form-row">
-      <div class="form-col"><label class="lbl">Chương trình học</label>
-        <select class="inp" id="as-progId" onchange="onStudentAddProgramChange()"></select>
+      <div class="form-col full">
+        <label class="lbl">Tên khóa học</label>
+        <select class="inp" id="as-courseName">
+          <option value="Vẽ tay">Vẽ tay</option>
+          <option value="Vẽ máy">Vẽ máy</option>
+          <option value="Sketchnotes">Sketchnotes</option>
+          <option value="Blender">Blender</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Số buổi học</label>
+        <input type="number" class="inp" id="as-total" value="8" min="1" onchange="onStudentAddTotalChange()">
       </div>
       <div class="form-col"><label class="lbl">Học phí (VNĐ)</label><input class="inp" id="as-fee" placeholder="1.200.000"></div>
     </div>
@@ -1166,8 +1376,19 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
       <div class="form-col"><label class="lbl">SĐT phụ huynh</label><input class="inp" id="es-parentPhone"></div>
     </div>
     <div class="form-row">
-      <div class="form-col"><label class="lbl">Chương trình học</label>
-        <select class="inp" id="es-progId" onchange="onStudentEditProgramChange()"></select>
+      <div class="form-col full">
+        <label class="lbl">Tên khóa học</label>
+        <select class="inp" id="es-courseName">
+          <option value="Vẽ tay">Vẽ tay</option>
+          <option value="Vẽ máy">Vẽ máy</option>
+          <option value="Sketchnotes">Sketchnotes</option>
+          <option value="Blender">Blender</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col"><label class="lbl">Số buổi học</label>
+        <input type="number" class="inp" id="es-total" min="1" onchange="onStudentEditTotalChange()">
       </div>
       <div class="form-col"><label class="lbl">Học phí (VNĐ)</label><input class="inp" id="es-fee"></div>
     </div>
@@ -1208,8 +1429,19 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
       Gia hạn học phí cho học sinh: <strong style="color:var(--gold-l)" id="rs-name-display"></strong>
     </div>
     <div class="form-row">
-      <div class="form-col full"><label class="lbl">Chọn chương trình học</label>
-        <select class="inp" id="rs-progId" onchange="onStudentRenewProgramChange()"></select>
+      <div class="form-col full">
+        <label class="lbl">Tên khóa học mới</label>
+        <select class="inp" id="rs-courseName">
+          <option value="Vẽ tay">Vẽ tay</option>
+          <option value="Vẽ máy">Vẽ máy</option>
+          <option value="Sketchnotes">Sketchnotes</option>
+          <option value="Blender">Blender</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col full"><label class="lbl">Số buổi học khóa mới</label>
+        <input type="number" class="inp" id="rs-total" min="1" onchange="onStudentRenewTotalChange()">
       </div>
     </div>
     <div class="form-row">
@@ -1252,6 +1484,13 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
   </div>
 </div>
 
+<!-- Modal: Student Detail -->
+<div class="modal-bg" id="modal-student-detail">
+  <div class="modal" style="max-width:680px; padding: 24px 28px; border-top: 4px solid #ff5e3a; position: relative;">
+    <div id="student-detail-content"></div>
+  </div>
+</div>
+
 <!-- Modal: Add Recurring Class/Session -->
 <div class="modal-bg" id="modal-add-session">
   <div class="modal">
@@ -1281,7 +1520,7 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
         <div style="display:flex;gap:8px;align-items:center;">
           <select class="inp" id="ns-start" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option selected>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
           <span style="color:var(--text-d);font-size:13px;">–</span>
-          <select class="inp" id="ns-end" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option selected>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
+          <select class="inp" id="ns-end" style="flex:1;"><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option selected>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select>
         </div>
       </div>
     </div>
@@ -1445,6 +1684,100 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
   </div>
 </div>
 
+<!-- Modal: Add Canvas Order -->
+<div class="modal-bg" id="modal-add-canvas">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">➕ Đặt khung Canvas mới</div>
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Học sinh</label>
+        <select class="inp" id="ac-studentId"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col">
+        <label class="lbl">Kích thước</label>
+        <input class="inp" id="ac-size" placeholder="Ví dụ: 20cm x 20cm">
+      </div>
+      <div class="form-col">
+        <label class="lbl">Số tiền (VNĐ)</label>
+        <input class="inp" id="ac-amount" placeholder="Ví dụ: 50.000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col">
+        <label class="lbl">Ngày nhận khung</label>
+        <input class="inp" type="date" id="ac-receivedDate">
+      </div>
+      <div class="form-col">
+        <label class="lbl" style="display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;margin-top:2px;">
+          <input type="checkbox" id="ac-isPaid" onchange="toggleAddCanvasPaidDate(this.checked)"> Đã xác nhận đóng tiền
+        </label>
+        <input class="inp" type="date" id="ac-paymentDate" style="margin-top:5px;display:none;">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-canvas')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveAddCanvas()">Xác nhận</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Canvas Order -->
+<div class="modal-bg" id="modal-edit-canvas">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">✏️ Chỉnh sửa đặt khung Canvas</div>
+    <input type="hidden" id="ec-id">
+    <div class="form-row">
+      <div class="form-col full">
+        <label class="lbl">Học sinh</label>
+        <select class="inp" id="ec-studentId"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col">
+        <label class="lbl">Kích thước</label>
+        <input class="inp" id="ec-size" placeholder="Ví dụ: 20cm x 20cm">
+      </div>
+      <div class="form-col">
+        <label class="lbl">Số tiền (VNĐ)</label>
+        <input class="inp" id="ec-amount" placeholder="Ví dụ: 50.000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col">
+        <label class="lbl">Ngày nhận khung</label>
+        <input class="inp" type="date" id="ec-receivedDate">
+      </div>
+      <div class="form-col">
+        <label class="lbl" style="display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;margin-top:2px;">
+          <input type="checkbox" id="ec-isPaid" onchange="toggleEditCanvasPaidDate(this.checked)"> Đã xác nhận đóng tiền
+        </label>
+        <input class="inp" type="date" id="ec-paymentDate" style="margin-top:5px;display:none;">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-canvas')">Hủy</button>
+      <button class="btn btn-gold" onclick="saveEditCanvas()">Lưu thay đổi</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Delete Canvas Order -->
+<div class="modal-bg" id="modal-delete-canvas">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-title" style="color:#ff7070;">⚠️ Xác nhận xóa đặt khung Canvas</div>
+    <input type="hidden" id="dc-id">
+    <div style="font-size:13px;color:var(--text-m);margin-bottom:20px;line-height:1.6;">
+      Bạn có chắc chắn muốn xóa đơn đặt khung Canvas của học sinh <strong id="dc-name-display" style="color:var(--gold-l);"></strong>?
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-delete-canvas')">Hủy</button>
+      <button class="btn btn-danger" onclick="doDeleteCanvas()">Xác nhận xóa</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /*═══════════════════════════════════
   SEED DATA & APP STATE
@@ -1492,6 +1825,9 @@ const SESSIONS_DATA = [];
 // Seed Students
 const STUDENTS = [];
 
+// Seed Canvas Orders
+const CANVAS_ORDERS = [];
+
 // Seed State Vars
 let currentUser = null;
 let activeTab = 'overview';
@@ -1533,6 +1869,7 @@ async function sbLoad(){
     if(data.memberSelfAtt)  Object.assign(memberSelfAtt, data.memberSelfAtt);
     if(data.renewLog)      renewLog.splice(0,renewLog.length,...data.renewLog);
     if(data.revenueByMonth) Object.assign(revenueByMonth,data.revenueByMonth);
+    if(data.canvasOrders && data.canvasOrders.length) CANVAS_ORDERS.splice(0,CANVAS_ORDERS.length,...data.canvasOrders);
     _sbSetStatus('ok');
     return true;
   } catch(e){
@@ -1557,6 +1894,7 @@ async function sbSave(){
       memberSelfAtt:{...memberSelfAtt},
       renewLog:[...renewLog],
       revenueByMonth:{...revenueByMonth},
+      canvasOrders:[...CANVAS_ORDERS],
       savedAt:new Date().toISOString()
     });
     try{
@@ -1711,6 +2049,13 @@ function initApp(){
   if (editRevBtn) {
     editRevBtn.style.display = (currentUser.role === 'admin') ? 'inline-block' : 'none';
   }
+
+  // Bind Canvas Input formatters
+  const acAmount = document.getElementById('ac-amount');
+  const ecAmount = document.getElementById('ec-amount');
+  if (acAmount) acAmount.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
+  if (ecAmount) ecAmount.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
+  updateCanvasBadge();
   
   document.querySelectorAll('.nav-item').forEach(n=>n.style.display='');
   if(currentUser.role==='teacher'){
@@ -1730,7 +2075,8 @@ const TAB_TITLES={
   members:'Thành viên',
   students:'Danh sách học sinh',
   sessions:'Lớp học / Ca điểm danh',
-  reviews:'Nhận xét học sinh'
+  reviews:'Nhận xét học sinh',
+  canvas:'Đặt khung Canvas'
 };
 
 function switchTab(name,el){
@@ -1755,6 +2101,7 @@ function switchTab(name,el){
   if(name==='members')  renderMembers();
   if(name==='students') renderStudents();
   if(name==='sessions') renderSessions();
+  if(name==='canvas')   renderCanvasOrders();
 }
 
 function toggleSidebar(){
@@ -2057,18 +2404,6 @@ function doDeleteMember(){
   TAB 3: STUDENTS COMPONENT (ACTIVE)
 ═══════════════════════════════════*/
 function initStudentModalSelectors(){
-  // Populate programs select dropdowns
-  const asProg = document.getElementById('as-progId');
-  const esProg = document.getElementById('es-progId');
-  const rsProg = document.getElementById('rs-progId');
-  
-  if(asProg && esProg && rsProg){
-    const optionsHTML = PROGRAMS.map(p => `<option value="${p.id}">${p.name} (${p.sessions} buổi)</option>`).join('');
-    asProg.innerHTML = optionsHTML;
-    esProg.innerHTML = optionsHTML;
-    rsProg.innerHTML = optionsHTML;
-  }
-  
   // Populate session checklists
   const asSessions = document.getElementById('as-sessions-check');
   const esSessions = document.getElementById('es-sessions-check');
@@ -2083,8 +2418,8 @@ function initStudentModalSelectors(){
   }
   
   // Set up auto fee fills
-  onStudentAddProgramChange();
-  onStudentRenewProgramChange();
+  onStudentAddTotalChange();
+  onStudentRenewTotalChange();
   
   // Setup Search Listener
   const searchInput = document.getElementById('stu-search-input');
@@ -2101,26 +2436,26 @@ function initStudentModalSelectors(){
   if (rsFee) rsFee.addEventListener('input', e => { e.target.value = formatFeeVND(e.target.value); });
 }
 
-function getProgramDefaultFee(progId){
-  if(progId === 1) return '1.200.000';
-  if(progId === 2) return '2.000.000';
-  if(progId === 3) return '3.200.000';
-  return '1.200.000';
+function getFeeForSessions(sessions) {
+  if (sessions === 8) return '1.200.000';
+  if (sessions === 12) return '2.000.000';
+  if (sessions === 16) return '3.200.000';
+  return formatFeeVND(sessions * 150000);
 }
 
-function onStudentAddProgramChange(){
-  const progId = parseInt(document.getElementById('as-progId').value);
-  document.getElementById('as-fee').value = getProgramDefaultFee(progId);
+function onStudentAddTotalChange() {
+  const total = parseInt(document.getElementById('as-total').value) || 8;
+  document.getElementById('as-fee').value = getFeeForSessions(total);
 }
 
-function onStudentEditProgramChange(){
-  const progId = parseInt(document.getElementById('es-progId').value);
-  document.getElementById('es-fee').value = getProgramDefaultFee(progId);
+function onStudentEditTotalChange() {
+  const total = parseInt(document.getElementById('es-total').value) || 8;
+  document.getElementById('es-fee').value = getFeeForSessions(total);
 }
 
-function onStudentRenewProgramChange(){
-  const progId = parseInt(document.getElementById('rs-progId').value);
-  document.getElementById('rs-fee').value = getProgramDefaultFee(progId);
+function onStudentRenewTotalChange() {
+  const total = parseInt(document.getElementById('rs-total').value) || 8;
+  document.getElementById('rs-fee').value = getFeeForSessions(total);
 }
 
 function openAddStudentModalHelper(){
@@ -2133,7 +2468,8 @@ function openAddStudentModalHelper(){
   const checkboxes = document.querySelectorAll('#as-sessions-check input[type="checkbox"]');
   checkboxes.forEach(cb => cb.checked = false);
   
-  onStudentAddProgramChange();
+  document.getElementById('as-total').value = 8;
+  onStudentAddTotalChange();
   openModal('modal-add-student');
 }
 
@@ -2149,6 +2485,7 @@ function renderStudents(){
     // Match name or nickname
     const nameMatch = s.name.toLowerCase().includes(searchVal);
     const nickMatch = (s.nick || '').toLowerCase().includes(searchVal);
+    const courseMatch = (s.courseName || '').toLowerCase().includes(searchVal);
     
     // Match class names
     let classMatch = false;
@@ -2158,7 +2495,7 @@ function renderStudents(){
       if(ses && ses.name.toLowerCase().includes(searchVal)) classMatch = true;
     });
     
-    return nameMatch || nickMatch || classMatch;
+    return nameMatch || nickMatch || classMatch || courseMatch;
   });
   
   // Update badge count
@@ -2175,6 +2512,24 @@ function renderStudents(){
     const done = s.done || 0;
     const total = s.total || prog.sessions || 8;
     const pct = Math.min(Math.max(Math.round((done / total) * 100), 0), 100);
+    const remaining = total - done;
+    
+    let warningBadge = '';
+    if (remaining <= 0) {
+      warningBadge = `<span class="badge badge-red" style="font-size:10px;margin-top:4px;display:inline-flex;">⚠ Hết chương trình học</span>`;
+    } else if (remaining <= 2) {
+      warningBadge = `<span class="badge badge-gold" style="font-size:10px;margin-top:4px;display:inline-flex;">⚠ Sắp hết chương trình học (còn ${remaining} buổi)</span>`;
+    }
+    
+    const course = s.courseName || 'Chưa chọn';
+    const progName = `${course} (${total} buổi)`;
+    
+    let barColor = 'linear-gradient(90deg, var(--teal), #00ffaa)';
+    if (remaining <= 0) {
+      barColor = 'linear-gradient(90deg, var(--red), #ff7070)';
+    } else if (remaining <= 2) {
+      barColor = 'linear-gradient(90deg, var(--gold), var(--gold-l))';
+    }
     
     const isExpired = s.dateTo && new Date(s.dateTo) < new Date();
     const needsPayment = (done >= total) || isExpired || s.stuStatus === 'unpaid';
@@ -2213,6 +2568,7 @@ function renderStudents(){
         <div style="font-weight:600">${s.name}</div>
         ${s.nick ? `<div style="font-size:11px;color:var(--text-d)">(${s.nick})</div>` : ''}
         <div style="font-size:10px;color:var(--text-d)">NS: ${s.dob || '—'}</div>
+        ${warningBadge ? `<div style="margin-top:2px;">${warningBadge}</div>` : ''}
       </td>
       <td>
         <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
@@ -2220,10 +2576,10 @@ function renderStudents(){
         </div>
       </td>
       <td>
-        <div style="font-size:12px;font-weight:500;margin-bottom:4px;color:var(--gold-l);">${prog.name}</div>
+        <div style="font-size:12px;font-weight:500;margin-bottom:4px;color:var(--gold-l);">${progName}</div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="flex:1;min-width:70px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;border:0.5px solid rgba(255,255,255,.1);">
-            <div style="width:${pct}%;height:100%;background:linear-gradient(90deg, var(--teal), #00ffaa);border-radius:3px;"></div>
+            <div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px;"></div>
           </div>
           <span style="font-size:11px;font-weight:700;color:var(--teal);min-width:32px;text-align:right;">${done}/${total}</span>
         </div>
@@ -2246,6 +2602,7 @@ function renderStudents(){
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
           <button class="btn btn-teal btn-sm" style="padding:4px 8px;font-size:11px;" onclick="openRenewStudent(${s.id})" title="Gia hạn học phí khóa mới">🔄 Gia hạn</button>
           <button class="btn btn-outline btn-sm" style="padding:4px 8px;font-size:11px;" onclick="openEditStudent(${s.id})">✏️ Sửa</button>
+          <button class="btn btn-gold btn-sm" style="padding:4px 8px;font-size:11px;" onclick="openStudentDetail(${s.id})" title="Xem chi tiết học sinh">📋 Chi tiết</button>
           ${currentUser && currentUser.role === 'admin' ? `<button class="btn btn-danger btn-sm" style="padding:4px 6px;font-size:11px;" onclick="confirmDeleteStudent(${s.id})">🗑</button>` : ''}
         </div>
       </td>
@@ -2260,7 +2617,9 @@ function saveAddStudent(){
   const address = document.getElementById('as-address').value.trim();
   const parentName = document.getElementById('as-parentName').value.trim();
   const parentPhone = document.getElementById('as-parentPhone').value.trim();
-  const progId = parseInt(document.getElementById('as-progId').value);
+  const courseName = document.getElementById('as-courseName').value;
+  const total = parseInt(document.getElementById('as-total').value) || 8;
+  const progId = (total === 12 ? 2 : (total === 16 ? 3 : 1));
   const fee = document.getElementById('as-fee').value.trim();
   const dateFrom = document.getElementById('as-dateFrom').value;
   const dateTo = document.getElementById('as-dateTo').value;
@@ -2279,7 +2638,6 @@ function saveAddStudent(){
     if(cb.checked) sessionIds.push(parseInt(cb.value));
   });
   
-  const prog = PROGRAMS.find(p => p.id === progId) || {sessions: 8};
   const newId = (STUDENTS.length > 0 ? Math.max(...STUDENTS.map(s => s.id)) : 0) + 1;
   const formattedPaidDate = formatDateDMY(paidDate);
   
@@ -2294,8 +2652,9 @@ function saveAddStudent(){
     sessionId: sessionIds[0] || null,
     sessionIds,
     progId,
+    courseName,
     done: 0,
-    total: prog.sessions,
+    total: total,
     fee,
     paid: formattedPaidDate,
     round: 1,
@@ -2355,7 +2714,8 @@ function openEditStudent(id){
   document.getElementById('es-address').value = s.address || '';
   document.getElementById('es-parentName').value = s.parentName || '';
   document.getElementById('es-parentPhone').value = s.parentPhone || '';
-  document.getElementById('es-progId').value = s.progId;
+  document.getElementById('es-courseName').value = s.courseName || 'Vẽ tay';
+  document.getElementById('es-total').value = s.total || 8;
   document.getElementById('es-fee').value = s.fee || '';
   document.getElementById('es-dateFrom').value = s.dateFrom || '';
   document.getElementById('es-dateTo').value = s.dateTo || '';
@@ -2391,12 +2751,10 @@ function saveEditStudent(){
   s.parentName = document.getElementById('es-parentName').value.trim();
   s.parentPhone = document.getElementById('es-parentPhone').value.trim();
   
-  const newProgId = parseInt(document.getElementById('es-progId').value);
-  if(s.progId !== newProgId){
-    s.progId = newProgId;
-    const prog = PROGRAMS.find(p => p.id === newProgId) || {sessions: 8};
-    s.total = prog.sessions;
-  }
+  const newTotal = parseInt(document.getElementById('es-total').value) || 8;
+  s.total = newTotal;
+  s.progId = (newTotal === 12 ? 2 : (newTotal === 16 ? 3 : 1));
+  s.courseName = document.getElementById('es-courseName').value;
   
   s.fee = document.getElementById('es-fee').value.trim();
   s.dateFrom = document.getElementById('es-dateFrom').value;
@@ -2512,7 +2870,8 @@ function openRenewStudent(id){
   
   document.getElementById('rs-id').value = s.id;
   document.getElementById('rs-name-display').textContent = s.name;
-  document.getElementById('rs-progId').value = s.progId;
+  document.getElementById('rs-courseName').value = s.courseName || 'Vẽ tay';
+  document.getElementById('rs-total').value = s.total || 8;
   document.getElementById('rs-fee').value = s.fee || '';
   
   const today = new Date().toISOString().split('T')[0];
@@ -2520,7 +2879,7 @@ function openRenewStudent(id){
   document.getElementById('rs-dateFrom').value = today;
   document.getElementById('rs-dateTo').value = '';
   
-  onStudentRenewProgramChange();
+  onStudentRenewTotalChange();
   openModal('modal-renew-student');
 }
 
@@ -2529,7 +2888,9 @@ function saveRenewStudent(){
   const s = STUDENTS.find(x => x.id === id);
   if(!s) return;
   
-  const progId = parseInt(document.getElementById('rs-progId').value);
+  const total = parseInt(document.getElementById('rs-total').value) || 8;
+  const progId = (total === 12 ? 2 : (total === 16 ? 3 : 1));
+  const courseName = document.getElementById('rs-courseName').value;
   const fee = document.getElementById('rs-fee').value.trim();
   const paidDate = document.getElementById('rs-paidDate').value;
   const dateFrom = document.getElementById('rs-dateFrom').value;
@@ -2540,15 +2901,14 @@ function saveRenewStudent(){
     return;
   }
   
-  const prog = PROGRAMS.find(p => p.id === progId) || {sessions: 8};
-  
   s.progId = progId;
+  s.courseName = courseName;
   s.fee = fee;
   s.paid = formatDateDMY(paidDate);
   s.dateFrom = dateFrom;
   s.dateTo = dateTo;
   s.done = 0;
-  s.total = prog.sessions;
+  s.total = total;
   s.round = (s.round || 1) + 1;
   s.stuStatus = 'active';
   s.status = 'active';
@@ -2576,6 +2936,237 @@ function saveRenewStudent(){
   buildCharts();
   sbSave();
   showToast('🔄 Đã gia hạn học phí thành công!');
+}
+
+/*═══════════════════════════════════
+  STUDENT DETAIL & ATTENDANCE HISTORY
+  ═══════════════════════════════════*/
+function getStudentAttendanceHistory(studentId) {
+  const presentDates = [];
+  for (const [key, record] of Object.entries(savedAttendance)) {
+    if (record.finalized && record.presentIds && record.presentIds.includes(studentId)) {
+      const parts = key.split('_');
+      if (parts.length === 2) {
+        const dateStr = parts[1];
+        if (!presentDates.includes(dateStr)) {
+          presentDates.push(dateStr);
+        }
+      }
+    }
+  }
+  
+  const grouped = {};
+  presentDates.forEach(date => {
+    const monthKey = date.slice(0, 7);
+    if (!grouped[monthKey]) {
+      grouped[monthKey] = [];
+    }
+    grouped[monthKey].push(date);
+  });
+  
+  const sortedMonths = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+  const topMonths = sortedMonths.slice(0, 3);
+  
+  return topMonths.map(m => ({
+    monthKey: m,
+    dates: grouped[m]
+  }));
+}
+
+function openStudentDetail(studentId) {
+  const s = STUDENTS.find(x => x.id === studentId);
+  if (!s) return;
+  
+  const sIds = s.sessionIds || (s.sessionId ? [s.sessionId] : []);
+  const dayMap = {
+    'T2': 'Thứ 2',
+    'T3': 'Thứ 3',
+    'T4': 'Thứ 4',
+    'T5': 'Thứ 5',
+    'T6': 'Thứ 6',
+    'T7': 'Thứ 7',
+    'CN': 'Chủ nhật'
+  };
+  const sessionTimes = sIds.map(id => {
+    const ses = SESSIONS_DATA.find(x => x.id === id);
+    if (ses) {
+      const dayWord = dayMap[ses.day] || ses.day;
+      return `${dayWord} ${ses.time}`;
+    }
+    return '';
+  }).filter(t => t !== '').join(', ') || '—';
+  
+  const statusBadge = s.stuStatus === 'break' 
+    ? '<span class="badge badge-gray">Tạm dừng</span>' 
+    : '<span class="badge badge-green">Đang học</span>';
+  
+  const done = s.done || 0;
+  const total = s.total || 8;
+  const pct = Math.min(Math.max(Math.round((done / total) * 100), 0), 100);
+  const remaining = total - done;
+  
+  let barColor = 'linear-gradient(90deg, var(--teal), #00ffaa)';
+  if (remaining <= 0) {
+    barColor = 'linear-gradient(90deg, var(--red), #ff7070)';
+  } else if (remaining <= 2) {
+    barColor = 'linear-gradient(90deg, var(--gold), var(--gold-l))';
+  }
+  
+  const isUnpaid = s.stuStatus === 'unpaid';
+  const debtText = isUnpaid 
+    ? `${s.fee ? formatFeeVND(s.fee) + 'đ' : '—'}` 
+    : 'Sạch';
+  const debtClass = isUnpaid ? 'sd-val highlight-large' : 'sd-val large-green';
+  const debtStyle = isUnpaid ? 'color: var(--red);' : '';
+  
+  const formatDateStr = (dStr) => {
+    if(!dStr) return '—';
+    try {
+      const parts = dStr.split('-');
+      if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return dStr;
+    } catch(e) { return dStr; }
+  };
+  
+  const history = getStudentAttendanceHistory(studentId);
+  let attendanceHtml = '';
+  
+  if (history.length === 0) {
+    attendanceHtml = `
+      <div style="text-align:center;padding:20px;color:var(--text-d);font-size:12px;">
+        Chưa có lịch sử điểm danh.
+      </div>
+    `;
+  } else {
+    attendanceHtml = history.map(h => {
+      const [year, month] = h.monthKey.split('-');
+      const monthNum = parseInt(month);
+      const yearNum = parseInt(year);
+      const daysCount = new Date(yearNum, monthNum, 0).getDate();
+      const presentCount = h.dates.length;
+      
+      let circlesHtml = '';
+      for (let day = 1; day <= daysCount; day++) {
+        const dateStr = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const isPresent = h.dates.includes(dateStr);
+        circlesHtml += `<span class="sd-day-circle ${isPresent ? 'active' : ''}">${day}</span>`;
+      }
+      
+      return `
+        <div class="sd-month-group">
+          <div class="sd-month-title">Tháng ${monthNum}/${yearNum} – ${presentCount} buổi có mặt</div>
+          <div class="sd-days-grid">
+            ${circlesHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  const html = `
+    <div class="sd-header">
+      <div class="sd-title">Chi tiết học viên</div>
+      <button class="sd-close" onclick="closeModal('modal-student-detail')">✕</button>
+    </div>
+    
+    <div class="sd-grid">
+      <div class="sd-field sd-col-2">
+        <span class="sd-label">Họ và tên</span>
+        <span class="sd-val name">${s.name}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Tên gọi ở nhà</span>
+        <span class="sd-val">${s.nick || '—'}</span>
+      </div>
+      
+      <div class="sd-field">
+        <span class="sd-label">Năm sinh</span>
+        <span class="sd-val">${s.dob || '—'}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">SĐT</span>
+        <span class="sd-val">${s.parentPhone || '—'}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Địa chỉ</span>
+        <span class="sd-val">${s.address || '—'}</span>
+      </div>
+      
+      <div class="sd-field sd-col-2">
+        <span class="sd-label">Họ tên cha/mẹ</span>
+        <span class="sd-val">${s.parentName || '—'}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Trạng thái</span>
+        <div>${statusBadge}</div>
+      </div>
+      
+      <div class="sd-field">
+        <span class="sd-label">Gói học</span>
+        <div>
+          <span class="badge badge-teal" style="background: rgba(0, 200, 212, 0.12); border: 1px solid rgba(0, 200, 212, 0.3); color: var(--teal); padding: 4px 12px; border-radius: 20px; font-weight: 600;">${s.courseName || 'Vẽ tay'} ${s.total}B/tháng</span>
+        </div>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Ca học</span>
+        <span class="sd-val" style="line-height:1.4;">${sessionTimes}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Ngày bắt đầu</span>
+        <span class="sd-val">${s.dateFrom || '—'}</span>
+      </div>
+      
+      <div class="sd-field">
+        <span class="sd-label">Lần đóng HP</span>
+        <span class="sd-val">${s.round || 1}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Hết hạn gói</span>
+        <span class="sd-val highlight-green">${formatDateStr(s.dateTo)}</span>
+      </div>
+      <div class="sd-field">
+        <!-- Grid placeholder -->
+      </div>
+      
+      <div class="sd-field sd-col-3">
+        <span class="sd-label">Tiến trình gói học</span>
+        <div>
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            <span style="font-size:22px;font-weight:700;color:var(--teal);">${done}/${total}</span>
+            <span class="sd-progress-pct">${pct}% hoàn thành</span>
+          </div>
+          <div class="sd-progress-container">
+            <div class="sd-progress-bar">
+              <div class="sd-progress-fill" style="width:${pct}%; background:${barColor};"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sd-field sd-col-2">
+        <span class="sd-label">Đã đóng</span>
+        <span class="sd-val large-green">${s.fee ? formatFeeVND(s.fee) + 'đ' : '0đ'}</span>
+      </div>
+      <div class="sd-field">
+        <span class="sd-label">Công nợ còn lại</span>
+        <span class="${debtClass}" style="${debtStyle}">${debtText}</span>
+      </div>
+    </div>
+    
+    <div class="sd-attendance-section">
+      <div class="sd-attendance-title">📅 Lịch sử điểm danh – 3 tháng gần nhất</div>
+      ${attendanceHtml}
+    </div>
+    
+    <div class="modal-footer" style="margin-top:20px; padding-top:16px;">
+      <button class="btn btn-sm" style="background:rgba(255,59,59,.15); border:1px solid rgba(255,59,59,.4); color:#ff7070;" onclick="closeModal('modal-student-detail'); confirmDeleteStudent(${s.id})">🗑 Xóa học sinh</button>
+      <button class="btn btn-sm" style="background:rgba(243, 156, 18, 0.15); border:1px solid rgba(243, 156, 18, 0.4); color:#f39c12; margin-left:auto;" onclick="closeModal('modal-student-detail'); openEditStudent(${s.id})">✏️ Sửa thông tin</button>
+      <button class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); color:var(--text);" onclick="closeModal('modal-student-detail')">Đóng</button>
+    </div>
+  `;
+  
+  document.getElementById('student-detail-content').innerHTML = html;
+  openModal('modal-student-detail');
 }
 
 /*═══════════════════════════════════
@@ -3540,6 +4131,316 @@ function viewSavedReview(id){
   if(titleEl) titleEl.textContent=`📋 Nhận xét đã lưu — ${r.stuName}`;
   document.getElementById('review-preview-content').innerHTML=buildReviewHTML(stu,r.sessLabel,dateLabel,r.text,r.scores,r.teacher);
   openModal('modal-preview');
+}
+
+/*═══════════════════════════════════
+  CANVAS FRAME ORDERS LOGIC
+  ═══════════════════════════════════*/
+function formatCanvasDate(dStr) {
+  if(!dStr) return '—';
+  try {
+    const parts = dStr.split('-');
+    if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return dStr;
+  } catch(e) { return dStr; }
+}
+
+function updateCanvasBadge() {
+  const badge = document.getElementById('canvas-unpaid-badge');
+  const totalBadge = document.getElementById('canvas-unpaid-total-badge');
+  const unpaidOrders = CANVAS_ORDERS.filter(o => !o.isPaid);
+  
+  if (badge) {
+    badge.style.display = unpaidOrders.length > 0 ? 'inline-block' : 'none';
+  }
+  
+  if (totalBadge) {
+    if (unpaidOrders.length > 0) {
+      totalBadge.textContent = `${unpaidOrders.length} chưa đóng tiền`;
+      totalBadge.style.display = 'inline-flex';
+    } else {
+      totalBadge.style.display = 'none';
+    }
+  }
+}
+
+function renderCanvasOrders() {
+  const tb = document.getElementById('canvas-tbody');
+  if(!tb) return;
+  
+  const searchVal = (document.getElementById('canvas-search-input')?.value || '').trim().toLowerCase();
+  
+  const filtered = CANVAS_ORDERS.filter(o => {
+    if (!searchVal) return true;
+    const nameMatch = (o.studentName || '').toLowerCase().includes(searchVal);
+    const sizeMatch = (o.size || '').toLowerCase().includes(searchVal);
+    return nameMatch || sizeMatch;
+  });
+  
+  // Update unpaid counts/badges
+  updateCanvasBadge();
+  
+  tb.innerHTML = filtered.map((o, i) => {
+    const statusBadge = o.isPaid 
+      ? `<span class="badge badge-green">● Đã đóng</span>`
+      : `<span class="badge badge-red">⚠ Chưa đóng</span>`;
+      
+    const paymentDateStr = o.isPaid && o.paymentDate ? formatCanvasDate(o.paymentDate) : '—';
+    const rowBg = i % 2 === 0 ? '' : 'background:rgba(255,255,255,.025)';
+    const student = STUDENTS.find(s => s.id === o.studentId);
+    const displayName = student ? (student.name + (student.nick ? ` (${student.nick})` : '')) : (o.studentName || '—');
+    
+    return `<tr style="${rowBg}">
+      <td style="color:var(--text-d)">${i+1}</td>
+      <td>
+        <div style="font-weight:600">${displayName}</div>
+      </td>
+      <td>${o.size || '—'}</td>
+      <td><span style="font-weight:600;color:var(--gold-l)">${o.amount ? o.amount + 'đ' : '—'}</span></td>
+      <td>${formatCanvasDate(o.receivedDate)}</td>
+      <td>
+        <span style="${!o.isPaid ? 'color:var(--red);' : ''}">${paymentDateStr}</span>
+      </td>
+      <td>${statusBadge}</td>
+      <td>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn btn-outline btn-sm" style="padding:4px 8px;font-size:11px;" onclick="openEditCanvas(${o.id})">✏️ Sửa</button>
+          <button class="btn btn-danger btn-sm" style="padding:4px 6px;font-size:11px;" onclick="confirmDeleteCanvas(${o.id})">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function initCanvasStudentSelect(selectId, selectedId = null) {
+  const select = document.getElementById(selectId);
+  if(!select) return;
+  
+  // Sort students alphabetically
+  const sortedStudents = [...STUDENTS].sort((a,b) => a.name.localeCompare(b.name, 'vi'));
+  
+  let optionsHTML = '<option value="">-- Chọn học sinh --</option>';
+  optionsHTML += sortedStudents.map(s => `
+    <option value="${s.id}" ${selectedId && parseInt(selectedId) === s.id ? 'selected' : ''}>
+      ${s.name} ${s.nick ? `(${s.nick})` : ''}
+    </option>
+  `).join('');
+  select.innerHTML = optionsHTML;
+}
+
+function openAddCanvasModal() {
+  initCanvasStudentSelect('ac-studentId');
+  document.getElementById('ac-size').value = '';
+  document.getElementById('ac-amount').value = '';
+  
+  // Set received date to today by default
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ac-receivedDate').value = today;
+  
+  // Reset payment status
+  const isPaidCb = document.getElementById('ac-isPaid');
+  isPaidCb.checked = false;
+  toggleAddCanvasPaidDate(false);
+  
+  openModal('modal-add-canvas');
+}
+
+function toggleAddCanvasPaidDate(checked) {
+  const dateInput = document.getElementById('ac-paymentDate');
+  if (checked) {
+    dateInput.style.display = 'block';
+    dateInput.value = new Date().toISOString().split('T')[0];
+  } else {
+    dateInput.style.display = 'none';
+    dateInput.value = '';
+  }
+}
+
+// Ensure the helper works when select changes
+function onAddCanvasStudentChange() {
+  // Can be used if additional behavior is needed
+}
+
+function saveAddCanvas() {
+  const studentIdVal = document.getElementById('ac-studentId').value;
+  if (!studentIdVal) {
+    showToast('⚠️ Vui lòng chọn học sinh!');
+    return;
+  }
+  const studentId = parseInt(studentIdVal);
+  const student = STUDENTS.find(s => s.id === studentId);
+  const studentName = student ? student.name : '';
+  
+  const size = document.getElementById('ac-size').value.trim();
+  const amount = document.getElementById('ac-amount').value.trim();
+  const receivedDate = document.getElementById('ac-receivedDate').value;
+  
+  if (!size) {
+    showToast('⚠️ Vui lòng điền kích thước!');
+    return;
+  }
+  if (!amount) {
+    showToast('⚠️ Vui lòng nhập số tiền!');
+    return;
+  }
+  if (!receivedDate) {
+    showToast('⚠️ Vui lòng chọn ngày nhận!');
+    return;
+  }
+  
+  const isPaid = document.getElementById('ac-isPaid').checked;
+  const paymentDate = document.getElementById('ac-paymentDate').value;
+  
+  if (isPaid && !paymentDate) {
+    showToast('⚠️ Vui lòng chọn ngày đóng tiền!');
+    return;
+  }
+  
+  const newId = (CANVAS_ORDERS.length > 0 ? Math.max(...CANVAS_ORDERS.map(o => o.id)) : 0) + 1;
+  
+  const newOrder = {
+    id: newId,
+    studentId: studentId,
+    studentName: studentName,
+    size: size,
+    amount: amount,
+    receivedDate: receivedDate,
+    isPaid: isPaid,
+    paymentDate: paymentDate
+  };
+  
+  CANVAS_ORDERS.push(newOrder);
+  
+  sbSave();
+  closeModal('modal-add-canvas');
+  showToast('✅ Đã đặt khung Canvas thành công!');
+  
+  if (activeTab === 'canvas') {
+    renderCanvasOrders();
+  } else {
+    updateCanvasBadge();
+  }
+}
+
+function openEditCanvas(id) {
+  const o = CANVAS_ORDERS.find(x => x.id === id);
+  if (!o) return;
+  
+  document.getElementById('ec-id').value = o.id;
+  initCanvasStudentSelect('ec-studentId', o.studentId);
+  document.getElementById('ec-size').value = o.size || '';
+  document.getElementById('ec-amount').value = o.amount || '';
+  document.getElementById('ec-receivedDate').value = o.receivedDate || '';
+  
+  const isPaidCb = document.getElementById('ec-isPaid');
+  isPaidCb.checked = o.isPaid;
+  
+  const dateInput = document.getElementById('ec-paymentDate');
+  if (o.isPaid) {
+    dateInput.style.display = 'block';
+    dateInput.value = o.paymentDate || '';
+  } else {
+    dateInput.style.display = 'none';
+    dateInput.value = '';
+  }
+  
+  openModal('modal-edit-canvas');
+}
+
+function toggleEditCanvasPaidDate(checked) {
+  const dateInput = document.getElementById('ec-paymentDate');
+  if (checked) {
+    dateInput.style.display = 'block';
+    dateInput.value = new Date().toISOString().split('T')[0];
+  } else {
+    dateInput.style.display = 'none';
+    dateInput.value = '';
+  }
+}
+
+function saveEditCanvas() {
+  const id = parseInt(document.getElementById('ec-id').value);
+  const idx = CANVAS_ORDERS.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  
+  const studentIdVal = document.getElementById('ec-studentId').value;
+  if (!studentIdVal) {
+    showToast('⚠️ Vui lòng chọn học sinh!');
+    return;
+  }
+  const studentId = parseInt(studentIdVal);
+  const student = STUDENTS.find(s => s.id === studentId);
+  const studentName = student ? student.name : '';
+  
+  const size = document.getElementById('ec-size').value.trim();
+  const amount = document.getElementById('ec-amount').value.trim();
+  const receivedDate = document.getElementById('ec-receivedDate').value;
+  
+  if (!size) {
+    showToast('⚠️ Vui lòng điền kích thước!');
+    return;
+  }
+  if (!amount) {
+    showToast('⚠️ Vui lòng nhập số tiền!');
+    return;
+  }
+  if (!receivedDate) {
+    showToast('⚠️ Vui lòng chọn ngày nhận!');
+    return;
+  }
+  
+  const isPaid = document.getElementById('ec-isPaid').checked;
+  const paymentDate = document.getElementById('ec-paymentDate').value;
+  
+  if (isPaid && !paymentDate) {
+    showToast('⚠️ Vui lòng chọn ngày đóng tiền!');
+    return;
+  }
+  
+  CANVAS_ORDERS[idx].studentId = studentId;
+  CANVAS_ORDERS[idx].studentName = studentName;
+  CANVAS_ORDERS[idx].size = size;
+  CANVAS_ORDERS[idx].amount = amount;
+  CANVAS_ORDERS[idx].receivedDate = receivedDate;
+  CANVAS_ORDERS[idx].isPaid = isPaid;
+  CANVAS_ORDERS[idx].paymentDate = paymentDate;
+  
+  sbSave();
+  closeModal('modal-edit-canvas');
+  showToast('✅ Đã cập nhật đơn đặt khung Canvas!');
+  
+  if (activeTab === 'canvas') {
+    renderCanvasOrders();
+  } else {
+    updateCanvasBadge();
+  }
+}
+
+function confirmDeleteCanvas(id) {
+  const o = CANVAS_ORDERS.find(x => x.id === id);
+  if (!o) return;
+  
+  document.getElementById('dc-id').value = o.id;
+  document.getElementById('dc-name-display').textContent = o.studentName || 'Học sinh';
+  openModal('modal-delete-canvas');
+}
+
+function doDeleteCanvas() {
+  const id = parseInt(document.getElementById('dc-id').value);
+  const idx = CANVAS_ORDERS.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  
+  CANVAS_ORDERS.splice(idx, 1);
+  
+  sbSave();
+  closeModal('modal-delete-canvas');
+  showToast('✅ Đã xóa đơn đặt khung Canvas!');
+  
+  if (activeTab === 'canvas') {
+    renderCanvasOrders();
+  } else {
+    updateCanvasBadge();
+  }
 }
 
 document.addEventListener('click',function(e){
