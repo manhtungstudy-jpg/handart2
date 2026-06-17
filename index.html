@@ -202,12 +202,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);color:va
 .sb-uname{font-size:12px;font-weight:700;color:var(--gold-l);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-urole{font-size:10px;color:var(--teal);letter-spacing:1px;text-transform:uppercase;}
-.sb-logout, .sb-settings{
+.gs-logout, .gs-settings{
   font-size:16px;color:var(--text-d);cursor:pointer;transition:.2s;
   background:none;border:none;padding:4px;
 }
-.sb-logout:hover{color:var(--red);}
-.sb-settings:hover{color:var(--gold-l);}
+.gs-logout:hover{color:var(--red);}
+.gs-settings:hover{color:var(--gold-l);}
 
 .header{
   position:fixed;left:var(--sidebar);right:0;top:0;height:var(--header);z-index:40;
@@ -934,8 +934,8 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
         <div class="sb-uname" id="sb-uname">Admin</div>
         <div class="sb-urole" id="sb-urole">admin</div>
       </div>
-      <button class="sb-settings" onclick="openSbSettingsModal()" title="Cấu hình kết nối Supabase">⚙</button>
-      <button class="sb-logout" onclick="doLogout()" title="Đăng xuất">⏻</button>
+
+      <button class="gs-logout" onclick="doLogout()" title="Đăng xuất">⏻</button>
     </div>
   </nav>
 
@@ -943,7 +943,7 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
     <button class="hdr-mob-menu" onclick="toggleSidebar()">☰</button>
     <div class="hdr-title" id="hdr-title">Tổng quan</div>
     <div class="hdr-date" id="hdr-date"></div>
-    <div id="sb-sync-status" style="font-size:11px;letter-spacing:.5px;min-width:70px;text-align:right;"></div>
+    <div id="gs-sync-status" style="font-size:11px;letter-spacing:.5px;min-width:70px;text-align:right;"></div>
     <div class="hdr-badge" id="hdr-role-badge">Admin</div>
   </header>
 
@@ -1629,36 +1629,6 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
   </div>
 </div>
 
-<!-- Modal: Supabase Settings -->
-<div class="modal-bg" id="modal-sb-settings">
-  <div class="modal" style="max-width:480px;">
-    <div class="modal-title">⚙️ Cấu hình kết nối Supabase</div>
-    <div style="font-size:12px;color:var(--text-m);line-height:1.6;margin-bottom:16px;padding:10px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:8px;">
-      💡 Bạn có thể cấu hình dự án Supabase của riêng mình để lưu trữ dữ liệu riêng tư. Nếu để trống, hệ thống sẽ tự động sử dụng dự án dùng chung mặc định.
-    </div>
-    <div class="form-row">
-      <div class="form-col full">
-        <label class="lbl">Supabase Project URL</label>
-        <input class="inp" id="cfg-sb-url" placeholder="https://your-project.supabase.co">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-col full">
-        <label class="lbl">Supabase API Key (Anon / Service Role)</label>
-        <input type="password" class="inp" id="cfg-sb-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-col"><label class="lbl">Bucket Name</label><input class="inp" id="cfg-sb-bucket" placeholder="eradata"></div>
-      <div class="form-col"><label class="lbl">File Name (JSON)</label><input class="inp" id="cfg-sb-file" placeholder="handart-data.json"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-sb-settings')">Hủy</button>
-      <button class="btn btn-gold" onclick="saveSbSettings()">💾 Lưu cấu hình</button>
-    </div>
-  </div>
-</div>
-
 <!-- Modal: Edit Revenue -->
 <div class="modal-bg" id="modal-edit-revenue">
   <div class="modal" style="max-width:400px;">
@@ -1782,15 +1752,12 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
 /*═══════════════════════════════════
   SEED DATA & APP STATE
   (HandArt Drawing Class equivalents)
-  Loaded automatically if Supabase data file is not found
-  Synced to 'handart-data.json'
+  Loaded automatically if Google Sheet data is not found
+  Synced to local storage fallback
 ═══════════════════════════════════*/
 const MONTHS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
 
-let SB_URL = localStorage.getItem('cfg_sb_url') || 'https://ronsdbiejfpnlwcpanhd.supabase.co';
-let SB_KEY = localStorage.getItem('cfg_sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbnNkYmllamZwbmx3Y3BhbmhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjY5MDMsImV4cCI6MjA5NjI0MjkwM30.Uvu9fg4ojck0SVg3T1KCIldR4Q0ATIaZIzqiouApvtY';
-let SB_BUCKET = localStorage.getItem('cfg_sb_bucket') || 'handart2';
-let SB_FILE = localStorage.getItem('cfg_sb_file') || 'handart2data.json';
+let GS_URL = 'https://script.google.com/macros/s/AKfycbxh280w11GwwwmwtrQtXy8hVqpGcfrueYxZFQNaFgAoVMHCozK2PoIv4Yckf3SipraS/exec';
 
 const CRITERIA = [
   {key:'color',label:'Phối màu, sắc độ'},
@@ -1840,51 +1807,91 @@ let renewLog = [];
 let revenueByMonth = {};
 
 /*═══════════════════════════════════
-  SUPABASE SYNC SETUP (Isolated File)
-  Uses bucket 'eradata', file 'handart-data.json'
-═══════════════════════════════════*/
-function _sbSetStatus(state){
-  const el=document.getElementById('sb-sync-status');
+  GOOGLE SHEETS SYNC SETUP
+  ═══════════════════════════════════*/
+function _gsSetStatus(state){
+  const el=document.getElementById('gs-sync-status');
   if(!el) return;
-  if(state==='saving')   { el.textContent='⏳ Đang lưu...';  el.style.color='var(--gold-l)'; }
-  else if(state==='ok')  { el.textContent='✓ Đã lưu';        el.style.color='#5ddb8e'; setTimeout(()=>{ if(el.textContent==='✓ Đã lưu') el.textContent=''; },2500); }
-  else if(state==='err') { el.textContent='⚠ Lỗi lưu';      el.style.color='var(--red)'; }
+  if(state==='saving')   { el.textContent='⏳ Đồng bộ...';  el.style.color='var(--gold-l)'; }
+  else if(state==='ok')  { el.textContent='✓ Đã đồng bộ';    el.style.color='#5ddb8e'; setTimeout(()=>{ if(el.textContent==='✓ Đã đồng bộ') el.textContent=''; },2500); }
+  else if(state==='err') { el.textContent='⚠ Lỗi đồng bộ';  el.style.color='var(--red)'; }
   else                   { el.textContent=''; }
 }
 
-async function sbLoad(){
-  _sbSetStatus('saving');
+function applyData(data) {
+  if(data.MEMBERS && data.MEMBERS.length) MEMBERS.splice(0,MEMBERS.length,...data.MEMBERS);
+  if(data.SESSIONS_DATA) SESSIONS_DATA.splice(0,SESSIONS_DATA.length,...data.SESSIONS_DATA);
+  if(data.STUDENTS)      STUDENTS.splice(0,STUDENTS.length,...data.STUDENTS);
+  if(data.savedAttendance) {
+    for (let k in savedAttendance) delete savedAttendance[k];
+    Object.assign(savedAttendance, data.savedAttendance);
+  }
+  if(data.hiddenSessionDates) {
+    for (let k in hiddenSessionDates) delete hiddenSessionDates[k];
+    Object.assign(hiddenSessionDates, data.hiddenSessionDates);
+  }
+  if(data.savedReviews)  savedReviews.splice(0,savedReviews.length,...data.savedReviews);
+  if(data.memberSelfAtt) {
+    for (let k in memberSelfAtt) delete memberSelfAtt[k];
+    Object.assign(memberSelfAtt, data.memberSelfAtt);
+  }
+  if(data.renewLog)      renewLog.splice(0,renewLog.length,...data.renewLog);
+  if(data.revenueByMonth) {
+    for (let k in revenueByMonth) delete revenueByMonth[k];
+    Object.assign(revenueByMonth, data.revenueByMonth);
+  }
+  if(data.canvasOrders && data.canvasOrders.length) CANVAS_ORDERS.splice(0,CANVAS_ORDERS.length,...data.canvasOrders);
+}
+
+async function gsLoad(){
+  _gsSetStatus('saving');
+  if (!GS_URL) {
+    const localDataStr = localStorage.getItem('handart_local_data');
+    if (localDataStr) {
+      try {
+        const data = JSON.parse(localDataStr);
+        applyData(data);
+        _gsSetStatus('ok');
+        return true;
+      } catch(e) {
+        console.error('Error parsing local data', e);
+      }
+    }
+    _gsSetStatus('ok');
+    return false;
+  }
   try{
-    const url=`${SB_URL}/storage/v1/object/${SB_BUCKET}/${SB_FILE}`;
-    const res=await fetch(url,{headers:{'Authorization':'Bearer '+SB_KEY}});
-    if(res.status===404){ _sbSetStatus('ok'); return false; } 
+    const res=await fetch(GS_URL);
     if(!res.ok) throw new Error('HTTP '+res.status);
     const data=await res.json();
-    if(data.MEMBERS && data.MEMBERS.length) MEMBERS.splice(0,MEMBERS.length,...data.MEMBERS);
-    if(data.SESSIONS_DATA) SESSIONS_DATA.splice(0,SESSIONS_DATA.length,...data.SESSIONS_DATA);
-    if(data.STUDENTS)      STUDENTS.splice(0,STUDENTS.length,...data.STUDENTS);
-    if(data.savedAttendance)    Object.assign(savedAttendance,   data.savedAttendance);
-    if(data.hiddenSessionDates) Object.assign(hiddenSessionDates,data.hiddenSessionDates);
-    if(data.savedReviews)  savedReviews.splice(0,savedReviews.length,...data.savedReviews);
-    if(data.memberSelfAtt)  Object.assign(memberSelfAtt, data.memberSelfAtt);
-    if(data.renewLog)      renewLog.splice(0,renewLog.length,...data.renewLog);
-    if(data.revenueByMonth) Object.assign(revenueByMonth,data.revenueByMonth);
-    if(data.canvasOrders && data.canvasOrders.length) CANVAS_ORDERS.splice(0,CANVAS_ORDERS.length,...data.canvasOrders);
-    _sbSetStatus('ok');
+    if (!data || Object.keys(data).length === 0) {
+      _gsSetStatus('ok');
+      return false;
+    }
+    applyData(data);
+    _gsSetStatus('ok');
     return true;
   } catch(e){
-    console.error('sbLoad error',e);
-    _sbSetStatus('err');
+    console.error('gsLoad error',e);
+    _gsSetStatus('err');
+    const localDataStr = localStorage.getItem('handart_local_data');
+    if (localDataStr) {
+      try {
+        const data = JSON.parse(localDataStr);
+        applyData(data);
+        return true;
+      } catch(err) {}
+    }
     return false;
   }
 }
 
-let _sbSaveTimer=null;
-async function sbSave(){
-  clearTimeout(_sbSaveTimer);
-  _sbSaveTimer=setTimeout(async()=>{
-    _sbSetStatus('saving');
-    const payload=JSON.stringify({
+let _gsSaveTimer=null;
+async function gsSave(){
+  clearTimeout(_gsSaveTimer);
+  _gsSaveTimer=setTimeout(async()=>{
+    _gsSetStatus('saving');
+    const payloadObj = {
       MEMBERS:[...MEMBERS],
       SESSIONS_DATA:[...SESSIONS_DATA],
       STUDENTS:[...STUDENTS],
@@ -1896,63 +1903,27 @@ async function sbSave(){
       revenueByMonth:{...revenueByMonth},
       canvasOrders:[...CANVAS_ORDERS],
       savedAt:new Date().toISOString()
-    });
+    };
+    const payloadStr = JSON.stringify(payloadObj);
+    localStorage.setItem('handart_local_data', payloadStr);
+    
+    if (!GS_URL) {
+      _gsSetStatus('ok');
+      return;
+    }
     try{
-      const url=`${SB_URL}/storage/v1/object/${SB_BUCKET}/${SB_FILE}`;
-      let res=await fetch(url,{
-        method:'PUT',
-        headers:{'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','x-upsert':'true'},
-        body:payload
+      const res=await fetch(GS_URL,{
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:payloadStr
       });
-      if(!res.ok){
-        res=await fetch(`${SB_URL}/storage/v1/object/${SB_BUCKET}/${SB_FILE}`,{
-          method:'POST',
-          headers:{'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
-          body:payload
-        });
-      }
       if(!res.ok) throw new Error('HTTP '+res.status);
-      _sbSetStatus('ok');
+      _gsSetStatus('ok');
     } catch(e){
-      console.error('sbSave error',e);
-      _sbSetStatus('err');
+      console.error('gsSave error',e);
+      _gsSetStatus('err');
     }
   },800);
-}
-
-function openSbSettingsModal() {
-  if (currentUser.role !== 'admin') {
-    showToast('⚠️ Chỉ Admin mới có quyền cấu hình kết nối Supabase!');
-    return;
-  }
-  document.getElementById('cfg-sb-url').value = localStorage.getItem('cfg_sb_url') || SB_URL;
-  document.getElementById('cfg-sb-key').value = localStorage.getItem('cfg_sb_key') || SB_KEY;
-  document.getElementById('cfg-sb-bucket').value = localStorage.getItem('cfg_sb_bucket') || SB_BUCKET;
-  document.getElementById('cfg-sb-file').value = localStorage.getItem('cfg_sb_file') || SB_FILE;
-  openModal('modal-sb-settings');
-}
-
-function saveSbSettings() {
-  const url = document.getElementById('cfg-sb-url').value.trim();
-  const key = document.getElementById('cfg-sb-key').value.trim();
-  const bucket = document.getElementById('cfg-sb-bucket').value.trim();
-  const file = document.getElementById('cfg-sb-file').value.trim();
-
-  if (url) localStorage.setItem('cfg_sb_url', url); else localStorage.removeItem('cfg_sb_url');
-  if (key) localStorage.setItem('cfg_sb_key', key); else localStorage.removeItem('cfg_sb_key');
-  if (bucket) localStorage.setItem('cfg_sb_bucket', bucket); else localStorage.removeItem('cfg_sb_bucket');
-  if (file) localStorage.setItem('cfg_sb_file', file); else localStorage.removeItem('cfg_sb_file');
-
-  SB_URL = url || 'https://ronsdbiejfpnlwcpanhd.supabase.co';
-  SB_KEY = key || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbnNkYmllamZwbmx3Y3BhbmhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjY5MDMsImV4cCI6MjA5NjI0MjkwM30.Uvu9fg4ojck0SVg3T1KCIldR4Q0ATIaZIzqiouApvtY';
-  SB_BUCKET = bucket || 'handart2';
-  SB_FILE = file || 'handart2data.json';
-
-  closeModal('modal-sb-settings');
-  showToast('✅ Đã cập nhật cấu hình Supabase! Đang tải lại dữ liệu...');
-  sbLoad().then(() => {
-    initApp();
-  });
 }
 
 /*═══════════════════════════════════
@@ -1968,7 +1939,7 @@ async function doLogin(){
   if(!found){
     const btn = document.querySelector('.btn-login');
     if(btn){ btn.disabled=true; btn.textContent='Đang kiểm tra...'; }
-    await sbLoad();
+    await gsLoad();
     if(btn){ btn.disabled=false; btn.textContent='Đăng nhập ›'; }
     found = MEMBERS.find(m=>m.username===u && m.pass===p);
   }
@@ -1976,17 +1947,18 @@ async function doLogin(){
   if(!found){ showErr('Tên đăng nhập hoặc mật khẩu không đúng!'); return; }
   if(found.status==='inactive'){ showErr('Tài khoản đã bị tạm dừng. Liên hệ quản trị viên!'); return; }
   currentUser = {...found};
+  localStorage.setItem('handart_current_user', JSON.stringify(currentUser)); // Lưu phiên đăng nhập
   document.getElementById('page-login').style.display='none';
   document.getElementById('app').style.display='block';
   
   const loadMsg=document.createElement('div');
-  loadMsg.id='sb-loading';
+  loadMsg.id='gs-loading';
   loadMsg.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(6,13,26,.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:var(--font-body);';
   loadMsg.innerHTML='<div style="font-size:24px">🎨</div><div style="color:var(--gold-l);font-size:14px;letter-spacing:1px;">Đang tải dữ liệu...</div>';
   document.body.appendChild(loadMsg);
   
-  sbLoad().then(()=>{
-    if(document.getElementById('sb-loading')) document.body.removeChild(loadMsg);
+  gsLoad().then(()=>{
+    if(document.getElementById('gs-loading')) document.body.removeChild(loadMsg);
     initApp();
   });
 }
@@ -2004,6 +1976,7 @@ function doLogout(){
   document.querySelectorAll('.nav-item').forEach(n=>n.style.display='');
   document.getElementById('page-login').style.display='flex';
   document.getElementById('app').style.display='none';
+  localStorage.removeItem('handart_current_user'); // Xóa phiên đăng nhập
   currentUser=null;
   activeTab='overview';
 }
@@ -2038,11 +2011,7 @@ function initApp(){
     addSessionBtn.style.display = (currentUser.role === 'teacher') ? 'none' : '';
   }
 
-  // Hide Supabase settings button for non-admins (only admin can access)
-  const settingsBtn = document.querySelector('.sb-settings');
-  if (settingsBtn) {
-    settingsBtn.style.display = (currentUser.role === 'admin') ? '' : 'none';
-  }
+
 
   // Hide or show edit revenue button for admin
   const editRevBtn = document.getElementById('btn-edit-revenue');
@@ -2344,7 +2313,7 @@ function saveAddMember(){
     status:'active'
   });
   closeModal('modal-add-member');
-  renderMembers(); sbSave();
+  renderMembers(); gsSave();
   showToast('✅ Đã thêm thành viên mới!');
   document.getElementById('am-name').value='';
   document.getElementById('am-username').value='';
@@ -2378,7 +2347,7 @@ function saveEditMember(){
   MEMBERS[idx].role=document.getElementById('em-role').value;
   MEMBERS[idx].status=document.getElementById('em-status').value;
   closeModal('modal-edit-member');
-  renderMembers(); sbSave();
+  renderMembers(); gsSave();
   showToast('✅ Đã cập nhật thành viên!');
 }
 
@@ -2396,7 +2365,7 @@ function doDeleteMember(){
   if(idx===-1) return;
   MEMBERS.splice(idx,1);
   closeModal('modal-delete-member');
-  renderMembers(); sbSave();
+  renderMembers(); gsSave();
   showToast('🗑 Đã xóa thành viên!');
 }
 
@@ -2690,7 +2659,7 @@ function saveAddStudent(){
   renderStudents();
   updateOverviewCards();
   buildCharts();
-  sbSave();
+  gsSave();
   showToast('✅ Đã thêm học sinh mới!');
 }
 
@@ -2769,7 +2738,7 @@ function saveEditStudent(){
   closeModal('modal-edit-student');
   renderStudents();
   updateOverviewCards();
-  sbSave();
+  gsSave();
   showToast('✅ Đã cập nhật học sinh!');
 }
 
@@ -2808,7 +2777,7 @@ function doDeleteStudent(){
   renderStudents();
   updateOverviewCards();
   buildCharts();
-  sbSave();
+  gsSave();
   showToast('🗑 Đã xóa học sinh!');
 }
 
@@ -2860,7 +2829,7 @@ function saveEditRevenue() {
   closeModal('modal-edit-revenue');
   buildCharts();
   updateOverviewCards();
-  sbSave();
+  gsSave();
   showToast('✅ Đã cập nhật doanh thu tháng!');
 }
 
@@ -2934,7 +2903,7 @@ function saveRenewStudent(){
   renderStudents();
   updateOverviewCards();
   buildCharts();
-  sbSave();
+  gsSave();
   showToast('🔄 Đã gia hạn học phí thành công!');
 }
 
@@ -3434,7 +3403,7 @@ function finalizeSession(classId, dateStr) {
     memberSelfAtt[teacherId][monthKey] = (memberSelfAtt[teacherId][monthKey] || 0) + 1;
   }
   
-  sbSave();
+  gsSave();
   renderSessions();
   showToast('✅ Đã hoàn tất ca học và điểm danh!');
 }
@@ -3475,7 +3444,7 @@ function undoFinalizeSession(classId, dateStr) {
     delete savedAttendance[sessionKey];
   }
   
-  sbSave();
+  gsSave();
   renderSessions();
   showToast('🔓 Đã mở khóa ca học!');
 }
@@ -3497,7 +3466,7 @@ function changeSessionTeacher(classId, dateStr, teacherId) {
   } else {
     savedAttendance[sessionKey].teacherId = parseInt(teacherId);
   }
-  sbSave();
+  gsSave();
   renderSessions();
   showToast('✅ Đã cập nhật giáo viên cho ca dạy này!');
 }
@@ -3560,7 +3529,7 @@ function saveEditRecurringClass() {
   closeModal('modal-edit-recurring-class');
   initStudentModalSelectors();
   renderSessions();
-  sbSave();
+  gsSave();
   showToast('✅ Đã cập nhật lớp học cố định!');
 }
 
@@ -3650,14 +3619,14 @@ function confirmAddStudentToSession() {
   
   closeModal('modal-add-stu-session');
   renderSessions();
-  sbSave();
+  gsSave();
   showToast('✅ Đã thêm học sinh vào ca học!');
 }
 
 function hideSessionDate(classId, dateStr) {
   const sessionKey = `${classId}_${dateStr}`;
   hiddenSessionDates[sessionKey] = true;
-  sbSave();
+  gsSave();
   renderSessions();
   showToast('🚫 Đã hủy ca dạy của ngày này!');
 }
@@ -3665,7 +3634,7 @@ function hideSessionDate(classId, dateStr) {
 function restoreSessionDate(classId, dateStr) {
   const sessionKey = `${classId}_${dateStr}`;
   delete hiddenSessionDates[sessionKey];
-  sbSave();
+  gsSave();
   renderSessions();
   showToast('✅ Đã phục hồi ca dạy!');
 }
@@ -3708,7 +3677,7 @@ function saveNewSession() {
   closeModal('modal-add-session');
   initStudentModalSelectors();
   renderSessions();
-  sbSave();
+  gsSave();
   showToast(`✅ Đã tạo lớp "${name}" — ${day} ${time}`);
 }
 
@@ -3743,7 +3712,7 @@ function doDeleteRecurringClass() {
   closeModal('modal-delete-recurring-class');
   initStudentModalSelectors();
   renderSessions();
-  sbSave();
+  gsSave();
   showToast('🗑 Đã xóa lớp học cố định!');
 }
 
@@ -4068,7 +4037,7 @@ function saveReview(){
     savedAt:new Date().toISOString()
   };
   savedReviews.unshift(review);
-  renderSavedReviews(); sbSave();
+  renderSavedReviews(); gsSave();
   showToast(`✅ Đã lưu nhận xét cho ${stu.name}!`);
   
   // Reset fields
@@ -4311,7 +4280,7 @@ function saveAddCanvas() {
   
   CANVAS_ORDERS.push(newOrder);
   
-  sbSave();
+  gsSave();
   closeModal('modal-add-canvas');
   showToast('✅ Đã đặt khung Canvas thành công!');
   
@@ -4405,7 +4374,7 @@ function saveEditCanvas() {
   CANVAS_ORDERS[idx].isPaid = isPaid;
   CANVAS_ORDERS[idx].paymentDate = paymentDate;
   
-  sbSave();
+  gsSave();
   closeModal('modal-edit-canvas');
   showToast('✅ Đã cập nhật đơn đặt khung Canvas!');
   
@@ -4432,7 +4401,7 @@ function doDeleteCanvas() {
   
   CANVAS_ORDERS.splice(idx, 1);
   
-  sbSave();
+  gsSave();
   closeModal('modal-delete-canvas');
   showToast('✅ Đã xóa đơn đặt khung Canvas!');
   
@@ -4442,6 +4411,31 @@ function doDeleteCanvas() {
     updateCanvasBadge();
   }
 }
+
+// Tự động phục hồi phiên đăng nhập khi tải trang
+document.addEventListener('DOMContentLoaded', () => {
+  const savedUser = localStorage.getItem('handart_current_user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      document.getElementById('page-login').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      
+      const loadMsg = document.createElement('div');
+      loadMsg.id = 'gs-loading';
+      loadMsg.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(6,13,26,.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:var(--font-body);';
+      loadMsg.innerHTML = '<div style="font-size:24px">🎨</div><div style="color:var(--gold-l);font-size:14px;letter-spacing:1px;">Đang tải dữ liệu...</div>';
+      document.body.appendChild(loadMsg);
+      
+      gsLoad().then(() => {
+        if (document.getElementById('gs-loading')) document.body.removeChild(loadMsg);
+        initApp();
+      });
+    } catch (e) {
+      localStorage.removeItem('handart_current_user');
+    }
+  }
+});
 
 document.addEventListener('click',function(e){
   if(e.target.classList.contains('modal-bg')) e.target.classList.remove('show');
