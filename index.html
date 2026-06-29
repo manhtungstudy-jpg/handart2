@@ -1401,6 +1401,7 @@ label.lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(-
         <select class="inp" id="es-status">
           <option value="active">Đang học</option>
           <option value="break">Tạm dừng học</option>
+          <option value="unpaid">Chưa đóng học phí</option>
         </select>
       </div>
       <div class="form-col"><label class="lbl">Đã học (số buổi)</label>
@@ -2565,7 +2566,9 @@ function renderStudents(){
       <td>
         ${s.stuStatus === 'break' 
           ? '<span class="badge badge-gray">○ Tạm dừng</span>' 
-          : '<span class="badge badge-green">● Đang học</span>'}
+          : (s.stuStatus === 'unpaid'
+             ? '<span class="badge badge-red">○ Chưa đóng phí</span>'
+             : '<span class="badge badge-green">● Đang học</span>')}
       </td>
       <td>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
@@ -2713,31 +2716,85 @@ function saveEditStudent(){
     if(cb.checked) sessionIds.push(parseInt(cb.value));
   });
   
-  s.name = document.getElementById('es-name').value.trim();
+  const oldName = s.name;
+  const oldFee = s.fee;
+  const oldStuStatus = s.stuStatus;
+  
+  const newName = document.getElementById('es-name').value.trim();
+  const newFee = document.getElementById('es-fee').value.trim();
+  const newStuStatus = document.getElementById('es-status').value;
+  const newTotal = parseInt(document.getElementById('es-total').value) || 8;
+  
+  s.name = newName;
   s.nick = document.getElementById('es-nick').value.trim();
   s.dob = document.getElementById('es-dob').value.trim();
   s.address = document.getElementById('es-address').value.trim();
   s.parentName = document.getElementById('es-parentName').value.trim();
   s.parentPhone = document.getElementById('es-parentPhone').value.trim();
   
-  const newTotal = parseInt(document.getElementById('es-total').value) || 8;
   s.total = newTotal;
   s.progId = (newTotal === 12 ? 2 : (newTotal === 16 ? 3 : 1));
   s.courseName = document.getElementById('es-courseName').value;
   
-  s.fee = document.getElementById('es-fee').value.trim();
+  s.fee = newFee;
   s.dateFrom = document.getElementById('es-dateFrom').value;
   s.dateTo = document.getElementById('es-dateTo').value;
-  s.stuStatus = document.getElementById('es-status').value;
+  s.stuStatus = newStuStatus;
   s.done = parseInt(document.getElementById('es-done').value) || 0;
   
   s.sessionId = sessionIds[0] || null;
   s.sessionIds = sessionIds;
   s.status = s.stuStatus === 'break' ? 'inactive' : 'active';
   
+  // Sync name in renewLog
+  if (newName !== oldName) {
+    renewLog.forEach(r => {
+      if (r.stuId === s.id) r.stuName = newName;
+    });
+  }
+  
+  // Update Revenue and Log
+  if (oldStuStatus === 'unpaid' && newStuStatus === 'active') {
+    // If student was unpaid and is now active, record the payment!
+    const todayStr = new Date().toISOString().split('T')[0];
+    const monthKey = todayStr.slice(0, 7);
+    const feeVal = parseFeeVND(newFee);
+    
+    revenueByMonth[monthKey] = (revenueByMonth[monthKey] || 0) + feeVal;
+    
+    renewLog.push({
+      stuId: s.id,
+      stuName: newName,
+      sessionId: sessionIds[0] || null,
+      progId: s.progId,
+      dateFrom: s.dateFrom,
+      dateTo: s.dateTo,
+      fee: newFee,
+      paidDate: todayStr,
+      round: s.round || 1,
+      renewedAt: new Date().toISOString()
+    });
+    
+    s.paid = formatDateDMY(todayStr);
+  } else if (oldStuStatus !== 'unpaid' && newFee !== oldFee) {
+    // If student was already paid but fee changed, adjust the current round's revenue
+    const currentRoundLog = renewLog.find(r => r.stuId === s.id && r.round === (s.round || 1));
+    if (currentRoundLog) {
+      const monthKey = currentRoundLog.paidDate ? currentRoundLog.paidDate.slice(0, 7) : null;
+      if (monthKey) {
+        const oldFeeVal = parseFeeVND(oldFee);
+        const newFeeVal = parseFeeVND(newFee);
+        const diff = newFeeVal - oldFeeVal;
+        revenueByMonth[monthKey] = (revenueByMonth[monthKey] || 0) + diff;
+      }
+      currentRoundLog.fee = newFee;
+    }
+  }
+  
   closeModal('modal-edit-student');
   renderStudents();
   updateOverviewCards();
+  buildCharts();
   gsSave();
   showToast('✅ Đã cập nhật học sinh!');
 }
