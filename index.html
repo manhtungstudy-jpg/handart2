@@ -3973,6 +3973,46 @@ function buildReviewHTML(stu, sessionLabel, dateLabel, text, scores, teacherName
   const activeTeachers = MEMBERS.filter(m => m.status !== 'inactive' && (m.role === 'teacher' || m.role === 'manager' || m.role === 'admin'));
   const teacherOptions = activeTeachers.map(m => `<option value="${m.name}" ${m.name === displayTeacher ? 'selected' : ''} style="background:#0d1b2e;color:#e8e0cc;">${m.name}</option>`).join('');
 
+  // Lấy toàn bộ lịch sử ngày điểm danh (cho phép trùng ngày nếu học 2 ca/ngày)
+  let formattedDates = [];
+  if (stu) {
+    const allDates = [];
+    for (const [key, record] of Object.entries(savedAttendance)) {
+      if (record.finalized && record.presentIds && record.presentIds.includes(stu.id)) {
+        const parts = key.split('_');
+        if (parts.length === 2) {
+          const dateStr = parts[1];
+          allDates.push(dateStr);
+        }
+      }
+    }
+    allDates.sort(); // Xếp tăng dần theo thời gian (từ cũ đến mới)
+    
+    // Tính số buổi học quá hạn (học nợ chưa gia hạn khóa mới)
+    const overdueCount = stu.done > stu.total ? (stu.done - stu.total) : 0;
+    
+    formattedDates = allDates.map((dStr, index) => {
+      const parts = dStr.split('-');
+      const dateText = parts.length === 3 ? `${parts[2]}/${parts[1]}` : dStr; // Định dạng DD/MM
+      
+      // Nếu là những buổi cuối vượt quá số buổi đã đóng (overdue) thì bôi đỏ
+      if (overdueCount > 0 && index >= (allDates.length - overdueCount)) {
+        return `<span style="color:#ff5e5e;font-weight:700;">${dateText}</span>`;
+      }
+      return dateText;
+    });
+  }
+
+  const progressHTML = stu ? `
+    <div style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,.025);border-radius:10px;border:1.5px dashed rgba(201,168,76,.25);font-family:'Be Vietnam Pro',sans-serif;">
+      <div style="font-size:12px;font-weight:700;color:#f0d080;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;">📊 TIẾN ĐỘ & NHẬT KÝ ĐIỂM DANH</div>
+      <div style="font-size:11.5px;color:rgba(232,224,204,0.75);line-height:1.7;">
+        <span style="color:rgba(232,224,204,0.45)">Khóa học:</span> <strong>${stu.courseName || 'Mỹ thuật'}</strong> (Đã học <strong>${stu.done}/${stu.total}</strong> buổi)<br>
+        <span style="color:rgba(232,224,204,0.45)">Danh sách ngày đi học:</span> ${formattedDates.length > 0 ? formattedDates.join(', ') : 'Chưa có dữ liệu điểm danh'}
+      </div>
+    </div>
+  ` : '';
+
   return `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(201,168,76,.18);">
       <img src="themes/logo.png" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;" alt="logo">
@@ -3990,6 +4030,7 @@ function buildReviewHTML(stu, sessionLabel, dateLabel, text, scores, teacherName
     </div>
     ${scoreRows}
     ${text?`<div style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,.04);border-radius:10px;border-left:3px solid #8a6a20;font-size:13px;line-height:1.7;color:#e8e0cc;font-family:'Be Vietnam Pro',sans-serif;white-space:pre-wrap;">${text}</div>`:''}
+    ${progressHTML}
     ${noticeHTML}
     <div style="margin-top:14px;font-size:11px;color:rgba(232,224,204,0.4);text-align:right;font-family:'Be Vietnam Pro',sans-serif;">
       Giáo viên nhận xét: <select id="preview-teacher-select" style="background:transparent;color:#f0d080;border:none;font-family:'Be Vietnam Pro',sans-serif;font-size:11px;font-weight:600;cursor:pointer;outline:none;padding:0;display:inline-block;width:auto;">${teacherOptions}</select> · HANDART ACADEMY
